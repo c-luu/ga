@@ -7,6 +7,7 @@ reads a
 method computeLIS(a: array<int>) returns (lis: array<int>) 
 ensures lis.Length <= a.Length
 ensures strictlyIncreasing(lis)
+ensures multiset(a[..]) * multiset(lis[..]) == multiset(lis[..])
 {
     return lis;
 }
