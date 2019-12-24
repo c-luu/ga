@@ -48,6 +48,7 @@ modifies x
 method computeLIS(a: array<int>) returns (lisN: nat) 
 requires a.Length > 0
 ensures 0 <= lisN <= a.Length
+ensures a == old(a)
 {
     var n := a.Length;
     var lis := new nat[n];
