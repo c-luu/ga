@@ -16,7 +16,7 @@ reads x, y
     multiset(y[..]) * multiset(x[..]) == multiset(x[..])
 }
 
-method computeLIS(a: array<int>) returns (lisN: int) 
+method computeLIS(a: array<int>) returns (lisN: nat) 
 requires a.Length > 0
 ensures 0 <= lisN <= a.Length
 {
@@ -24,7 +24,7 @@ ensures 0 <= lisN <= a.Length
     if n < 3 { return 1; }
     if n == 0 { return 0; }
 
-    var lis := new int[n];
+    var lis := new nat[n];
     var i, j := 1, 1;
 
     while i < n 
