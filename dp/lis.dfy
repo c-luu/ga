@@ -61,11 +61,9 @@ ensures 0 <= lisN <= a.Length
         invariant 0 <= j <= i
         decreases i - j - 1 
         {
-            /*
             if a[j] < a[i] && lis[i] < 1 + lis[j] {
                 lis[i] := 1 + lis[j];
             }
-            */
             j := j + 1;
         }
         i := i + 1;
