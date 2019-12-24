@@ -58,6 +58,14 @@ ensures 0 <= lisN <= a.Length
     assert lis.Length == n;
 
     while i < n
+    /**
+     * TODO: We need a loop invariant
+     * for each variable within the
+     * loop if possible.
+     * NOTE: invariants syntatically follow
+     * the loop guard, but will be checked
+     * before the loop guard.
+     */
     invariant 0 <= j <= i <= n
     invariant boundedElements(lis)
     decreases n - i 
