@@ -40,6 +40,11 @@ modifies x
     }
 }
 
+/**
+ * TODO: Make a post-condition (recursive) function
+ * representing: L(i) == 1 + max_j { L(j) | a[j] < a[i] & j < i }
+ * and use it below.
+ */
 method computeLIS(a: array<int>) returns (lisN: nat) 
 requires a.Length > 0
 ensures 0 <= lisN <= a.Length
