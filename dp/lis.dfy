@@ -1,10 +1,10 @@
-predicate strictlyIncreasing(a: array<int>) 
+predicate strictlyIncreasing(a: array<nat>) 
 reads a
 {
     forall i, j :: 0 <= i < j < a.Length ==> a[i] < a[j]
 }
 
-predicate increasing(a: array<int>) 
+predicate increasing(a: array<nat>) 
 reads a
 {
     forall i, j :: 0 <= i < j < a.Length ==> a[i] <= a[j]
