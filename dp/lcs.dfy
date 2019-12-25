@@ -1,10 +1,9 @@
 function RecLCS(a: seq<char>, b: seq<char>): nat
-//requires 0 < |a| == |b|
-//requires 0 <= c <= |a| == |b|
-requires 0 < |a| == |b|
+requires 0 < |a|
+requires 0 < |b|
 decreases a, b
 {
-    if a[0] == b[0] && 1 < |a| == |b|
+    if a[|a|-1] == b[|b|-1] && 1 < |a| == |b|
     then 1 + RecLCS(a[..|a|-1], b[..|b|-1])
     else 0
 }
