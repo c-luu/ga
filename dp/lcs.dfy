@@ -8,18 +8,21 @@ decreases a, b
     else 0
 }
 
-function RecLCS2(a: array2<char>): nat
-requires 0 < a.Length0
-requires 0 < a.Length1
+function RecLCS2(a: array2<char>, i: nat, j: nat): nat
+reads a
+requires 0 <= i < a.Length0
+requires 0 <= i < a.Length1
+requires 0 <= j <  a.Length0
+requires 0 <= j <  a.Length1
 {
     if a.Length0 > 0 && a.Length1 == 0
     then 0
     else if a.Length0 == 0 && a.Length1 > 0
     then 0
-    else if a[a.Length0-1][a.Length1-1] != a[a.Length0-1][a.Length1-1]
-    then if RecLCS2(a[..a.Length0-1][a.Length1-1]) > RecLCS2(a[a.Length0-1][..a.Length1-1])
-    then RecLCS2(a[..a.Length0-1][a.Length1-1])
-    else RecLCS2(a[a.Length0-1][..a.Length1-1])
+    else if a[i, j] != a[i, j]
+    then if RecLCS2(a, i-1, j) > RecLCS2(a, i, j-1)
+    then RecLCS2(a, i-1, j)
+    else RecLCS2(a, i, j-1)
     else 0
 }
 
