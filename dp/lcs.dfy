@@ -5,7 +5,7 @@ requires 0 < |a| == |b|
 decreases a, b
 {
     if a[0] == b[0] && 1 < |a| == |b|
-    then 1 + RecLCS(a[1..], b[1..])
+    then 1 + RecLCS(a[..|a|-1], b[..|b|-1])
     else 0
 }
 
