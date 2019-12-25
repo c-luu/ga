@@ -40,6 +40,13 @@ modifies x
     }
 }
 
+method elementsStrictlyLT(a: set<int>, k: int) returns (b: set<int>)
+ensures forall i :: i in b ==> i < k
+{
+    var y := set x | x in a && x < k;
+    return y;
+}
+
 /**
  * TODO: Make a post-condition (recursive) function
  * representing: L(i) == 1 + max_j { L(j) | a[j] < a[i] & j < i }
@@ -68,6 +75,7 @@ ensures a == old(a)
      * before the loop guard.
      */
     invariant 0 <= j <= i <= n
+    invariant increasing(lis)
     invariant boundedElements(lis)
     decreases n - i 
     {
