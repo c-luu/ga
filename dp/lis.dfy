@@ -47,6 +47,7 @@ ensures forall i :: i in b ==> i < k
     return y;
 }
 
+// http://verifythus.cost-ic0701.org/common-example/arraymax-in-dafny
 method maxIdx(s: seq<int>) returns (max: int) 
 requires |s| > 0
 ensures 0 <= max <= |s|
