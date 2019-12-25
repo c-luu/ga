@@ -47,6 +47,33 @@ ensures forall i :: i in b ==> i < k
     return y;
 }
 
+method maxIdx(s: seq<int>) returns (max: int) 
+requires |s| > 0
+ensures 0 <= max <= |s|
+//ensures forall i :: 0 <= i < max ==> s[max] > s[i]
+ensures forall i :: i in multiset(s[..]) ==> s[max] >= i
+{
+    var n := |s|;
+    if |s| <= 1 {
+        return 0;
+    }
+
+    max := 0;
+    var k := max + 1;
+
+    while k < n 
+    invariant 0 <= max < k <= n
+    invariant forall i :: 0 <= i < max ==> s[max] > s[i]
+    //invariant forall i :: 0 <= i < k ==> s[k] > s[i]
+    decreases n - k
+    {
+        if s[k] < s[max] {
+            max := k;
+        }
+        k := k + 1;
+    }
+}
+
 /**
  * TODO: Make a post-condition (recursive) function
  * representing: L(i) == 1 + max_j { L(j) | a[j] < a[i] & j < i }
