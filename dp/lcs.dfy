@@ -2,6 +2,14 @@
  * References:
  * 1. https://en.wikipedia.org/wiki/Longest_common_subsequence_problem#Worked_example
  */
+
+predicate validMatrix(a: array2<nat>)
+requires 0 < a.Length0
+requires 0 < a.Length1
+reads a
+{
+    forall i, j :: (i == 0 && 0 <= j < a.Length1) || (j == 0 && 0 <= i < a.Length0) ==> a[i, j] == 0 
+}
  
 function RecLCS(a: seq<char>, b: seq<char>): nat
 requires 0 < |a|
