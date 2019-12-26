@@ -1,3 +1,8 @@
+/**
+ * References:
+ * 1. https://en.wikipedia.org/wiki/Longest_common_subsequence_problem#Worked_example
+ */
+ 
 function RecLCS(a: seq<char>, b: seq<char>): nat
 requires 0 < |a|
 requires 0 < |b|
