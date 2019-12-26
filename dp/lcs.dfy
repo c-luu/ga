@@ -10,14 +10,15 @@ decreases a, b
 
 function RecLCS2(a: array2<char>, i: nat, j: nat): nat
 reads a
+decreases i, j
 requires 0 <= i < a.Length0
 requires 0 <= i < a.Length1
-requires 0 <= j <  a.Length0
-requires 0 <= j <  a.Length1
+requires 0 <= j < a.Length0
+requires 0 <= j < a.Length1
 {
-    if a.Length0 > 0 && a.Length1 == 0
+    if i > 0 && j == 0
     then 0
-    else if a.Length0 == 0 && a.Length1 > 0
+    else if i == 0 && j > 0
     then 0
     else if a[i, j] != a[i, j]
     then if RecLCS2(a, i-1, j) > RecLCS2(a, i, j-1)
