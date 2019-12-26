@@ -53,6 +53,13 @@ ensures s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS(s, s.Length0-1, 
     decreases rowLen - i
     invariant 1 <= i <= rowLen
     {
+        while j < colLen
+        decreases colLen - j
+        invariant 1 <= j <= colLen
+        {
+            j := j + 1;
+        }
+
         i := i + 1;
     }
 
