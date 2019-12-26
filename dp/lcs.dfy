@@ -33,7 +33,3 @@ requires -1 <= j < a.Length1
                     else 1 + RecLCS2(a, i-1, j-1)
             else 0
 }
-
-method computeLCS(a: seq<char>, b: seq<char>) returns (lcs: seq<char>) 
-ensures multiset(lcs[..]) == multiset(a[..]) * multiset(b[..])
-{}
