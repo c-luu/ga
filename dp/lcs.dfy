@@ -42,7 +42,7 @@ requires 0 <= j < a.Length1
             else 0
 }
 
-method computeLCS(s: array2<char>, lcsMatrix: array2<nat>) returns (lcsLen: nat)
+method dpLCS(s: array2<char>, lcsMatrix: array2<nat>) returns (lcsLen: nat)
 requires 0 < lcsMatrix.Length0 && 0 < lcsMatrix.Length1
 requires validMatrix(lcsMatrix)
 ensures s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS2(s, s.Length0-1, s.Length1-1)
