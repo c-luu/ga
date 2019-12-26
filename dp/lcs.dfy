@@ -14,15 +14,13 @@ decreases i, j
 requires -1 <= i < a.Length0
 requires -1 <= j < a.Length1
 {
-    if i > -1 && j == -1
-    then 0
-    else if i == -1 && j > -1
-    then 0
+    if i < 0 || j < 0
+        then 0
     else if a[i, j] != a[i, j]
-        then if RecLCS2(a, i-1, j) > RecLCS2(a, i, j-1)
-        then RecLCS2(a, i-1, j)
-        else RecLCS2(a, i, j-1)
-    else 0
+            then if RecLCS2(a, i-1, j) > RecLCS2(a, i, j-1)
+                then RecLCS2(a, i-1, j)
+                else RecLCS2(a, i, j-1)
+        else 0
 }
 
 method computeLCS(a: seq<char>, b: seq<char>) returns (lcs: seq<char>) 
