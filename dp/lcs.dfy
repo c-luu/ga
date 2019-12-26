@@ -10,7 +10,7 @@ reads a
 {
     forall i, j :: (i == 0 && 0 <= j < a.Length1) || (j == 0 && 0 <= i < a.Length0) ==> a[i, j] == 0 
 }
- 
+
 function recLCS(a: seq<char>, b: seq<char>): nat
 requires 0 < |a|
 requires 0 < |b|
@@ -40,4 +40,12 @@ requires -1 <= j < a.Length1
                     then recLCS2(a, i, j-1)
                     else 1 + recLCS2(a, i-1, j-1)
             else 0
+}
+
+method computeLCS(s: array2<char>, lcsMatrix: array2<nat>) returns (lcsLen: nat)
+requires 0 < lcsMatrix.Length0 && 0 < lcsMatrix.Length1
+requires validMatrix(lcsMatrix)
+ensures lcsLen == recLCS2(s, s.Length0-1, s.Length1-1)
+{
+    assume lcsLen == recLCS2(s, s.Length0-1, s.Length1-1);
 }
