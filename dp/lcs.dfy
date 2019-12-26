@@ -12,8 +12,6 @@ function RecLCS2(a: array2<char>, i: nat, j: nat): nat
 reads a
 decreases i, j
 requires 0 <= i < a.Length0
-requires 0 <= i < a.Length1
-requires 0 <= j < a.Length0
 requires 0 <= j < a.Length1
 {
     if i > 0 && j == 0
