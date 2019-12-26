@@ -19,9 +19,9 @@ requires 0 <= j < a.Length1
     else if i == 0 && j > 0
     then 0
     else if a[i, j] != a[i, j]
-    then if RecLCS2(a, i-1, j) > RecLCS2(a, i, j-1)
-    then RecLCS2(a, i-1, j)
-    else RecLCS2(a, i, j-1)
+        then if RecLCS2(a, i-1, j) > RecLCS2(a, i, j-1)
+        then RecLCS2(a, i-1, j)
+        else RecLCS2(a, i, j-1)
     else 0
 }
 
