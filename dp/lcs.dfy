@@ -3,12 +3,17 @@
  * 1. https://en.wikipedia.org/wiki/Longest_common_subsequence_problem#Worked_example
  */
 
-predicate validMatrix(a: array2<nat>)
+predicate rowColInitializedMatrix(a: array2<nat>)
 reads a
 {
     forall i, j :: ((0 <= i < a.Length0 && 0 <= j < a.Length1) 
                     && ((i == 0 && 0 <= j < a.Length1) || (j == 0 && 0 <= i < a.Length0))) 
                     ==> a[i, j] == 0 
+}
+
+predicate leftPaddedDimMatrix(a: array2<char>, b: array2<nat>)
+{
+    b.Length0 == a.Length0+1 && b.Length1 == a.Length1+1 
 }
 
 function recLCS(a: array2<char>, i: int, j: int): nat
@@ -34,7 +39,8 @@ requires 0 <= j < a.Length1
 
 method dpLCS(s: array2<char>, lcsMatrix: array2<nat>) returns (lcsLen: nat)
 requires 0 < lcsMatrix.Length0 && 0 < lcsMatrix.Length1
-requires validMatrix(lcsMatrix)
+requires rowColInitializedMatrix(lcsMatrix)
+requires leftPaddedDimMatrix(s, lcsMatrix)
 ensures s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS(s, s.Length0-1, s.Length1-1)
 {
     assume s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS(s, s.Length0-1, s.Length1-1);
