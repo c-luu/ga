@@ -24,11 +24,7 @@ requires 0 <= j < a.Length1
             then recLCS(a, i-1, j)
             else recLCS(a, i, j-1)
         else if a[i, j] == a[i, j]
-            then if recLCS(a, i-1, j) > recLCS(a, i, j-1) && recLCS(a, i-1, j) > 1 + recLCS(a, i-1, j-1)
-                then recLCS(a, i-1, j)
-                else if recLCS(a, i, j-1) > recLCS(a, i-1, j) && recLCS(a, i, j-1) > 1 + recLCS(a, i-1, j-1)
-                    then recLCS(a, i, j-1)
-                    else 1 + recLCS(a, i-1, j-1)
+            then 1 + recLCS(a, i-1, j-1)
             else 0
 }
 
