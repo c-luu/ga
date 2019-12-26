@@ -46,5 +46,14 @@ requires rowColInitializedMatrix(lcsMatrix)
 requires leftPaddedDimMatrix(s, lcsMatrix)
 ensures s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS(s, s.Length0-1, s.Length1-1)
 {
+    var rowLen, colLen := lcsMatrix.Length0, lcsMatrix.Length1;
+    var i, j := 1, 1;
+
+    while i < rowLen
+    decreases rowLen - i
+    {
+        i := i + 1;
+    }
+
     assume s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS(s, s.Length0-1, s.Length1-1);
 }
