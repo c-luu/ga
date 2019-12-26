@@ -4,11 +4,11 @@
  */
 
 predicate validMatrix(a: array2<nat>)
-requires 0 < a.Length0
-requires 0 < a.Length1
 reads a
 {
-    forall i, j :: (i == 0 && 0 <= j < a.Length1) || (j == 0 && 0 <= i < a.Length0) ==> a[i, j] == 0 
+    forall i, j :: ((0 <= i < a.Length0 && 0 <= j < a.Length1) 
+                    && ((i == 0 && 0 <= j < a.Length1) || (j == 0 && 0 <= i < a.Length0))) 
+                    ==> a[i, j] == 0 
 }
 
 function recLCS(a: seq<char>, b: seq<char>): nat
@@ -24,10 +24,10 @@ decreases a, b
 function recLCS2(a: array2<char>, i: int, j: int): nat
 reads a
 decreases i, j
-requires -1 <= i < a.Length0
-requires -1 <= j < a.Length1
+requires 0 <= i < a.Length0
+requires 0 <= j < a.Length1
 {
-    if i < 0 || j < 0
+    if i == 0 || j == 0
         then 0
     else if a[i, j] != a[i, j]
         then if recLCS2(a, i-1, j) > recLCS2(a, i, j-1)
@@ -45,7 +45,7 @@ requires -1 <= j < a.Length1
 method computeLCS(s: array2<char>, lcsMatrix: array2<nat>) returns (lcsLen: nat)
 requires 0 < lcsMatrix.Length0 && 0 < lcsMatrix.Length1
 requires validMatrix(lcsMatrix)
-ensures lcsLen == recLCS2(s, s.Length0-1, s.Length1-1)
+ensures s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS2(s, s.Length0-1, s.Length1-1)
 {
-    assume lcsLen == recLCS2(s, s.Length0-1, s.Length1-1);
+    assume s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS2(s, s.Length0-1, s.Length1-1);
 }
