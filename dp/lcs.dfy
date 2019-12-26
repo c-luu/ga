@@ -52,7 +52,6 @@ ensures s.Length0-1 > 0 && s.Length1-1 > 0 ==> lcsLen == recLCS(s, s.Length0-1, 
     while i < rowLen
     decreases rowLen - i
     invariant 1 <= i <= rowLen
-    
     {
         i := i + 1;
     }
