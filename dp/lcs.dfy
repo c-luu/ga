@@ -29,13 +29,12 @@ requires 0 <= j < |s2|
         then if recLCS(s1, s2, i-1, j) > recLCS(s1, s2, i, j-1)
             then recLCS(s1, s2, i-1, j)
             else recLCS(s1, s2, i, j-1)
-        else if s1[i] == s2[j]
-            then if recLCS(s1, s2, i-1, j) > recLCS(s1, s2, i, j-1) && recLCS(s1, s2, i-1, j) > 1 + recLCS(s1, s2, i-1, j-1)
+        else 
+             if recLCS(s1, s2, i-1, j) > recLCS(s1, s2, i, j-1) && recLCS(s1, s2, i-1, j) > 1 + recLCS(s1, s2, i-1, j-1)
                 then recLCS(s1, s2, i-1, j)
                 else if recLCS(s1, s2, i, j-1) > recLCS(s1, s2, i-1, j) && recLCS(s1, s2, i, j-1) > 1 + recLCS(s1, s2, i-1, j-1)
                     then recLCS(s1, s2, i, j-1)
-                    else 1 + recLCS(s1, s2, i-1, j-1)
-            else 0
+            else 1 + recLCS(s1, s2, i-1, j-1)
 }
 
 method dpLCS(s1: seq<char>, s2: seq<char>, lcsMatrix: array2<nat>) returns (lcsLen: nat)
@@ -72,5 +71,21 @@ ensures lcsLen == recLCS(s1, s2, |s1|-1, |s2|-1)
     }
 
     lcsLen := lcsMatrix[|s1|-1, |s2|-1];
-    assume lcsLen == recLCS(s1, s2, |s1|-1, |s2|-1);
+}
+
+method main() returns (x: nat)
+{
+    var s1, s2 := "\0", "\0";
+    var a := new nat[|s1|, |s2|];
+
+    forall i | 0 <= i < |s1| {
+        a[i, 0] := 0; 
+    }
+
+    forall j | 0 <= j < |s2| {
+        a[0, j] := 0; 
+    }
+
+    x := dpLCS(s1, s2, a); 
+    assert x == 0;
 }
