@@ -39,12 +39,13 @@ requires 0 <= j < |s2|
 }
 
 method dpLCS(s1: seq<char>, s2: seq<char>, lcsMatrix: array2<nat>) returns (lcsLen: nat)
+modifies lcsMatrix
 requires 0 < lcsMatrix.Length0 == |s1| && 0 < lcsMatrix.Length1 == |s2|
 requires rowColInitializedMatrix(lcsMatrix)
 requires leftPaddedDimMatrix(s1, s2, lcsMatrix)
-ensures |s1|-1 > 0 && |s2|-1 > 0 ==> lcsLen == recLCS(s1, s2, |s1|-1, |s2|-1)
+ensures lcsLen == recLCS(s1, s2, |s1|-1, |s2|-1)
 {
-    var rowLen, colLen := lcsMatrix.Length0, lcsMatrix.Length1;
+    var rowLen, colLen := |s1|, |s2|;
     var i, j := 1, 1;
 
     while i < rowLen
@@ -56,11 +57,20 @@ ensures |s1|-1 > 0 && |s2|-1 > 0 ==> lcsLen == recLCS(s1, s2, |s1|-1, |s2|-1)
         decreases colLen - j
         invariant 1 <= j <= colLen
         {
+            if s1[i] == s2[j]
+                { lcsMatrix[i, j] := 1 + lcsMatrix[i-1, j-1]; }
+            else
+                { 
+                    lcsMatrix[i, j] := if lcsMatrix[i, j-1] > lcsMatrix[i-1, j]
+                                        then lcsMatrix[i, j-1] else lcsMatrix[i-1, j];
+                }
+
             j := j + 1;
         }
 
         i := i + 1;
     }
 
-    assume |s1|-1 > 0 && |s2|-1 > 0 ==> lcsLen == recLCS(s1, s2, |s1|-1, |s2|-1);
+    lcsLen := lcsMatrix[|s1|-1, |s2|-1];
+    assume lcsLen == recLCS(s1, s2, |s1|-1, |s2|-1);
 }
