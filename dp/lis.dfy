@@ -75,8 +75,8 @@ ensures a == old(a)
      * before the loop guard.
      */
     invariant 0 <= j <= i <= n
-    invariant increasing(lis)
-    invariant boundedElements(lis)
+    invariant Prop.increasing(lis[..])
+    invariant Prop.boundedElements(lis[..])
     decreases n - i 
     {
         while j < i - 1 

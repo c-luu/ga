@@ -1,36 +1,31 @@
 module Prop {
-    predicate shorterThan(sub: seq<int>, sequence: seq<int>)
+    predicate shorterThan<T>(sub: seq<T>, sequence: seq<T>)
     {
         |sub| < |sequence|
     }
 
-    predicate strictlyIncreasing(a: array<nat>) 
-    reads a
+    predicate increasing(a: seq<int>) 
     {
-        forall i, j :: 0 <= i < j < a.Length ==> a[i] < a[j]
+        forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]
     }
 
-    predicate increasing(a: array<nat>) 
-    reads a
+    predicate strictlyIncreasing(a: seq<int>) 
     {
-        forall i, j :: 0 <= i < j < a.Length ==> a[i] <= a[j]
+        forall i, j :: 0 <= i < j < |a| ==> a[i] < a[j]
     }
 
-    predicate subsetOf(x: array<int>, y: array<int>)
-    reads x, y
+    predicate subsetOf<T>(x: seq<T>, y: seq<T>)
     {
-        multiset(y[..]) * multiset(x[..]) == multiset(x[..])
+        multiset(y) * multiset(x) == multiset(x)
     }
 
-    predicate boundedElements(x: array<nat>) 
-    reads x
+    predicate boundedElements(x: seq<int>) 
     {
-        forall i :: 0 <= i < x.Length ==> 0 < x[i] <= x.Length
+        forall i :: 0 <= i < |x| ==> 0 < x[i] <= |x|
     }
 
-    predicate uniformArray(x: array<nat>) 
-    reads x
+    predicate uniformArray(x: seq<int>) 
     {
-        forall i, j :: 0 <= i < j < x.Length ==> x[i] == x[j]
+        forall i, j :: 0 <= i < j < |x| ==> x[i] == x[j]
     }
 }
