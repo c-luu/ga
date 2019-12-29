@@ -1,37 +1,9 @@
-predicate strictlyIncreasing(a: array<nat>) 
-reads a
-{
-    forall i, j :: 0 <= i < j < a.Length ==> a[i] < a[j]
-}
-
-predicate increasing(a: array<nat>) 
-reads a
-{
-    forall i, j :: 0 <= i < j < a.Length ==> a[i] <= a[j]
-}
-
-predicate subsetOf(x: array<int>, y: array<int>)
-reads x, y
-{
-    multiset(y[..]) * multiset(x[..]) == multiset(x[..])
-}
-
-predicate boundedElements(x: array<nat>) 
-reads x
-{
-    forall i :: 0 <= i < x.Length ==> 0 < x[i] <= x.Length
-}
-
-predicate uniformArray(x: array<nat>) 
-reads x
-{
-    forall i, j :: 0 <= i < j < x.Length ==> x[i] == x[j]
-}
+include "../prop.dfy"
 
 method initLIS(x: array<nat>, val: nat) 
 requires 0 < val <= x.Length
-ensures uniformArray(x) 
-ensures boundedElements(x)
+ensures Prop.uniformArray(x) 
+ensures Prop.boundedElements(x)
 modifies x
 {
     forall i | 0 <= i < x.Length 
