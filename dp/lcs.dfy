@@ -3,7 +3,7 @@
  * 1. https://en.wikipedia.org/wiki/Longest_common_subsequence_problem#Worked_example
  */
 
-include "util.dfy"
+include "../util.dfy"
 
 predicate rowColInitializedMatrix(a: array2<nat>)
 reads a
