@@ -62,9 +62,9 @@ requires |s| >= 1
 {
     if |s| == 1 
         then Prop.seqSum'(s) 
-    else if Prop.seqSum'(s) > Prop.seqSum'(s) + left(s[..|s|-1])
+    else if Prop.seqSum'(s) > left(s[..|s|-1])
         then Prop.seqSum'(s)
-    else Prop.seqSum'(s) + left(s[..|s|-1])
+    else left(s[..|s|-1])
 }
 
 function method right(s: seq<int>): int
@@ -73,9 +73,9 @@ requires |s| >= 1
 {
     if |s| == 1 
         then Prop.seqSum'(s) 
-    else if Prop.seqSum'(s) > Prop.seqSum'(s) + right(s[1..])
+    else if Prop.seqSum'(s) > right(s[1..])
         then Prop.seqSum'(s)
-    else Prop.seqSum'(s) + right(s[1..])
+    else right(s[1..])
 }
 
 function method recMCS'(s: seq<int>): int
@@ -99,11 +99,8 @@ ensures sumOfEmptySubseq(subSeq, sum)
 
 method Main()
 {
-    //assert recMCS'([5, 15, -30, 1, 0]) == 20;
-    //assert Prop.seqSum([5, 15]) == 20;
-    //assert Prop.seqSum([0]) == 0;
-    //print Prop.seqSum'([5, 15, -30, 1, 0]);
     var x := [5, 15, -30, 1, 0];
-    //assert Prop.seqSum(x) == -9;
-    print recMCS'([5, 15, -30, 1, 0]);
+    var y := [5, 15, -30, 10, -5, 40, 10];
+    print recMCS'(y);
+    print '\n';
 }
