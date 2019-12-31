@@ -3,8 +3,16 @@ module Prop {
     decreases sequence
     requires |sequence| > 0
     {
-        if |sequence| == 1 then sequence[0]
+        if |sequence| == 1 then sequence[|sequence|-1]
         else sequence[|sequence|-1] + seqSum(sequence[..|sequence|-1])
+    }
+
+    function method seqSum'(sequence: seq<int>): int 
+    decreases sequence
+    requires |sequence| > 0
+    {
+        if |sequence| == 1 then sequence[|sequence|-1]
+        else sequence[|sequence|-1] + seqSum'(sequence[..|sequence|-1])
     }
 
     predicate shorterThan<T>(sub: seq<T>, sequence: seq<T>)
