@@ -2,8 +2,8 @@ include "../prop.dfy"
 
 method initLIS(x: array<nat>, val: nat) 
 requires 0 < val <= x.Length
-ensures Prop.uniformArray(x) 
-ensures Prop.boundedElements(x)
+ensures Prop.uniformArray(x[..]) 
+ensures Prop.boundedElements(x[..])
 modifies x
 {
     forall i | 0 <= i < x.Length 
