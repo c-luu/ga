@@ -44,7 +44,7 @@ requires |s| > 1
     else right(s[1..])
 }
 
-method maxContiguousSubseq(a: seq<int>) returns (subSeq: seq<int>, sum: int)
+method dpMCS(a: seq<int>) returns (subSeq: seq<int>, sum: int)
 requires |a| > 1
 ensures Prop.shorterThan(subSeq, a)
 ensures Prop.subsetOf(subSeq, a)
