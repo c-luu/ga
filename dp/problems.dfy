@@ -14,71 +14,29 @@ predicate maxSubseqSum(sequence: seq<int>, sum: int)
     forall i, j :: 0 <= i < j <= |sequence| ==> sum > Prop.seqSum(sequence[i..j])
 }
 
-// (TODO) Recurrence of contiguous subsequence of maxium sum:
-// (TODO) Can probably do away with index i?
-/*
-function recMaxContiguousSubseq(sequence: seq<int>, subSeq: seq<int>, i: int): int
-requires 0 <= i < |sequence|
-{
-    // Base case.
-    if i == |sequence| then sequence[i-1] else
-    if |sequence|-i == |subSeq| 
-        then recMaxContiguousSubseq(sequence, sequence[i+1..i+1], i+1)
-    else if Prop.seqSum(subSeq) > recMaxContiguousSubseq(sequence, sequence[..i+1], i+1)
-        then Prop.seqSum(subSeq) else recMaxContiguousSubseq(sequence, sequence[..i+1], i+1)
-}
-*/
-
-/**
-----------------
-5, 15, -30, 1, 0
-----------------
-5
-5, 15
-5, 15, -30
-5, 15, -30, 1
-5, 15, -30, 1, 0
-15
-15, -30
-15, -30, 1
-15, -30, 1, 0
--30
--30, 1
--30, 1, 0
-1
-1, 0
-0
- */
-function recMCS(s: seq<int>): int
-requires 0 < |s|
-{
-    if |s| == 1 then Prop.seqSum(s[..]) else
-    if Prop.seqSum(s[..1]) + recMCS(s[1..]) > recMCS(s[1..]) then Prop.seqSum(s[..1]) + recMCS(s[1..]) else recMCS(s[1..])
-}
-
-function method left(s: seq<int>): int
+function left(s: seq<int>): int
 decreases s
 requires |s| >= 1
 {
     if |s| == 1 
-        then Prop.seqSum'(s) 
-    else if Prop.seqSum'(s) > left(s[..|s|-1])
-        then Prop.seqSum'(s)
+        then Prop.seqSum(s) 
+    else if Prop.seqSum(s) > left(s[..|s|-1])
+        then Prop.seqSum(s)
     else left(s[..|s|-1])
 }
 
-function method right(s: seq<int>): int
+function right(s: seq<int>): int
 decreases s
 requires |s| >= 1
 {
     if |s| == 1 
-        then Prop.seqSum'(s) 
-    else if Prop.seqSum'(s) > right(s[1..])
-        then Prop.seqSum'(s)
+        then Prop.seqSum(s) 
+    else if Prop.seqSum(s) > right(s[1..])
+        then Prop.seqSum(s)
     else right(s[1..])
 }
 
-function method recMCS'(s: seq<int>): int
+function recMCS(s: seq<int>): int
 requires |s| > 1
 {
     if left(s[..|s|-1]) > right(s[1..])
@@ -86,21 +44,18 @@ requires |s| > 1
     else right(s[1..])
 }
 
-/*
 method maxContiguousSubseq(a: seq<int>) returns (subSeq: seq<int>, sum: int)
+requires |a| > 1
 ensures Prop.shorterThan(subSeq, a)
 ensures Prop.subsetOf(subSeq, a)
 ensures Prop.increasing(subSeq) // or strictly increasing?
 ensures maxSubseqSum(a, sum)
 ensures sumOfEmptySubseq(subSeq, sum)
+ensures sum == recMCS(a)
 {
 }
-*/
 
 method Main()
 {
-    var x := [5, 15, -30, 1, 0];
-    var y := [5, 15, -30, 10, -5, 40, 10];
-    print recMCS'(y);
-    print '\n';
+    assert recMCS([5, 15, -30, 10, -5, 40, 10]) == 55;
 }
