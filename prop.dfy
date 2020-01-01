@@ -1,4 +1,14 @@
 module Prop {
+    function calcMax(s: seq<int>): int
+    decreases s
+    requires |s| > 0
+    {
+        if |s| == 1 then s[|s|-1] else
+        if s[|s|-1] > calcMax(s[..|s|-1])
+            then s[|s|-1]
+        else calcMax(s[..|s|-1])
+    }
+
     function seqSum(sequence: seq<int>): int 
     decreases sequence
     requires |sequence| > 0
