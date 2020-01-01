@@ -42,8 +42,8 @@ module Prop {
         forall i :: 0 <= i < |x| ==> 0 < x[i] <= |x|
     }
 
-    predicate uniformArray(x: seq<int>) 
+    predicate uniformArray<T>(x: seq<T>, val: T) 
     {
-        forall i, j :: 0 <= i < j < |x| ==> x[i] == x[j]
+        forall i :: 0 <= i < |x| ==> x[i] == val
     }
 }
