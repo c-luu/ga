@@ -23,6 +23,19 @@ requires computedLIS(l, a)
     lisRes == Prop.calcMax(l)
 }
 
+predicate rhsLISInvariant(i: nat, l: seq<nat>)
+{
+    forall k :: i < k < |l| ==> l[k] == 1
+}
+
+predicate lhsLISInvariant(i: nat, l: seq<nat>, a: seq<int>)
+requires |l| == |a| > 1
+requires 0 <= i < |l|
+requires computedLIS(l, a)
+{
+    exists k: nat :: k in l[..i] && recLIS(k, l[..i], a[..i])
+}
+
 method dpLIS(l: seq<nat>, a: seq<int>) returns (lis: nat)
 requires |l| == |a| > 0
 requires Prop.uniformArray(l, 1)
@@ -34,7 +47,10 @@ ensures recLIS(lis, l, a)
 
     while i < |a|
     decreases |a|-i
+    invariant i <= |a|
     invariant j == 0
+    invariant rhsLISInvariant(i, l)
+    //invariant lhsLISInvariant(i, l, a)
     {
         while j < i-1
         decreases i - j - 1
