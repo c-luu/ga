@@ -23,11 +23,20 @@ requires computedLIS(l, a)
     lisRes == Prop.calcMax(l)
 }
 
+/**
+ * All elements to the right of `i` in L
+ * should be initialized, and nothing more.
+ */
 predicate rhsLISInvariant(i: nat, l: seq<nat>)
 {
     forall k :: i < k < |l| ==> l[k] == 1
 }
 
+/**
+ * There's at least one element to the left of `i`
+ * that is the LIS in L. If all of them are the same,
+ * return any one of them?
+ */
 predicate lhsLISInvariant(i: nat, l: seq<nat>, a: seq<int>)
 requires |l| == |a| > 1
 requires 0 <= i < |l|
