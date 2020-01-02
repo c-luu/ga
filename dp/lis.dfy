@@ -1,5 +1,6 @@
 include "../prop.dfy"
 
+//https://www8.cs.umu.se/kurser/TDBA77/VT06/algorithms/BOOK/BOOK2/NODE47.HTM
 function maxLIS(l: seq<nat>, a: seq<int>, val: int): int
 decreases l, a
 requires |l| == |a| > 0
