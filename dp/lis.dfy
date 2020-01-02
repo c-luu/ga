@@ -37,12 +37,11 @@ predicate rhsLISInvariant(i: nat, l: seq<nat>)
  * that is the LIS in L. If all of them are the same,
  * return any one of them?
  */
-predicate lhsLISInvariant(i: nat, l: seq<nat>, a: seq<int>)
+predicate lhsLISInvariant(l: seq<nat>, a: seq<int>)
 requires |l| == |a| > 1
-requires 0 <= i < |l|
 requires computedLIS(l, a)
 {
-    exists k: nat :: k in l[..i] && recLIS(k, l[..i], a[..i])
+    exists k: nat :: k in l && recLIS(k, l, a)
 }
 
 method dpLIS(l: seq<nat>, a: seq<int>) returns (lis: nat)
@@ -59,7 +58,7 @@ ensures recLIS(lis, l, a)
     invariant i <= |a|
     invariant j == 0
     invariant rhsLISInvariant(i, l)
-    invariant lhsLISInvariant(i, l, a)
+    invariant lhsLISInvariant(l[..i], a[..i])
     {
         while j < i-1
         decreases i - j - 1
