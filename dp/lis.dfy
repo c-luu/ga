@@ -12,7 +12,7 @@ requires |l| == |a| > 0
 predicate computedLIS(l: seq<nat>, a: seq<int>)
 requires |l| == |a| > 0
 {
-    forall i, j :: 1 <= j <= i-1 < |l|-1 && a[j] < a[i] 
+    forall i, j :: 0 <= j <= i-1 < |l|-1 && a[j] < a[i] 
         ==> l[i] == 1 + maxLIS(l[..j+1], a[..j+1], a[j])
 }
 
