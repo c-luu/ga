@@ -59,7 +59,7 @@ ensures recLIS(lis, l, a)
     invariant i <= |a|
     invariant j == 0
     invariant rhsLISInvariant(i, l)
-    //invariant lhsLISInvariant(i, l, a)
+    invariant lhsLISInvariant(i, l, a)
     {
         while j < i-1
         decreases i - j - 1
