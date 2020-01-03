@@ -74,3 +74,12 @@ ensures recLIS(lis, l, a)
 
     assume computedLIS(l, a) && recLIS(lis, l, a);
 }
+
+method Main()
+{
+    var a := [0, 1, -1];
+    var l := [1, 2, 1];
+    
+    assert Prop.calcMax(a) == 1;
+    assert computedLIS(l, a);
+}
