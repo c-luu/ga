@@ -1,12 +1,18 @@
 module Prop {
     function calcMax(s: seq<int>): int
-    decreases s
     requires |s| > 0
     {
-        if |s| == 1 then s[|s|-1] else
-        if s[|s|-1] > calcMax(s[..|s|-1])
-            then s[|s|-1]
-        else calcMax(s[..|s|-1])
+        calcMax'(s, 0)
+    }
+
+    function calcMax'(s: seq<int>, idx: nat): int
+    decreases |s| - idx
+    requires 0 <= idx < |s|
+    {
+        if idx + 1 == |s| then s[idx] else
+        if s[idx] > calcMax'(s, idx+1)
+            then s[idx]
+        else calcMax'(s, idx+1)
     }
 
     function seqSum(sequence: seq<int>): int 
