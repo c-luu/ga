@@ -1,20 +1,20 @@
 include "../prop.dfy"
 
-//https://www8.cs.umu.se/kurser/TDBA77/VT06/algorithms/BOOK/BOOK2/NODE47.HTM
-function maxLIS(l: seq<nat>, a: seq<int>, val: int): int
-decreases l, a
-requires |l| == |a| > 0
-{
-    if |l| == 1 || |a| == 1 then l[|l|-1] else
-    if l[|l|-1] == Prop.calcMax(l) && val >= a[|a|-1] then l[|l|-1]
-    else maxLIS(l[..|l|-1], a[..|a|-1], val)
-}
-
+// https://www8.cs.umu.se/kurser/TDBA77/VT06/algorithms/BOOK/BOOK2/NODE47.HTM
 predicate computedLIS(l: seq<nat>, a: seq<int>)
 requires |l| == |a| > 0
 {
-    forall i, j :: 0 <= j <= i-1 < |l|-1 && a[j] < a[i] 
-        ==> l[i] == 1 + maxLIS(l[..j+1], a[..j+1], a[j])
+    forall i, j {:induction j}:: 0 <= j <= i-1 < |l|-1  ==>
+    (a[j] < a[i] ==> l[i] == 1 + computedLIS'(l, a, a[j], 0, j))
+}
+
+function computedLIS'(l: seq<nat>, a: seq<int>, val: int, start: nat, end: nat): int
+decreases |l| - start
+requires 0 <= start <= end < |l| == |a|
+{
+    if start == end then l[start] else
+    if l[start] == Prop.calcMax(l) && val >= a[start] then l[start]
+    else computedLIS'(l, a, val, start+1, end)
 }
 
 predicate recLIS(lisRes: int, l: seq<nat>, a: seq<int>)
@@ -77,9 +77,9 @@ ensures recLIS(lis, l, a)
 
 method Main()
 {
-    var a := [0, 1, -1];
-    var l := [1, 2, 1];
+    var a := [5, 7, 4, -3, 9, 1, 10, 4, 5, 8, 9, 3];
+    var l := [1, 2, 1,  1, 3, 2, 4,  3, 4, 5, 6, 3];
     
-    assert Prop.calcMax(a) == 1;
     assert computedLIS(l, a);
+    assert recLIS(6, l, a);
 }
