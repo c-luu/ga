@@ -4,14 +4,15 @@ include "../prop.dfy"
 predicate computedLIS(l: seq<nat>, a: seq<int>)
 requires |l| == |a| > 0
 {
-    forall i, j {:induction j}:: 0 <= j <= i-1 < |l|-1  ==>
-    (a[j] < a[i] ==> l[i] == 1 + computedLIS'(l, a, a[j], 0, j))
+    forall i, j {:induction j} :: 0 <= j <= i-1 < i < |l| ==>
+    (a[j] < a[i] ==> l[i] == 1 + computedLIS'(l, a, a[i], 0, i))
 }
 
 function computedLIS'(l: seq<nat>, a: seq<int>, val: int, start: nat, end: nat): int
 decreases |l| - start
 requires 0 <= start <= end < |l| == |a|
 {
+    if end == 0 then 1 else
     if start == end then l[start] else
     if l[start] == Prop.calcMax(l) && val >= a[start] then l[start]
     else computedLIS'(l, a, val, start+1, end)
