@@ -1,6 +1,6 @@
 include "../prop.dfy"
 
-// 6.1
+// DPV
 // Base case(s):
 predicate sumOfEmptySubseq(subSeq: seq<int>, sum: int) 
 {
