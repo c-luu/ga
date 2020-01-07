@@ -25,6 +25,16 @@ requires |s| >= 1
     else left(s[..|s|-1])
 }
 
+function left'(s: seq<int>, idx: nat, tail: nat): int
+requires 0 <= idx < tail < |s|
+{
+    if idx + 1 == tail
+        then s[idx] 
+    else if Prop.seqSum(s) > left(s[..|s|-1])
+        then Prop.seqSum(s)
+    else left(s[..|s|-1])
+}
+
 function right(s: seq<int>): int
 decreases s
 requires |s| >= 1
