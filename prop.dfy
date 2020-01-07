@@ -20,7 +20,15 @@ module Prop {
     requires |sequence| > 0
     {
         if |sequence| == 1 then sequence[|sequence|-1]
-        else sequence[|sequence|-1] + seqSum(sequence[..|sequence|-1])
+        else sequence[|sequence|-1] + seqSum'(sequence, 0, |sequence|-1)
+    }
+
+    function seqSum'(sequence: seq<int>, from: nat, to: nat): int 
+    decreases |sequence| - from
+    requires 0 <= from < to < |sequence|
+    {
+        if from + 1 == to then sequence[from]
+        else sequence[from] + seqSum'(sequence, from+1, to)
     }
 
     predicate shorterThan<T>(sub: seq<T>, sequence: seq<T>)
