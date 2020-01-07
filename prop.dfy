@@ -60,4 +60,9 @@ module Prop {
     {
         forall i :: 0 <= i < |x| ==> x[i] == val
     }
+
+    method Main()
+    {
+        assert seqSum([-1, 1, -1, 1]) == 0;
+    }
 }
