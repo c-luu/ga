@@ -15,24 +15,22 @@ predicate maxSubseqSum(sequence: seq<int>, sum: int)
 }
 
 function left(s: seq<int>): int
-decreases s
-requires |s| >= 1
+requires |s| > 0
 {
-    if |s| == 1 
-        then Prop.seqSum(s) 
-    else if Prop.seqSum(s) > left(s[..|s|-1])
+    if Prop.seqSum(s) > left'(s, 0, |s|)
         then Prop.seqSum(s)
-    else left(s[..|s|-1])
+    else left'(s, 0, |s|)
 }
 
-function left'(s: seq<int>, idx: nat, tail: nat): int
-requires 0 <= idx < tail < |s|
+function left'(s: seq<int>, from: nat, to: nat): int
+decreases |s| - from
+requires 0 <= from < to <= |s|
 {
-    if idx + 1 == tail
-        then s[idx] 
-    else if Prop.seqSum(s) > left(s[..|s|-1])
+    if from + 1 == to
+        then s[from] 
+    else if Prop.seqSum(s) > left'(s, from+1, to)
         then Prop.seqSum(s)
-    else left(s[..|s|-1])
+    else left'(s, from+1, to)
 }
 
 function right(s: seq<int>): int
@@ -67,5 +65,6 @@ ensures sum == recMCS(a)
 
 method Main()
 {
+    assert left([-1, 1, 1, -1]) == 0;
     assert recMCS([5, 15, -30, 10, -5, 40, 10]) == 55;
 }
