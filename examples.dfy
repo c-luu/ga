@@ -46,3 +46,38 @@ module SkippingLemma {
         }
     }
 }
+
+module Distributive {
+    // Counts # of `True`s.
+    function count(a: seq<bool>): nat 
+    decreases a
+    {
+        if |a| == 0 then 0 else 
+        (if a[0] then 1 else 0) + count(a[1..])
+    }
+
+    predicate count'(a: seq<bool>, b: seq<bool>) {
+        forall a, b {:induction a, b} :: count(a + b) == count(a) + count(b)
+    }
+
+    lemma distributiveLemma(a: seq<bool>, b: seq<bool>) 
+    decreases a, b
+    ensures count(a + b) == count(a) + count(b) 
+    {
+        if a == [] {
+            assert a + b == b;
+        } else {
+            distributiveLemma(a[1..], b);
+            assert a + b == [a[0]] + (a[1..] + b);
+        }
+    }
+
+    method Main()
+    {
+        assert count([]) == 0;
+        assert count([true]) == 1;
+        assert count([false]) == 0;
+        assert count([true, false]) == 1;
+        assert count([true, true]) == 2;
+    }
+}
