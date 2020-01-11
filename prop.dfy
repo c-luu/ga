@@ -1,3 +1,4 @@
+// Uncategorized proof helpers. 
 module Prop {
     function calcMax(s: seq<int>): int
     requires |s| > 0
@@ -51,5 +52,20 @@ module Prop {
     predicate uniformArray<T>(x: seq<T>, val: T) 
     {
         forall i :: 0 <= i < |x| ==> x[i] == val
+    }
+}
+
+// Graph theory related proof helpers.
+module Graph {
+    class Node {
+        var next: seq<Node>;
+    }
+
+    predicate closed(graph: set<Node>) 
+    reads graph
+    {
+        forall i :: i in graph ==> 
+            forall k :: 0 <= k < |i.next| ==> i.next[k] in graph 
+                                                && i.next[k] != i
     }
 }
