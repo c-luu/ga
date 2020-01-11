@@ -81,3 +81,17 @@ module Distributive {
         assert count([true, true]) == 2;
     }
 }
+
+module Graphs {
+    class Node {
+        var next: seq<Node>;
+    }
+
+    predicate closed(graph: set<Node>) 
+    reads graph
+    {
+        forall i :: i in graph ==> 
+            forall k :: 0 <= k < |i.next| ==> i.next[k] in graph 
+                                                && i.next[k] != i
+    }
+}
