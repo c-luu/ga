@@ -1,4 +1,4 @@
-include "../prop.dfy"
+include "../authoring/seq.dfy"
 
 // https://www8.cs.umu.se/kurser/TDBA77/VT06/algorithms/BOOK/BOOK2/NODE47.HTM
 predicate computedLIS(l: seq<nat>, a: seq<int>)
@@ -14,7 +14,7 @@ requires 0 <= start <= end < |l| == |a|
 {
     if end == 0 then 1 else
     if start == end then l[start] else
-    if l[start] == Prop.calcMax(l) && val >= a[start] then l[start]
+    if l[start] == Seq.calcMax(l) && val >= a[start] then l[start]
     else computedLIS'(l, a, val, start+1, end)
 }
 
@@ -22,7 +22,7 @@ predicate recLIS(lisRes: int, l: seq<nat>, a: seq<int>)
 requires |l| == |a| > 0
 requires computedLIS(l, a)
 {
-    lisRes == Prop.calcMax(l)
+    lisRes == Seq.calcMax(l)
 }
 
 /**
@@ -48,7 +48,7 @@ requires computedLIS(l, a)
 
 method dpLIS(l: seq<nat>, a: seq<int>) returns (lis: nat)
 requires |l| == |a| > 0
-requires Prop.uniformArray(l, 1)
+requires Seq.uniformArray(l, 1)
 
 ensures computedLIS(l,a)
 ensures recLIS(lis, l, a)
