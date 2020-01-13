@@ -16,6 +16,22 @@ module Seq {
         else calcMax'(s, idx+1)
     }
 
+    function calcMin(s: seq<int>): int
+    requires |s| > 0
+    {
+        calcMin'(s, 0)
+    }
+
+    function calcMin'(s: seq<int>, idx: nat): int
+    decreases |s| - idx
+    requires 0 <= idx < |s|
+    {
+        if idx + 1 == |s| then s[idx] else
+        if s[idx] < calcMin'(s, idx+1)
+            then s[idx]
+        else calcMin'(s, idx+1)
+    }
+
     function seqSum(sequence: seq<int>): int 
     decreases sequence
     requires |sequence| > 0
@@ -61,5 +77,12 @@ module Seq {
     {
         if i + 1 == |x| then x[i] else
         if x[i] >= min(x, i+1) then x[i] else min(x, i+1)
+    }
+
+    method Main()
+    {
+        var s1 := [0, -1, 1, 2, -1];
+
+        assert calcMin(s1) == -1;
     }
 }
