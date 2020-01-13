@@ -21,43 +21,43 @@ module EditDistance {
     }
 
     function case1(a: string, b: string, ai: nat, bi: nat): int
-    requires 0 < ai < |a|
-    requires 0 < bi < |b|
-    decreases ai
+    requires 0 < ai+1 < |a|
+    requires 0 < bi+1 < |b|
+    decreases |a|- ai
     {
-        1 + recEdDist'(a, b, ai-1, bi)
+        1 + recEdDist'(a, b, ai+1, bi)
     }
 
     function case2(a: string, b: string, ai: nat, bi: nat): int
-    requires 0 < ai < |a|
-    requires 0 < bi < |b|
-    decreases bi
+    requires 0 < ai+1 < |a|
+    requires 0 < bi+1 < |b|
+    decreases |b| - bi
     {
-        1 + recEdDist'(a, b, ai, bi-1)
+        1 + recEdDist'(a, b, ai, bi+1)
     }
 
     function case3(a: string, b: string, ai: nat, bi: nat): int
-    requires 0 < ai < |a|
-    requires 0 < bi < |b|
-    decreases ai, bi
+    requires 0 < ai+1 < |a|
+    requires 0 < bi+1 < |b|
+    decreases |a|- ai, |b| - bi
     {
-        diff(a[ai], b[bi]) + recEdDist'(a, b, ai-1, bi-1)
+        diff(a[ai], b[bi]) + recEdDist'(a, b, ai+1, bi+1)
     }
 
     function recEdDist'(a: string, b: string, ai: nat, bi: nat): int
     requires 0 <= ai < |a|
     requires 0 <= bi < |b|
-    decreases ai, bi
+    decreases |a|- ai, |b| - bi
     {
         // Both strings are empty, nothing to edit.
-        if ai == 0 && bi == 0 then 0 else
+        if ai+1 == |a| && bi+1 == |b| then 0 else
 
         /* If `a` is empty but not `b`, we need to
          * edit the remaining characters including
          * the character at index `bi`.
          */
-        if ai == 0 then |b[..bi+1]| else
-        if bi == 0 then |a[..ai+1]| else
+        if ai+1 == |a| then |b[bi..]| else
+        if bi+1 == |b| then |a[ai..]| else
         if case1(a, b, ai, bi) < case2(a, b, ai, bi) 
             && case1(a, b, ai, bi) < case3(a, b, ai, bi)
         then case1(a, b, ai, bi) else
