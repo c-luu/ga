@@ -1,35 +1,107 @@
 include "../authoring/seq.dfy"
 
 module EditDistance {
-    import S = Seq
+    import Seq = Seq
 
-    function diff(a: char, b: char): nat
-    {
-        if a == b then 1 else 0
-    }
-
-    function recEdDist(a: string, b: string): nat
-    requires |a| > 0 && |b| > 0
-    {
-        if a[|a|-1] == b[|b|-1] then 0 else 1
-    }
-
-    lemma recEdDist'(a: string, b: string, ai: nat, bi: nat) returns (dist: nat)
-    requires |a| > 0 && |b| > 0
-    requires 0 <= ai < |a|
-    requires 0 <= bi < |b|
-    {
-        var res := [0, 0 ,0];
-        res[0] := 1+recEdDist'(a, b, popChar(ai), bi);
-        res[1] := 1+recEdDist'(a, b, ai, popChar(bi));
-        res[2] := diff(a[ai], b[bi]) + recEdDist'(a, b, popChar(ai), popChar(bi));
-    }
-
-    function popChar(i: nat): nat
-    requires i > 0
+    function popChar(i: int): int
+    requires i >= 0
     {
         if i-1 < 0 then 0 else i-1 
     }
+
+    function diff(a: char, b: char): int
+    {
+        if a == b then 0 else 1
+    }
+
+    function recEdDist(a: string, b: string): int
+    requires |a| > 0 && |b| > 0
+    {
+        0
+    }
+
+    function case1(a: string, b: string, ai: nat, bi: nat): int
+    requires 0 < ai < |a|
+    requires 0 < bi < |b|
+    decreases ai
+    {
+        1 + recEdDist'(a, b, ai-1, bi)
+    }
+
+    function case2(a: string, b: string, ai: nat, bi: nat): int
+    requires 0 < ai < |a|
+    requires 0 < bi < |b|
+    decreases bi
+    {
+        1 + recEdDist'(a, b, ai, bi-1)
+    }
+
+    function case3(a: string, b: string, ai: nat, bi: nat): int
+    requires 0 < ai < |a|
+    requires 0 < bi < |b|
+    decreases ai, bi
+    {
+        diff(a[ai], b[bi]) + recEdDist'(a, b, ai-1, bi-1)
+    }
+
+    function recEdDist'(a: string, b: string, ai: nat, bi: nat): int
+    requires 0 <= ai < |a|
+    requires 0 <= bi < |b|
+    decreases ai, bi
+    {
+        // Both strings are empty, nothing to edit.
+        if ai == 0 && bi == 0 then 0 else
+
+        /* If `a` is empty but not `b`, we need to
+         * edit the remaining characters including
+         * the character at index `bi`.
+         */
+        if ai == 0 then |b[..bi+1]| else
+        if bi == 0 then |a[..ai+1]| else
+        if case1(a, b, ai, bi) < case2(a, b, ai, bi) 
+            && case1(a, b, ai, bi) < case3(a, b, ai, bi)
+        then case1(a, b, ai, bi) else
+        if case2(a, b, ai, bi) < case1(a, b, ai, bi) 
+            && case2(a, b, ai, bi) < case3(a, b, ai, bi)
+        then case2(a, b, ai, bi) else
+        case3(a, b, ai, bi)
+    }
+
+
+    lemma editDist(a: string, b: string, ai: int, bi: int) returns (dist: int)
+    requires |a| > 0 && |b| > 0
+    requires 0 <= ai < |a|
+    requires 0 <= bi < |b|
+    decreases ai, bi
+    {
+        var case1, case2, case3 :int;
+
+        if ai-1 < 0 {
+            case1 := 0;
+        } else {
+            case1 := editDist(a, b, ai-1, bi);
+            case1 := 1 + case1;
+        }
+
+        if bi-1 < 0 {
+            case2 := 0;
+        } else {
+            case2 := editDist(a, b, ai, bi-1);
+            case2 := 1 + case2;
+        }
+
+        if ai-1 < 0 || bi-1 < 0 {
+            case3 := 0;
+        } else {
+            case3 :=  editDist(a, b, ai-1, bi-1);
+            case3 := diff(a[ai], b[bi]) + case3;
+        }
+
+
+        var res :seq<int> := [case1, case2 , case3];
+        dist := Seq.calcMin(res);
+    }
+
 
     method Main()
     {
@@ -37,7 +109,10 @@ module EditDistance {
         var s2 := "a";
         var s3 := "b";
 
+        // Base case: both characters are the same, so no editing cost.
         assert recEdDist(s1, s2) == 0;
+
+        // Base case: character substitution. 
         assert recEdDist(s1, s3) == 1;
     }
 }
