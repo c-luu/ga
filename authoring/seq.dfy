@@ -53,4 +53,13 @@ module Seq {
     {
         forall i :: 0 <= i < |x| ==> x[i] == val
     }
+
+    function min(x: seq<int>, i: int): int 
+    decreases |x| - i
+    requires 0 < i < |x|
+    requires |x| > 0
+    {
+        if i + 1 == |x| then x[i] else
+        if x[i] >= min(x, i+1) then x[i] else min(x, i+1)
+    }
 }
