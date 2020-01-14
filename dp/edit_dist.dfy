@@ -35,6 +35,13 @@ module EditDistance {
         diff(a[ai], b[bi]) + recEdDist'(a, b, ai+1, bi+1)
     }
 
+    method edDist(a: string, b: string) returns (minEdits: nat)
+    requires |a| > 0 && |b| > 0
+    ensures minEdits == recEdDist(a, b)
+    {
+        assume minEdits == recEdDist(a, b);
+    }
+
     method Main()
     {
         var s1 := "a";
