@@ -32,6 +32,22 @@ module Seq {
         else calcMin'(s, idx+1)
     }
 
+    function method methCalcMin(s: seq<int>): int
+    requires |s| > 0
+    {
+        methCalcMin'(s, 0)
+    }
+
+    function method methCalcMin'(s: seq<int>, idx: nat): int
+    decreases |s| - idx
+    requires 0 <= idx < |s|
+    {
+        if idx + 1 == |s| then s[idx] else
+        if s[idx] < methCalcMin'(s, idx+1)
+            then s[idx]
+        else methCalcMin'(s, idx+1)
+    }
+
     function seqSum(sequence: seq<int>): int 
     decreases sequence
     requires |sequence| > 0
