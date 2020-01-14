@@ -46,16 +46,18 @@ module EditDistance {
         var s5 := "sunny";
         var s6 := "aa";
         var s7 := "aa";
+        var s8 := "polynomial";
+        var s9 := "exponential";
 
         // Base case: both characters are the same, so no editing cost.
         assert recEdDist(s1, s2) == 0;
 
         // Base case: character substitution. 
         assert recEdDist(s1, s3) == 1;
-        
+        assert recEdDist(s6, s7) == 0;
+
         // Inductive:
         assert recEdDist(s4, s5) == 3;
-
-        assert recEdDist(s6, s7) == 0;
+        assert recEdDist(s8, s9) == 6;
     }
 }
