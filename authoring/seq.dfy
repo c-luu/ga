@@ -48,6 +48,22 @@ module Seq {
         else methCalcMin'(s, idx+1)
     }
 
+    function method methCalcMinNat(s: seq<nat>): nat
+    requires |s| > 0
+    {
+        methCalcMinNat'(s, 0)
+    }
+
+    function method methCalcMinNat'(s: seq<nat>, idx: nat): nat
+    decreases |s| - idx
+    requires 0 <= idx < |s|
+    {
+        if idx + 1 == |s| then s[idx] else
+        if s[idx] < methCalcMinNat'(s, idx+1)
+            then s[idx]
+        else methCalcMinNat'(s, idx+1)
+    }
+
     function seqSum(sequence: seq<int>): int 
     decreases sequence
     requires |sequence| > 0
