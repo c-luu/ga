@@ -43,7 +43,7 @@ module EditDistance {
         var s2 := "a";
         var s3 := "b";
         var s4 := "snowy";
-        var s5 := "sunny";
+        var s5 := "sunn";
         var s6 := "aa";
         var s7 := "aa";
         var s8 := "polynomial";
@@ -57,7 +57,7 @@ module EditDistance {
         assert recEdDist(s6, s7) == 0;
 
         // Inductive:
-        assert recEdDist(s4, s5) == 3;
+        assert recEdDist(s4, s5) == 4;
         assert recEdDist(s8, s9) == 6;
     }
 }
