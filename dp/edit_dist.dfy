@@ -39,6 +39,17 @@ module EditDistance {
     requires |a| > 0 && |b| > 0
     ensures minEdits == recEdDist(a, b)
     {
+        var m: array2<nat>;
+        m := new nat[|a|+1, |b|+1];
+        var a' := "\0" + a;
+        var b' := "\0" + b;
+
+        assert |a'| == |a| + 1;
+        assert a'[0] == '\0';
+        assert |b'| == |b| + 1;
+
+        m[0, 0] := 0;
+
         assume minEdits == recEdDist(a, b);
     }
 
