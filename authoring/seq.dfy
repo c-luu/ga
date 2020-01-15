@@ -32,36 +32,45 @@ module Seq {
         else calcMin'(s, idx+1)
     }
 
-    function method methCalcMin(s: seq<int>): int
-    requires |s| > 0
+    // https://raw.githubusercontent.com/dafny-lang/dafny/master/Test/tutorial/maximum.dfy
+    method maxMeth(values: seq<int>) returns (max: int)
+    requires values != []
+    ensures max in values
+    ensures forall i | 0 <= i < |values| :: values[i] <= max
     {
-        methCalcMin'(s, 0)
+        max := values[0];
+        var idx := 0;
+        while (idx < |values|)
+        decreases |values|-idx
+        invariant max in values
+        invariant idx <= |values|
+        invariant forall j | 0 <= j < idx :: values[j] <= max
+        {
+            if (values[idx] > max) {
+                max := values[idx];
+            }
+            idx := idx + 1;
+        }
     }
 
-    function method methCalcMin'(s: seq<int>, idx: nat): int
-    decreases |s| - idx
-    requires 0 <= idx < |s|
+    method minMeth(values: seq<int>) returns (min: int)
+    requires values != []
+    ensures min in values
+    ensures forall i | 0 <= i < |values| :: values[i] >= min
     {
-        if idx + 1 == |s| then s[idx] else
-        if s[idx] < methCalcMin'(s, idx+1)
-            then s[idx]
-        else methCalcMin'(s, idx+1)
-    }
-
-    function method methCalcMinNat(s: seq<nat>): nat
-    requires |s| > 0
-    {
-        methCalcMinNat'(s, 0)
-    }
-
-    function method methCalcMinNat'(s: seq<nat>, idx: nat): nat
-    decreases |s| - idx
-    requires 0 <= idx < |s|
-    {
-        if idx + 1 == |s| then s[idx] else
-        if s[idx] < methCalcMinNat'(s, idx+1)
-            then s[idx]
-        else methCalcMinNat'(s, idx+1)
+        min := values[0];
+        var idx := 0;
+        while (idx < |values|)
+        decreases |values|-idx
+        invariant min in values
+        invariant idx <= |values|
+        invariant forall j | 0 <= j < idx :: values[j] >= min
+        {
+            if (values[idx] <= min) {
+                min := values[idx];
+            }
+            idx := idx + 1;
+        }
     }
 
     function seqSum(sequence: seq<int>): int 
@@ -102,10 +111,18 @@ module Seq {
         forall i :: 0 <= i < |x| ==> x[i] == val
     }
 
+/*
     method Main()
     {
         var s1 := [0, -1, 1, 2, -1];
 
         assert calcMin(s1) == -1;
+
+        var r1 := maxMeth(s1);
+        assert r1 == 2 == calcMax(s1);
+
+        var r2 := minMeth(s1);
+        assert r2 == -1 == calcMin(s1);
     }
+    */
 }
