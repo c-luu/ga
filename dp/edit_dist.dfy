@@ -1,7 +1,9 @@
 include "../authoring/seq.dfy"
+include "../authoring/matrix.dfy"
 
 module EditDistance {
-    import Seq = Seq;
+    import Seq = Seq
+    import MX = MX
 
     function diff(a: char, b: char): int
     {
@@ -46,24 +48,24 @@ module EditDistance {
 
     method edDist(a: string, b: string) returns (minEdits: nat)
     requires |a| > 0 && |b| > 0
-    ensures minEdits == recEdDist(a, b)
+    //ensures minEdits == recEdDist(a, b)
     {
-        var m: array2<nat>;
-        m := new nat[|a|+1, |b|+1];
-
-        var a' := "\0" + a;
-        var b' := "\0" + b;
-        var i, j := 0, 0;
+        var a', b' := MX.dpStringMX(a, b);
+        var m := new nat[|a'|, |b'|];
+        var i, j := 1, 1;
 
         assert |a'| == |a| + 1;
         assert a'[0] == '\0';
         assert |b'| == |b| + 1;
 
+        m[0,0] := 0;
+        assert m[0, 0] == 0;
+
         while i < |a'|
         invariant 0 <= i <= |a'|
         decreases |a'|-i
         {
-            m[i, 0] := if i==0 then 0 else |b'|-1;
+            m[i, 0] := i;
             i := i+1;
         }
 
@@ -71,24 +73,28 @@ module EditDistance {
         invariant 0 <= j <= |b'|
         decreases |b'|-j
         {
-            m[0, j] := if j==0 then 0 else |a'|-1;
+            m[0, j] := j;
             j := j+1;
         }
 
         i, j := 1, 1;
 
         while i < |a'| 
-        invariant 0 <= i <= |a'|
+        invariant 0 < i <= |a'|
         invariant j == 1
         decreases |a'|-i
         {
+            assert forall a, b :: 0 <= a < |a'| && 0 <= b < |b'| ==> m[a,b] >=0;
             while j < |b'| 
-            invariant 0 <= i <= |a'|
-            invariant 0 <= j <= |b'|
+            invariant 0 < i <= |a'|
+            invariant 0 < j <= |b'|
             decreases |b'|-j
             {
+                assert forall a, b :: 0 <= a < |a'| && 0 <= b < |b'| ==> m[a,b] >=0;
                 var c1, c2, c3 := 1+m[i-1, j], 1+m[i, j-1], methDiff(a'[i],b'[j])+m[i-1,j-1];
-                var localEdDist := Seq.methCalcMin([c1, c2, c3]);
+                var resSeq := [c1, c2, c3];
+                var localEdDist := Seq.minMeth(resSeq);
+                m[i,j] := localEdDist;
 
                 j := j+1;
             }
@@ -98,7 +104,7 @@ module EditDistance {
         }
 
         minEdits := m[|a'|-1, |b'|-1];
-        assume minEdits == recEdDist(a, b);
+        //assume minEdits == recEdDist(a, b);
     }
 
     method Main()
@@ -114,6 +120,8 @@ module EditDistance {
         var s7 := "aa";
         var s8 := "polynomial";
         var s9 := "exponential";
+        var s10 := "\0snowy";
+        var s11 := "\0sunny";
 
         // Base case: both characters are the same, so no editing cost.
         assert recEdDist(s1, s2) == 0;
@@ -127,5 +135,11 @@ module EditDistance {
 
         // Causes timeout.
         // assert recEdDist(s8, s9) == 6;
+
+        var res := edDist(s10, s11);
+        print res;
+        res := edDist(s8, s9);
+        print '\n';
+        print res;
     }
 }
