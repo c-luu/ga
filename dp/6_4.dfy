@@ -33,17 +33,13 @@ requires 0 <= i <= j <= |S|
 {
     if i <= j < |S|-1 then
         if dict(S[i..j+1]) then
-        true else false
-        /*
+        //true else false
             if greedy_a1(S, j+1, j+1) then
                 true else false
-                */
-                /*
         else if greedy_a1(S, i, j+1) then
             true else false
-            */
     //else dict(S[i..j]) 
-    else if j < |S| then dict(S[i..j]) 
+    else if j < |S| then dict(S[i..j])  else false
 }
 
 // Limited dictionary function.
@@ -57,4 +53,5 @@ method Main()
     assert dict("a");
     assert dict("s") == false;
     assert greedy_a1("a", 0, 0) == true;
+    assert greedy_a1("asx", 0, 0) == true;
 }
