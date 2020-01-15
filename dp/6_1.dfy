@@ -1,4 +1,4 @@
-include "../prop.dfy"
+include "../authoring/seq.dfy"
 
 // DPV
 // Base case(s):
@@ -11,14 +11,14 @@ predicate sumOfEmptySubseq(subSeq: seq<int>, sum: int)
 predicate maxSubseqSum(sequence: seq<int>, sum: int)
 {
     // Do we need a total ordering such as this? Or less strict?
-    forall i, j :: 0 <= i < j <= |sequence| ==> sum > Prop.seqSum(sequence[i..j])
+    forall i, j :: 0 <= i < j <= |sequence| ==> sum > Seq.seqSum(sequence[i..j])
 }
 
 function left(s: seq<int>): int
 requires |s| > 0
 {
-    if Prop.seqSum(s) > left'(s, 0, |s|)
-        then Prop.seqSum(s)
+    if Seq.seqSum(s) > left'(s, 0, |s|)
+        then Seq.seqSum(s)
     else left'(s, 0, |s|)
 }
 
@@ -28,8 +28,8 @@ requires 0 <= from < to <= |s|
 {
     if from + 1 == to
         then s[from] 
-    else if Prop.seqSum(s) > left'(s, from+1, to)
-        then Prop.seqSum(s)
+    else if Seq.seqSum(s) > left'(s, from+1, to)
+        then Seq.seqSum(s)
     else left'(s, from+1, to)
 }
 
@@ -38,9 +38,9 @@ decreases s
 requires |s| >= 1
 {
     if |s| == 1 
-        then Prop.seqSum(s) 
-    else if Prop.seqSum(s) > right(s[1..])
-        then Prop.seqSum(s)
+        then Seq.seqSum(s) 
+    else if Seq.seqSum(s) > right(s[1..])
+        then Seq.seqSum(s)
     else right(s[1..])
 }
 
@@ -54,9 +54,9 @@ requires |s| > 1
 
 method dpMCS(a: seq<int>) returns (subSeq: seq<int>, sum: int)
 requires |a| > 1
-ensures Prop.shorterThan(subSeq, a)
-ensures Prop.subsetOf(subSeq, a)
-ensures Prop.increasing(subSeq) // or strictly increasing?
+ensures Seq.shorterThan(subSeq, a)
+ensures Seq.subsetOf(subSeq, a)
+ensures Seq.increasing(subSeq) // or strictly increasing?
 ensures maxSubseqSum(a, sum)
 ensures sumOfEmptySubseq(subSeq, sum)
 ensures sum == recMCS(a)
