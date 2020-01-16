@@ -31,8 +31,12 @@ predicate greedy_a1(S: string, i: nat, j: nat)
 decreases |S| - i, |S| - j 
 requires 0 <= i < j <= |S|
 {
-    if j == |S| then dict(S[i..j]) else
-    greedy_a1(S,i,j+1) 
+    if i<j<|S|-1 then
+        if dict(S[i..j]) && greedy_a1(S,j+1,j+2) then true else
+        if greedy_a1(S,i,j+1) && greedy_a1(S,j+1,j+2) then true else false
+    else dict(S)
+    //else if i<j<|S| then
+    //if dict(S[i..j]) && greedy_a1(S,i,j+1) then true else false else dict(S)
 }
 
 // Limited dictionary function.
