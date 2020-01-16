@@ -60,6 +60,7 @@ method Main()
     assert dict("as"[0..2]);
     assert greedy_a1("as", 0, 1) == true;
     assert "asa"[0..3] == "asa";
-    assert greedy_a1("asa", 0, 1) == true;
+    assert greedy_a1("asa", 0, 1) == false;
+    assert greedy_a1("aa", 0, 1) == true;
     //assert greedy_a1("asx", 0, 0) == false;
 }
