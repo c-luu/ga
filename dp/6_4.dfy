@@ -32,11 +32,10 @@ decreases |S| - i, |S| - j
 requires 0 <= i < j <= |S|
 {
     if i<j<|S|-1 then
-        if dict(S[i..j]) && greedy_a1(S,j+1,j+2) then true else
-        if greedy_a1(S,i,j+1) && greedy_a1(S,j+1,j+2) then true else false
-    else dict(S)
-    //else if i<j<|S| then
-    //if dict(S[i..j]) && greedy_a1(S,i,j+1) then true else false else dict(S)
+        if greedy_a1(S,i,j+1) then greedy_a1(S,j+1,j+2) else false 
+    else if i<j<|S| then 
+        (dict(S[i..j+1]) && greedy_a1(S,i,j+1)) 
+    else dict(S[i..j])
 }
 
 // Limited dictionary function.
