@@ -7,6 +7,18 @@ module SixOne {
     import Seq = Seq
     import MX = MX
 
+    /**
+     * Axiom 1: Express the sub-problem
+     * as a recurrence.
+     */
+
+    /**
+     * Axiom 1': Express Axiom 1
+     * in inductive form for Dafny.
+     * 
+     * TODO: Verify this if is needed.
+     */
+
     method Main()
     {
     }
