@@ -32,7 +32,7 @@ module SixFour {
 
     predicate greedyA1'(S: string, i: nat, j: nat)
     requires 0 <= i < j <= |S|
-    decreases |S|-i , |S|-j
+    decreases |S|-i, |S|-j
     {
         if dict(S[i..j]) then
             true
@@ -41,6 +41,10 @@ module SixFour {
         else if i+2 <= |S| then
             greedyA1'(S, i+1, i+2) 
         else false
+    }
+
+    method greedy(S: string) returns (out: bool)
+    {
     }
 
     method Main()
