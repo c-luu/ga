@@ -127,12 +127,14 @@ module Seq {
         var r2 := minMeth(s1);
         assert r2 == -1 == calcMin(s1);
 
-        var s2 := [ 0, 1, 2];
-        var s3 := [ 1, 2];
+        var s2 := [0, 1, 2];
+        var s3 := [1, 2];
+        var s4 := [0, 2];
 
         // Need lemma.
         assert s2[1..3] == s3;
         assert isSubSeq([1, 2], s2);
+        assert !isSubSeq(s4, s2);
     }
 */
 }
