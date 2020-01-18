@@ -1,7 +1,11 @@
 include "../authoring/math.dfy"
+include "../authoring/seq.dfy"
+include "../authoring/matrix.dfy"
 
 module SixFour {
     import M = Math
+    import Seq = Seq
+    import MX = MX
 
     // Input is a "corrupted" string where puncuations/ spaces are removed.
     // S ::= corrupted input string.
@@ -44,7 +48,26 @@ module SixFour {
     }
 
     method greedy(S: string) returns (out: bool)
+    requires |S| > 0
     {
+        var a', b' := MX.dpStringMX(S, S);
+        var m := new nat[|a'|, |b'|];
+        var i, j := 1, 1;
+
+        var x := 0;
+
+
+        while i < |a'|
+        decreases |a'|-i
+        {
+            while j < |a'|
+            decreases |a'|-j
+            {
+                j := j+1;
+            }
+
+            i := i+1;
+        }
     }
 
     method Main()
