@@ -18,23 +18,28 @@ module SixFour {
      * An axiom stating if there exists
      * at least one word in string `S`,
      * the result evaluates to true.
+     *
+     * It is greedy because although there
+     * may exist a substring that does not
+     * make up a word, it may still evaluate
+     * to true if it can find another one.
      */
-    predicate greedy_a1(S: string)
+    predicate greedyA1(S: string)
     requires |S| > 0
     {
-        greedy_a1'(S, 0, 1)
+        greedyA1'(S, 0, 1)
     }
 
-    predicate greedy_a1'(S: string, i: nat, j: nat)
+    predicate greedyA1'(S: string, i: nat, j: nat)
     requires 0 <= i < j <= |S|
     decreases |S|-i , |S|-j
     {
         if dict(S[i..j]) then
             true
         else if j+1 <= |S| then
-            greedy_a1'(S, i, j+1) 
+            greedyA1'(S, i, j+1) 
         else if i+2 <= |S| then
-            greedy_a1'(S, i+1, i+2) 
+            greedyA1'(S, i+1, i+2) 
         else false
     }
 
@@ -49,16 +54,16 @@ module SixFour {
         var s5 := "s";
         var s8 := "xx";
 
-        assert greedy_a1(s1) == true;
-        assert greedy_a1(s2) == true;
-        assert greedy_a1(s3) == true;
-        assert greedy_a1(s4) == true;
-        assert greedy_a1(s6) == true;
-        assert greedy_a1(s7) == true;
+        assert greedyA1(s1) == true;
+        assert greedyA1(s2) == true;
+        assert greedyA1(s3) == true;
+        assert greedyA1(s4) == true;
+        assert greedyA1(s6) == true;
+        assert greedyA1(s7) == true;
 
         // This is needed for some reason- might need a lemma?
         assert dict(s5) == false;
-        assert greedy_a1(s5) == false;
-        assert greedy_a1(s8) == false;
+        assert greedyA1(s5) == false;
+        assert greedyA1(s8) == false;
     }
 }
