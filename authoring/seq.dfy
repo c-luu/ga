@@ -77,8 +77,15 @@ module Seq {
     decreases sequence
     requires |sequence| > 0
     {
-        if |sequence| == 1 then sequence[|sequence|-1]
-        else sequence[|sequence|-1] + seqSum(sequence[..|sequence|-1])
+        seqSum'(sequence, 0)
+    }
+
+    function seqSum'(sequence: seq<int>, i: nat): int 
+    decreases |sequence| - i
+    requires i < |sequence|
+    {
+        if i+1 == |sequence| then sequence[i]
+        else sequence[i] + seqSum'(sequence, i+1)
     }
 
     predicate shorterThan<T>(sub: seq<T>, sequence: seq<T>)
@@ -127,6 +134,8 @@ module Seq {
         assert r1 == 2 == calcMax(s1);
         var r2 := minMeth(s1);
         assert r2 == -1 == calcMin(s1);
+
+        assert seqSum([10,-5,40,10]) == 55;
 
         var s2 := [0, 1, 2];
         var s3 := [1, 2];
