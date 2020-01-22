@@ -81,3 +81,78 @@ module Distributive {
         assert count([true, true]) == 2;
     }
 }
+
+module BinarySearch {
+    predicate sorted(a: seq<int>)
+    {
+        forall j,k :: 0 <= j < k < |a| ==> a[j] <= a[k]
+    }
+
+    predicate sorted'(a: array<int>)
+    reads a
+    {
+        forall j,k :: 0 <= j < k < a.Length ==> a[j] <= a[k]
+    }
+
+    method search(a: seq<int>, key: int) returns (idx: int)
+    requires sorted(a)
+    ensures idx >= 0 ==> idx < |a| && a[idx] == key
+    ensures idx < 0 ==> key !in a
+    {
+        var lo, hi := 0, |a|;
+
+        while lo < hi
+        decreases hi - lo
+        invariant 0 <= lo <= hi <= |a|
+        invariant key !in a[..lo] && key !in a[hi..]
+        {
+            var mid := (lo+hi)/2;
+            if key < a[mid]
+            {
+                hi := mid;
+            } else if a[mid] < key {
+                lo := mid+1;
+            } else {
+                return mid;
+            }
+        }
+
+        idx := -1;
+    }
+
+    method search'(a: array<int>, key: int) returns (idx: int)
+    requires sorted'(a)
+    ensures idx >= 0 ==> idx < a.Length && a[idx] == key
+    ensures idx < 0 ==> key !in a[..]
+    {
+        var lo, hi := 0, a.Length;
+
+        while lo < hi
+        decreases hi - lo
+        invariant 0 <= lo <= hi <= a.Length
+        invariant key !in a[..lo] && key !in a[hi..]
+        {
+            var mid := (lo+hi)/2;
+            if key < a[mid]
+            {
+                hi := mid;
+            } else if a[mid] < key {
+                lo := mid+1;
+            } else {
+                return mid;
+            }
+        }
+
+        idx := -1;
+    }
+
+    method Main()
+    {
+        var a := new int[2];
+        a[0] := 0;
+        a[1] := 1;
+        var r1 := search'(a, -1);
+        print r1;
+        assert  -1 == r1; 
+    }
+}
