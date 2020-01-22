@@ -120,10 +120,11 @@ module BinarySearch {
         idx := -1;
     }
 
-    method search'(a: array<int>, key: int) returns (idx: int)
+    lemma search'(a: array<int>, key: int) returns (idx: int)
     requires sorted'(a)
     ensures idx >= 0 ==> idx < a.Length && a[idx] == key
     ensures idx < 0 ==> key !in a[..]
+    ensures key !in a[..] ==> idx == -1
     {
         var lo, hi := 0, a.Length;
 
@@ -139,11 +140,14 @@ module BinarySearch {
             } else if a[mid] < key {
                 lo := mid+1;
             } else {
+                assert mid >= 0;
+                assert mid < a.Length;
+                assert a[mid] == key;
                 return mid;
             }
         }
 
-        idx := -1;
+        return -1;
     }
 
     method Main()
@@ -151,8 +155,14 @@ module BinarySearch {
         var a := new int[2];
         a[0] := 0;
         a[1] := 1;
-        var r1 := search'(a, -1);
-        print r1;
-        assert  -1 == r1; 
+        var r1 := search'(a, 0);
+        assert a[0] == 0;
+        assert  0 == r1; 
+
+        var a1 := new int[2];
+        a1[0] := 0;
+        a1[1] := 1;
+        var r2 := search'(a1, 3);
+        assert  -1 == r2; 
     }
 }
