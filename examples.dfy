@@ -72,6 +72,7 @@ module Distributive {
         }
     }
 
+/*
     method Main()
     {
         assert count([]) == 0;
@@ -80,6 +81,7 @@ module Distributive {
         assert count([true, false]) == 1;
         assert count([true, true]) == 2;
     }
+*/
 }
 
 module BinarySearch {
@@ -150,6 +152,7 @@ module BinarySearch {
         return -1;
     }
 
+/*
     method Main()
     {
         var a := new int[2];
@@ -165,4 +168,6 @@ module BinarySearch {
         var r2 := search'(a1, 3);
         assert  -1 == r2; 
     }
+*/
 }
+
