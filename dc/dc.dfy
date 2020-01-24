@@ -6,8 +6,7 @@ module MergeSort {
     method mergesort(a: seq<nat>) returns (out: seq<nat>)
     requires |a| > 0
     ensures |a| == 1 ==> out == a
-    ensures S.increasing(out)
-    ensures |a| == |out|
+    ensures S.increasing(out) && |a| == |out|
     decreases a
     {
         if |a| > 1 {
@@ -23,22 +22,22 @@ module MergeSort {
     }
 
     method merge(a: seq<nat>, b: seq<nat>) returns (out: seq<nat>)
-    requires 0 < |a| && 0 < |b|
-    ensures |a| == 1 ==> out == a
-    ensures |b| == 1 ==> out == b
-    ensures multiset(out) == multiset(a+b)
-    ensures S.increasing(out)
-    ensures |out| == |a|+|b|
+    requires 0 <= |a| && 0 <= |b|
+    ensures |a| == 0 && |b| >= 0 ==> out == b
+    ensures |b| == 0 && |a| >= 0 ==> out == a
+    ensures forall o :: o in out ==> o in a+b
+    decreases a, b
+    //ensures S.increasing(out)
     {
-        if |a| == 1 {
-            return a;
-        }
-         
-        if |b| == 1 {
+        if |a| == 0 && |b| >= 0 {
             return b;
         }
+         
+        if |b| == 0 && |a| >= 0 {
+            return a;
+        }
 
-        if a[0] < b[0] {
+        if a[0] <= b[0] {
             var res := merge(a[1..], b);
             var res' := [a[0]] + res;
             return res';
@@ -47,5 +46,12 @@ module MergeSort {
             var res' := [b[0]] + res;
             return res';
         }
+    }
+
+    method Main() {
+        var a1 := [0, 2];
+        var a2 := [1];
+        var res := merge(a1, a2);
+        print res;
     }
 }
