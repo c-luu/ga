@@ -7,12 +7,16 @@ module MergeSort {
     requires |a| > 0
     ensures |a| == 1 ==> out == a
     ensures S.increasing(out)
+    ensures |a| == |out|
     decreases a
     {
         if |a| > 1 {
             var mid := |a|/2;
-            var mergeRes := merge(a[..mid], a[mid..]);
-            var res := mergesort(mergeRes);
+            assert mid > 0;
+            var left := mergesort(a[..mid]); 
+            var right := mergesort(a[mid..]);
+            var mergeRes := merge(left, right);
+            out := mergeRes;
         } else {
             return a;
         }
@@ -24,6 +28,7 @@ module MergeSort {
     ensures |b| == 1 ==> out == b
     ensures multiset(out) == multiset(a+b)
     ensures S.increasing(out)
+    ensures |out| == |a|+|b|
     {
         if |a| == 1 {
             return a;
