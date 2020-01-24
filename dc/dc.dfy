@@ -23,19 +23,17 @@ module MergeSort {
     }
 
     method merge(a: seq<nat>, b: seq<nat>) returns (out: seq<nat>)
-    requires 0 < |a| && 0 < |b|
-    ensures |a| == 1 ==> out == a
-    ensures |b| == 1 ==> out == b
-    ensures multiset(out) == multiset(a+b)
+    requires 0 <= |a| && 0 <= |b|
+    ensures |a| == 0 ==> out == b
+    ensures |b| == 0 ==> out == a
     ensures S.increasing(out)
-    ensures |out| == |a|+|b|
     {
-        if |a| == 1 {
-            return a;
+        if |a| == 0 {
+            return b;
         }
          
-        if |b| == 1 {
-            return b;
+        if |b| == 0 {
+            return a;
         }
 
         if a[0] < b[0] {
