@@ -87,6 +87,7 @@ module Seq {
     }
 
     predicate increasing(a: seq<int>) 
+    requires |a| > 0
     {
         forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]
     }
@@ -111,18 +112,30 @@ module Seq {
         forall i :: 0 <= i < |x| ==> x[i] == val
     }
 
+    predicate isSubSeq<T>(sub: seq<T>, s: seq<T>)
+    requires |sub| > 0 && |s| > 0
+    {
+        exists i, j :: (0 <= i < j <= |s| ==> s[i..j] == sub)
+    }
+
 /*
     method Main()
     {
         var s1 := [0, -1, 1, 2, -1];
-
         assert calcMin(s1) == -1;
-
         var r1 := maxMeth(s1);
         assert r1 == 2 == calcMax(s1);
-
         var r2 := minMeth(s1);
         assert r2 == -1 == calcMin(s1);
+
+        var s2 := [0, 1, 2];
+        var s3 := [1, 2];
+        var s4 := [0, 2];
+
+        // Need lemma.
+        assert s2[1..3] == s3;
+        assert isSubSeq([1, 2], s2);
+        assert !isSubSeq(s4, s2);
     }
-    */
+*/
 }
