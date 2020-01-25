@@ -87,6 +87,7 @@ module Seq {
     }
 
     predicate increasing(a: seq<int>) 
+    requires |a| > 0
     {
         forall i, j :: 0 <= i < j < |a| ==> a[i] <= a[j]
     }
