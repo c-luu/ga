@@ -51,6 +51,7 @@ module MergeSort {
         }
     }
 
+/*
     method Main() {
         var a1 := [0, 2];
         var a2 := [1];
@@ -58,5 +59,38 @@ module MergeSort {
         var res1 := recMerge(a1, a2);
         var res2 := recMergeSort(a3);
         print res2;
+    }
+*/
+}
+
+module Selection {
+    // Incomplete- book has an awkward API.
+    // v is the initial split value, k 
+    function recSel(s: seq<nat>, sl: seq<nat>, sv: seq<nat>, sr: seq<nat>, v: nat, k: nat): nat
+    {
+        if k <= |sl| then recSel'(sl, k) else
+        /**
+         * k is in the portion of the array
+         * where all the elements == v.
+         */
+        if |sl| < k <= |sl|+|sv| then v else
+        if k > |sl|+|sv| then recSel'(sr, k-|sl|-|sv|) else 0
+    }
+
+    function recSel'(s: seq<nat>, k: nat): nat
+    {
+        0
+    }
+
+    method Main()
+    {
+        var v := 5;
+        var a1 := [2, 36, 5, 21, 8, 13, 11, 20, 5, 4, 1];
+        var sl := [1, 2, 4];
+        var sv :=  [5, 5];
+        var sr := [36, 21, 8, 13, 11, 20];
+
+        assert |a1| == |sl + sv + sr|;
+        assert forall e :: e in sl + sv + sr ==> e in a1;
     }
 }
