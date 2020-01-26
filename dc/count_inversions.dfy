@@ -18,7 +18,7 @@ requires |a| >= 0
     if |a| <= 1 {
         return 0;
     }
-    var mid := if (|a|/2) % 2 == 0 then (|a|/2)-1 else |a|/2;
+    var mid := M.methFloorMid(a);
     var res1 := countInv(a[..mid]);
     var res2 := countInv(a[mid..]);
     var res3 := merge(a[..mid], a[mid..]); 
