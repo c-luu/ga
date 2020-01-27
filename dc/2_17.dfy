@@ -16,21 +16,31 @@ predicate axiom1(a: seq<int>)
 }
 
 method recFxdPnts(a: seq<nat>, start: nat, end: nat) returns (out: nat)
-decreases a
-requires |a| >= 0
+requires |a| >= 1 && end >= start 
+decreases end - start
 {
-    if |a| <= 1 {
-        return 0;
+    if start <= end {
+        if |a| > 1 {
+            var mid := M.methFloorMid(a);
+            if mid == a[mid] { return 1; }
+            if mid > a[mid] && mid+1 <= end {
+                var res := recFxdPnts(a, mid+1, end);
+                return res;
+            }
+            if start <= mid {
+                var res := recFxdPnts(a, start, mid);
+                return res;
+            }
+        } else { return if a[0] == end then 1 else 0; }
     }
-    var mid := M.methFloorMid(a);
-    var res1 := recFxdPnts(a, start, mid);
-    var res2 := recFxdPnts(a, mid, 2*mid);
-    var res3 := merge(a[..mid], a[mid..]); 
-    out := res1 + res2 + res3;
+
+    else { return 0; }
 }
 
 method Main()
 {
     // Unordered sequence of numbers.
     var a1: seq<nat> := [6, 2, 1, 3];
+    var res := recFxdPnts(a1, 0, |a1|);
+    print res;
 }
