@@ -1,3 +1,9 @@
+// 
+predicate a1(a: seq<nat>, b: seq<nat>)
+{
+    |a| == |b|
+}
+
 method Main()
 {
     /**
@@ -12,4 +18,8 @@ method Main()
     var a1 := [6, 1, 12];
     var b1 := [1, 0, 8];
     var c1 := [8, 1, 8];
+
+    var a2 := [0];
+    var a3 := [1];
+    var a4 := [1];
 }
