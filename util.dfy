@@ -18,4 +18,17 @@ module Util {
         } 
         print "\n";
     }
+
+    method printArray<T>(a: array<T>) 
+    {
+        var v := 0;
+        while (v < a.Length)
+        decreases a.Length - v
+        {
+            print a[v];
+            print "\t";
+            v := v + 1;
+        } 
+        print "\n";
+    }
 }
