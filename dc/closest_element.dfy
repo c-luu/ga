@@ -45,7 +45,6 @@ requires |b| > 0
                    then l[0] else res;
         }
         else { out := l[0]; }
-        
     } 
     else { 
         if |r| > 1 { 
@@ -91,4 +90,11 @@ method Main()
     var c2' := new nat[|a2|];
     closestElem(a2, b2, c2');
     U.printArray(c2');
+
+    var a3 := [6, 0, 0, 0];
+    var b3 := [5, 6, 7, 8];
+    var c3 := [6, 5, 5, 5];
+    var c3' := new nat[|a3|];
+    closestElem(a3, b3, c3');
+    U.printArray(c3');
 }
