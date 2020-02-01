@@ -6,6 +6,15 @@ import M = Math
 import U = Util
 import S = Seq
 
+/**
+ * Important axiom for finding min. dist. in O(logn).
+ * If true, we recurse on the left sub-array.
+ */
+predicate method a1(a: nat, l: nat, r: nat)
+{
+    M.methDiff(a, l) <= M.methDiff(a, r)
+}
+
 // Assume inputs are sorted initially.
 method closestElem(a: seq<nat>, b: seq<nat>, out: array<nat>)
 modifies out
@@ -38,10 +47,10 @@ requires |b| > 0
     var l := b[..mid];
     var r := b[mid..];
 
-    if M.methDiff(c, l[0]) <= M.methDiff(c, r[0]) {
+    if a1(c, l[0], r[0]) {
         if |l| > 1 { 
             var res := merge''(c, l[1..]);
-            out := if M.methDiff(c, l[0]) <= M.methDiff(c, res)
+            out := if a1(c, l[0], res)
                    then l[0] else res;
         }
         else { out := l[0]; }
@@ -49,7 +58,7 @@ requires |b| > 0
     else { 
         if |r| > 1 { 
             var res := merge''(c, r[1..]); 
-            out := if M.methDiff(c, r[0]) <= M.methDiff(c, res)
+            out := if a1(c, r[0], res)
                    then r[0] else res;
         }
         else { out := r[0]; }
