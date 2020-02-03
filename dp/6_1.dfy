@@ -12,6 +12,11 @@ module SixOne {
      * as a recurrence.
      */
 
+    function a1(a: seq<nat>): seq<nat>
+    {
+        []
+    }
+
     /**
      * Axiom 1': Express Axiom 1
      * in inductive form for Dafny.
