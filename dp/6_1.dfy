@@ -13,8 +13,9 @@ module SixOne {
      */
 
     function a1(a: seq<nat>): seq<nat>
+    requires |a|>0
     {
-        []
+        if |a| == 1 then [a[0]] else []
     }
 
     /**
