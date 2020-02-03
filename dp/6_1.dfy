@@ -10,8 +10,9 @@ module SixOne {
     /**
      * Axiom 1: Express the sub-problem
      * as a recurrence.
+     * This may need to be adjusted to form T(n, a), where
+     * n is a[|a|-1].
      */
-
     function a1(a: seq<nat>): seq<nat>
     requires |a|>0
     {
@@ -21,9 +22,7 @@ module SixOne {
 
     /**
      * Axiom 1': Express Axiom 1
-     * in inductive form for Dafny.
-     * 
-     * TODO: Verify this if is needed.
+     * in inductive form for Dafny, if needed.
      */
 
     method Main()
