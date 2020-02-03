@@ -15,7 +15,8 @@ module SixOne {
     function a1(a: seq<nat>): seq<nat>
     requires |a|>0
     {
-        if |a| == 1 then [a[0]] else []
+        if |a| == 1 then [a[0]] else 
+        []
     }
 
     /**
@@ -27,5 +28,8 @@ module SixOne {
 
     method Main()
     {
+        // Base case.
+        var a := [0];
+        assert a1(a) == a;
     }
 }
