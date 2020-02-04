@@ -75,9 +75,10 @@ module Seq {
 
     function seqSum(sequence: seq<int>): int 
     decreases sequence
-    requires |sequence| > 0
+    requires |sequence| >= 0
     {
-        seqSum'(sequence, 0)
+        if |sequence|==0 then 0
+        else seqSum'(sequence, 0)
     }
 
     function seqSum'(sequence: seq<int>, i: nat): int 
