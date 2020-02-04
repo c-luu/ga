@@ -19,13 +19,16 @@ module SixOne {
     {
         if |a| == 0 then [] else
         if |a| == 1 then [a[0]] else 
-        if a2([a[0]], a2(a, a[1..]))==[a[0]] then [a[0]]
-        else if a2(a, a[1..]) == a then a else a1(a[1..])
+        if a2([a[0]], a2(a, a1(a[1..])))==[a[0]] then [a[0]]
+        else if a2(a, a1(a[1..])) == a then a else a1(a[1..])
     }
 
     function a2(a: seq<int>, b: seq<int>): seq<int>
-    requires |a|>0 && |b|>0
+    requires |a|>=0 && |b|>=0
     {
+        if |a|==0 && |b|>0 then a else
+        if |b|==0 && |a|>0 then b else 
+        if |b|==0 && |a|==0 then [] else
         if M.max(S.seqSum(a), S.seqSum(b)) == S.seqSum(a) then a else b
     }
 
@@ -40,10 +43,15 @@ module SixOne {
         var a := [0];
         assert a1(a) == a;
 
+        /*
         var a'', a''' := [1, 0], [0, 0];
         assert a2(a'', a''') == a'';
+        */
 
         var a' := [1, 0];
-        assert a1(a') == [a'[0]];
+        assert a1(a') == a';
+
+        var b := [5,15,-30,10,-5,40,10];
+        assert a1(b) == [10,-5,40,10];
     }
 }
