@@ -1,9 +1,10 @@
 // Authoring helpers for sequence data types.
 module Seq {
     function calcMax(s: seq<int>): int
-    requires |s| > 0
+    requires |s| >= 0
     {
-        calcMax'(s, 0)
+        if |s| == 0 then 0
+        else calcMax'(s, 0)
     }
 
     function calcMax'(s: seq<int>, idx: nat): int
