@@ -13,7 +13,7 @@ module SixOne {
      * This may need to be adjusted to form T(n, a), where
      * n is a[|a|-1].
      */
-    function a1(a: seq<nat>): seq<nat>
+    function a1(a: seq<int>): seq<int>
     requires |a|>0
     {
         if |a| == 1 then [a[0]] else 
@@ -30,5 +30,8 @@ module SixOne {
         // Base case.
         var a := [0];
         assert a1(a) == a;
+
+        var a' := [1, 0];
+        assert a1(a') == a'[0];
     }
 }
