@@ -11,7 +11,7 @@ module SixOne {
     decreases i
     requires 0<=i<|a|
     {
-        if i==0 then M.methMax(0, a[i]) else
+        if i==0 then M.max(0, a[i]) else
         M.max(0, a1(a,i-1)+a[i])
     }
 
