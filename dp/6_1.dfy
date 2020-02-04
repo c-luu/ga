@@ -4,7 +4,7 @@ include "../authoring/matrix.dfy"
 
 module SixOne {
     import M = Math
-    import Seq = Seq
+    import S = Seq
     import MX = MX
 
     /**
@@ -14,8 +14,9 @@ module SixOne {
      * n is a[|a|-1].
      */
     function a1(a: seq<int>): seq<int>
-    requires |a|>0
+    requires |a|>=0
     {
+        if |a| == 0 then [] else
         if |a| == 1 then [a[0]] else 
         []
     }
