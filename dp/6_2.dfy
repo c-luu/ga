@@ -15,9 +15,8 @@ module SixTwo {
      */
     predicate a1(miles: seq<nat>)
     requires |miles|>0 ==> miles[0] == 0
-    requires a2(miles)
     {
-        false
+        a2(miles)
     }
 
     // Distances are strictly increasing.
@@ -31,6 +30,16 @@ module SixTwo {
     function a3(miles: nat): int
     {
         (200-miles)*(200-miles)
+    }
+
+    // Min. function to serve as our recurrence.
+    function a4(miles: seq<nat>, i: nat): nat
+    requires 0 <= i < |miles|
+    requires |miles|==1 ==> i==|miles|-1
+    {
+        if |miles|==0 then 0 else
+        if |miles|==1 then miles[i] else 
+        0
     }
 
 /*
