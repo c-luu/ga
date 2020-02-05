@@ -10,10 +10,10 @@ module SixTwo {
     import U = Util
 
     /**
-     * posts[0] is the starting post. miles[0] == 0.
-     * There is a hotel we can visit at each posts[i].
+     * There is a hotel we can visit at each post i
+     * of distance: miles[i].
      */
-    predicate a1(posts: seq<nat>, miles: seq<nat>)
+    predicate a1(miles: seq<nat>)
     requires |miles|>0 ==> miles[0] == 0
     requires a2(miles)
     {
