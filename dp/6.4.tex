@@ -1,0 +1,14 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+	
+	\begin{equation}
+		T(i)=\begin{cases}
+			0, & \text{if $|a|=0$}.\\
+			dict(i), & \text{if $|a|=1$}.\\
+			$max_{0<=j<i}\{dict(a_{j,i}) \wedge T(j-1), dict(a_i) \wedge T(i-1)\}$.
+		\end{cases}
+	\end{equation}
+	
+\end{document}
