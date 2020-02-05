@@ -1,9 +1,10 @@
 // Authoring helpers for sequence data types.
 module Seq {
     function calcMax(s: seq<int>): int
-    requires |s| > 0
+    requires |s| >= 0
     {
-        calcMax'(s, 0)
+        if |s| == 0 then 0
+        else calcMax'(s, 0)
     }
 
     function calcMax'(s: seq<int>, idx: nat): int
@@ -53,6 +54,23 @@ module Seq {
         }
     }
 
+    method maxMethArr(values: array<int>) returns (max: int)
+    ensures forall i | 0 <= i < values.Length :: values[i] <= max
+    {
+        max := 0;
+        var idx := 0;
+        while (idx < values.Length)
+        decreases values.Length-idx
+        invariant idx <= values.Length
+        invariant forall j | 0 <= j < idx :: values[j] <= max
+        {
+            if (values[idx] > max) {
+                max := values[idx];
+            }
+            idx := idx + 1;
+        }
+    }
+
     method minMeth(values: seq<int>) returns (min: int)
     requires values != []
     ensures min in values
@@ -75,10 +93,18 @@ module Seq {
 
     function seqSum(sequence: seq<int>): int 
     decreases sequence
-    requires |sequence| > 0
+    requires |sequence| >= 0
     {
-        if |sequence| == 1 then sequence[|sequence|-1]
-        else sequence[|sequence|-1] + seqSum(sequence[..|sequence|-1])
+        if |sequence|==0 then 0
+        else seqSum'(sequence, 0)
+    }
+
+    function seqSum'(sequence: seq<int>, i: nat): int 
+    decreases |sequence| - i
+    requires i < |sequence|
+    {
+        if i+1 == |sequence| then sequence[i]
+        else sequence[i] + seqSum'(sequence, i+1)
     }
 
     predicate shorterThan<T>(sub: seq<T>, sequence: seq<T>)
@@ -127,6 +153,8 @@ module Seq {
         assert r1 == 2 == calcMax(s1);
         var r2 := minMeth(s1);
         assert r2 == -1 == calcMin(s1);
+
+        assert seqSum([10,-5,40,10]) == 55;
 
         var s2 := [0, 1, 2];
         var s3 := [1, 2];
