@@ -54,6 +54,23 @@ module Seq {
         }
     }
 
+    method maxMethArr(values: array<int>) returns (max: int)
+    ensures forall i | 0 <= i < values.Length :: values[i] <= max
+    {
+        max := 0;
+        var idx := 0;
+        while (idx < values.Length)
+        decreases values.Length-idx
+        invariant idx <= values.Length
+        invariant forall j | 0 <= j < idx :: values[j] <= max
+        {
+            if (values[idx] > max) {
+                max := values[idx];
+            }
+            idx := idx + 1;
+        }
+    }
+
     method minMeth(values: seq<int>) returns (min: int)
     requires values != []
     ensures min in values
