@@ -2,13 +2,23 @@
 \usepackage{amsmath}
 
 \begin{document}
+	\section{Recurrence}
+		\begin{equation}
+			T(i)=\begin{cases}
+				0, & \text{if $|a|=0$}.\\
+				dict(a_i), & \text{if $i=0$}.\\
+				\underset{1 \leq j \leq i}{\bigvee} dict(a_{j,i+1}) \wedge T(j-1).
+			\end{cases}
+		\end{equation}
+	\section{Assumptions}
+	Half-open intervals for sequence ranges, i.e. $[i,j)$.\\
+	0-based indexing.
 	
-	\begin{equation}
-		T(i)=\begin{cases}
-			0, & \text{if $|a|=0$}.\\
-			dict(a_i), & \text{if $|a|=1$}.\\
-			\underset{0 \leq j < i}{max} \{dict(a_{j,i}) \wedge T(j-1), dict(a_i) \wedge T(i-1)\}.
-		\end{cases}
-	\end{equation}
+	\section{Examples}	
+		\subsection{Base case 2}
+			Let a = "a".\\
+			Since $i=1$, $T(0) = dict(a_0) = dict("a") = 1$.
+			
+		\subsection{Inductive case}
 	
 \end{document}
