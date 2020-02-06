@@ -3,4 +3,8 @@
 *.bvd
 *.exe
 *.pdb
+*.aux
+*.log
+*.synctex*
+*.pdf
 .vscode
