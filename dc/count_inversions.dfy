@@ -11,6 +11,10 @@ function method inv(a: nat, b: nat): nat
     if M.methMax(a, b) == a then 1 else 0
 }
 
+
+/**
+ * Redo this from scratch, as well as the ref. model.
+ */
 method countInv(a: seq<nat>) returns (out: nat)
 decreases a
 requires |a| >= 0
