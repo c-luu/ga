@@ -7,90 +7,94 @@ module SixFour {
     import Seq = Seq
     import MX = MX
 
-    // Input is a "corrupted" string where puncuations/ spaces are removed.
-    // S ::= corrupted input string.
-
     // Limited dictionary function.
-    predicate dict(a: string)
+    predicate method methDict(a: string)
     {
-        a == "a" 
-        || a == "as"
+        /*a == "a" // Interesting case for non-greedy variant.
+        ||*/ a == "as"
         || a == "the"
     }
 
     /**
-     * An axiom stating if there exists
-     * at least one word in string `S`,
-     * the result evaluates to true.
-     *
-     * It is greedy because although there
-     * may exist a substring that does not
-     * make up a word, it may still evaluate
-     * to true if it can find another one.
-     */
-    predicate greedyA1(S: string)
-    requires |S| > 0
+     * Needs to be <= O(n^2), so be greedy unlike the proposed recurrence.
+     * Due to the inner loop updating the outer loop counter, i,
+     * to an unvisited character element, I suspect this O(n).
+     */ 
+    method greedySixFour(a: string) returns (words: bool)
+    requires |a|>0
     {
-        greedyA1'(S, 0, 1)
-    }
+        if |a|==1 { return methDict(a); }
+        var p := "\0" + a;
 
-    predicate greedyA1'(S: string, i: nat, j: nat)
-    requires 0 <= i < j <= |S|
-    decreases |S|-i, |S|-j
-    {
-        if dict(S[i..j]) then
-            true
-        else if j+1 <= |S| then
-            greedyA1'(S, i, j+1) 
-        else if i+2 <= |S| then
-            greedyA1'(S, i+1, i+2) 
-        else false
-    }
+        var ar := new bool[|p|];
+        ar[0] := true;
+        var i := 1;
 
-    method greedy(S: string) returns (out: bool)
-    requires |S| > 0
-    {
-        var a', b' := MX.dpStringMX(S, S);
-        var m := new nat[|a'|, |b'|];
-        var i, j := 1, 1;
-
-        var x := 0;
-
-
-        while i < |a'|
-        decreases |a'|-i
+        while i < ar.Length 
+        invariant 0<i<=|p|
+        invariant 0<i<=ar.Length
+        invariant |p|>2
+        invariant ar.Length>2
+        decreases ar.Length - i
         {
-            while j < |a'|
-            decreases |a'|-j
-            {
-                j := j+1;
-            }
+            if methDict([p[i]]) {
+                ar[i] := true;
+            } else {
+                ar[i] := false;
+                var j := i+1;
 
-            i := i+1;
+                while j < ar.Length
+                invariant i <= j <= ar.Length
+                invariant j<ar.Length ==> forall x :: i<=x<j ==> !ar[x]
+                decreases ar.Length - j
+                {
+                    if methDict(p[i..j+1]) {
+                        ar[j] := true;
+                        i := j;
+                        break;
+                    } else { ar[j] := false; }
+                    j := j+1;
+                }
+            }
+            if i < ar.Length { i := i+1; }
+            else { break; }
         }
+
+        return ar[ar.Length-1];
     }
 
+    method printWords(a: string, b: array<bool>) returns (words: seq<string>)
+    requires b.Length == |a|+1
+    requires b[0]
+    {
+        /**
+         * This is straightforward to implement in O(n) but
+         * we'll hand-wave here. Use the `true`'s in `b`
+         * to backtrack the array to find word-breaks to
+         * print out.
+         */
+    }
+
+/*
     method Main()
     {
         // Positives.
-        var s1, s2, s3, s4 := "a", "as", "aas", "aa";
-        var s6 := "asa";
-        var s7 := "sa";
+        var s1, s4, s2 := "as", "asthe", "theas";
+
+        var s1' := greedySixFour(s1);
+        var s4' := greedySixFour(s4);
+        var s2' := greedySixFour(s2);
+        print s1';
+        print s4';
+        print s2';
 
         // Negatives.
         var s5 := "s";
         var s8 := "xx";
-
-        assert greedyA1(s1) == true;
-        assert greedyA1(s2) == true;
-        assert greedyA1(s3) == true;
-        assert greedyA1(s4) == true;
-        assert greedyA1(s6) == true;
-        assert greedyA1(s7) == true;
-
-        // This is needed for some reason- might need a lemma?
-        assert dict(s5) == false;
-        assert greedyA1(s5) == false;
-        assert greedyA1(s8) == false;
+        var s5' := greedySixFour(s5);
+        var s8' := greedySixFour(s8);
+        print s5';
+        print s8';
     }
+*/
 }
