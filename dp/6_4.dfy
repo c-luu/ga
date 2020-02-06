@@ -19,6 +19,16 @@ module SixFour {
      * Needs to be <= O(n^2), so be greedy unlike the proposed recurrence.
      * Due to the inner loop updating the outer loop counter, i,
      * to an unvisited character element, I suspect this O(n).
+     *
+     * Assessment:
+     * The reference model (ref) actually iterates through
+     * i in [1, n) for the outer loop, and [1, i) in the inner loop.
+     * It computes the word array using previously computed values,
+     * taking advantage of optimal substructure unlike the greedy approach.
+     *
+     * It also keeps track of a dictionary p, where the key is the start
+     * index, and value is the end index that constitutes the computed
+     * valid word.
      */ 
     method greedySixFour(a: string) returns (words: bool)
     requires |a|>0
