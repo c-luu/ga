@@ -15,6 +15,12 @@ module SixFour {
         || a == "the"
     }
 
+    // Needs to be <= O(n^2).
+    method greedySixFour(a: string) returns (words: bool)
+    {
+        return false;
+    }
+
     method Main()
     {
         // Positives.
