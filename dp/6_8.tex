@@ -7,9 +7,10 @@
 
 \begin{document}	
 	\section{LCS}
-	\subsection{Assumptions}
+	\subsection*{Assumptions}
 	Half-open intervals for sequence ranges, i.e. $[i,j)$.\\
 	0-based indexing.
+	
 	\begin{theorem}
 	Given two strings, $a$ and $b$, let $T(i, j)$ be a function, where $0 < i < |a|$ and $0 < j < |b|$, that returns the 
 	maximum sub-string, z, of length $k$ in $a$ and $b$.
@@ -30,14 +31,19 @@
 	If $i=0 \vee j=0$, then $T(i,j)=0$ to terminate the search. This implies the $a$ and $b$ are left-padded with a junk character.
 	\end{lemma}
 	
-	\begin{lemma} [Counting a match]
+	\begin{lemma} [Accumulating subsequent matches]
 	\label{match}	
-	T(i,j) = 1 +T(i-1,j-1) when  $a_i = a_j$, otherwise 0. Since a count has been recognized for the match at $i, j$, we add the count to the result of the previous step, T(i-1,j-1). I.e.,
+	T(i,j) = 1 +T(i-1,j-1) when  $a_i = b_j$. Since a count has been recognized for the match at $i, j$, we add the count to the result of the previous step, T(i-1,j-1). I.e.,
 	if there was a match at $i-1, j-1$, we may accumulate our count, preserving the sub-string property.
 	\end{lemma}
 	
+	\begin{lemma} [Reset accumulation]
+	\label{reset}	
+	T(i,j) = 0 when  $a_i \neq b_j$ in order to mark that if the prior recursive step had a match, i.e. T(i-1,j-1)=1, but $a_i \neq b_j$, stop accumulating the LCS.
+	\end{lemma}
+	
 	\begin{remark}
-	An important note is lemma \ref{match} is crucial to maintain the sub-string accumulation. If we wanted the largest $k$ s.t. $z_k$ can be a non-contiguous sub-string, we would need
+	\ref{match} and \ref{reset} are crucial to maintain the sub-string accumulation. If we wanted the largest $k$ s.t. $z_k$ can be a non-contiguous sub-string, we would need
 	an additional inductive case:
 	$$\text{max}\{T(i-1,j), T(i,j-1)\}, \text{if $a_i \neq b_j$.}$$
 	\end{remark}
@@ -48,7 +54,7 @@
 	\begin{cases}
 	0, & \text{if $|a|=0 \vee |b|=0$ by \ref{cs}}.\\
 	0, & \text{if $i=0 \vee j=0$ by \ref{term}}.\\	
-	0, & \text{if } a_i \neq b_j \text{ by \ref{match}}.\\
+	0, & \text{if } a_i \neq b_j \text{ by \ref{reset}}.\\
 	1+T(i-1,j-1), & \text{$a_i = b_j$ by \ref{match}}.				
 	\end{cases}
 	\end{equation}
