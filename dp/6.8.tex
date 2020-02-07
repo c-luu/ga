@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage{amsmath}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\begin{document}
+	\section{Assumptions}
+	Half-open intervals for sequence ranges, i.e. $[i,j)$.\\
+	0-based indexing.
+	
+	\section{LCS}
+	\begin{theorem}
+	Given two strings, $a$ and $b$, there is a function $T(i, j)$, where $0 \leq i \leq |a|$ and $0 \leq j \leq |b|$, that returns the 
+	maximum sub-string of length $k$ in $a$ and $b$.
+	\end{theorem}
+	
+	\begin{lemma} [Empty sub-strings]
+	\label{cs}	
+	If $a$ or $b$ are empty strings, $T(n)=0$ because no common sub-string will be found.
+	\end{lemma}
+	
+	\subsection{Recurrence}
+    	\begin{equation}
+	T(i, j)=			
+	\begin{cases}
+	0, & \text{if $|a|=0 \vee |b|=0$ by \ref{cs}}.\\
+	1 + T(i-1,j-1), & \text{if $a_i = b_i$}.\\	
+	\underset{}{max}\{T(i-1,j), T(i,j-1)\}, & \text{if $a_i \neq b_i$}.\\					
+	\end{cases}
+	\end{equation}
+
+\end{document}
