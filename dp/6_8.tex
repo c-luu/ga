@@ -5,11 +5,12 @@
 \newtheorem{lemma}[theorem]{Lemma}
 
 \begin{document}
-	\section{Assumptions}
-	Half-open intervals for sequence ranges, i.e. $[i,j)$.\\
-	0-based indexing.
+
 	
 	\section{LCS}
+	\subsection{Assumptions}
+	Half-open intervals for sequence ranges, i.e. $[i,j)$.\\
+	0-based indexing.
 	\begin{theorem}
 	Given two strings, $a$ and $b$, let $T(i, j)$ be a function, where $0 < i < |a|$ and $0 < j < |b|$, that returns the 
 	maximum sub-string, z, of length $k$ in $a$ and $b$.
@@ -30,14 +31,20 @@
 	If $i=0 \vee j=0$, then $T(i,j)=0$ to terminate the search. This implies the $a$ and $b$ are left-padded with a junk character.
 	\end{lemma}
 	
+	\begin{lemma} [Counting a match]
+	\label{match}	
+	Note that T(i,j) = 1 +T(i-1,j-1) when  $a_i = a_j$. Since a count has been recognized for the match at $i, j$, such indices cannot participate in the recursive step.
+	\end{lemma}
+	
 	\subsection{Recurrence}
 	 \begin{equation}
 	T(i, j)=			
 	\begin{cases}
 	0, & \text{if $|a|=0 \vee |b|=0$ by \ref{cs}}.\\
 	0, & \text{if $i=0 \vee j=0$ by \ref{term}}.\\	
-	\text{max}\{T(i-1,j), T(i,j-1), T(i-1,j-1)\}, & \text{$a_i \neq b_j$}.\\
-	1+\text{max}\{T(i-1,j), T(i,j-1), T(i-1,j-1)\}, & \text{$a_i = b_j$}.			
+	1+T(i-1,j-1), & \text{$a_i = b_j$ by \ref{match}}.\\
+	\text{max}\{T(i-1,j), T(i,j-1)\}, & \text{$a_i \neq b_j$}.
+				
 	\end{cases}
 	\end{equation}	
 
