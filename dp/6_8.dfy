@@ -41,6 +41,16 @@ module SixEight {
                 if a'[i] == b'[j]
                 {
                     m[i,j] := 1 + m[i-1,j-1];
+
+                    /**
+                     * Tracking the current LCS as a
+                     * variable is crucial. The running
+                     * LCS needs to be reset on subsequent
+                     * character mismatches, preserving
+                     * the contiguous sub-string property.
+                     * Otherwise, we could return the global
+                     * maximum at m[|a|-1,|b|-1] .
+                     */
                     k := M.methMax(m[i, j], k);
                 } else {
                     m[i,j] := 0;
