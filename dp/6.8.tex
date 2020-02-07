@@ -11,23 +11,38 @@
 	
 	\section{LCS}
 	\begin{theorem}
-	Given two strings, $a$ and $b$, there is a function $T(i, j)$, where $0 \leq i \leq |a|$ and $0 \leq j \leq |b|$, that returns the 
+	Given two strings, $a$ and $b$, there is a function $T(i, j)$, where $0 < i < |a|$ and $0 < j < |b|$, that returns the 
 	maximum sub-string of length $k$ in $a$ and $b$.
 	\end{theorem}
 	
 	\begin{lemma} [Empty sub-strings]
 	\label{cs}	
-	If $a$ or $b$ are empty strings, $T(n)=0$ because no common sub-string will be found.
+	If $a$ or $b$ are empty strings, then $T(i,j)=0$ because no common sub-string will be found.
+	\end{lemma}
+	
+	\begin{lemma} [Termination]
+	\label{term}	
+	If $i=0 \vee j=0$, then $T(i,j)=0$ to terminate the search. This implies the $a$ and $b$ are left-padded with a junk character.
 	\end{lemma}
 	
 	\subsection{Recurrence}
-    	\begin{equation}
+	 \begin{equation}
 	T(i, j)=			
 	\begin{cases}
 	0, & \text{if $|a|=0 \vee |b|=0$ by \ref{cs}}.\\
-	1 + T(i-1,j-1), & \text{if $a_i = b_i$}.\\	
-	\underset{}{max}\{T(i-1,j), T(i,j-1)\}, & \text{if $a_i \neq b_i$}.\\					
+	0, & \text{if $i=0 \vee j=0$ by \ref{term}}.\\	
+	\text{max}\{s(i,j)+T(i-1,j), s(i,j)+T(i,j-1), s(i,j)+T(i-1,j-1)\}, & \text{otherwise.}				
 	\end{cases}
 	\end{equation}
+	
+	\begin{equation}
+	s(i,j)=
+	\begin{cases}
+	1, & \text{if } a_i = a_j.\\
+	0, & \text{otherwise.}
+	\end{cases}
+	\end{equation}
+	
+
 
 \end{document}
