@@ -3,10 +3,9 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}{Remark}
 
-\begin{document}
-
-	
+\begin{document}	
 	\section{LCS}
 	\subsection{Assumptions}
 	Half-open intervals for sequence ranges, i.e. $[i,j)$.\\
@@ -33,8 +32,15 @@
 	
 	\begin{lemma} [Counting a match]
 	\label{match}	
-	Note that T(i,j) = 1 +T(i-1,j-1) when  $a_i = a_j$. Since a count has been recognized for the match at $i, j$, such indices cannot participate in the recursive step.
+	T(i,j) = 1 +T(i-1,j-1) when  $a_i = a_j$, otherwise 0. Since a count has been recognized for the match at $i, j$, we add the count to the result of the previous step, T(i-1,j-1). I.e.,
+	if there was a match at $i-1, j-1$, we may accumulate our count, preserving the sub-string property.
 	\end{lemma}
+	
+	\begin{remark}
+	An important note is lemma \ref{match} is crucial to maintain the sub-string accumulation. If we wanted the largest $k$ s.t. $z_k$ can be a non-contiguous sub-string, we would need
+	an additional inductive case:
+	$$\text{max}\{T(i-1,j), T(i,j-1)\}, \text{if $a_i \neq b_j$.}$$
+	\end{remark}
 	
 	\subsection{Recurrence}
 	 \begin{equation}
@@ -42,10 +48,8 @@
 	\begin{cases}
 	0, & \text{if $|a|=0 \vee |b|=0$ by \ref{cs}}.\\
 	0, & \text{if $i=0 \vee j=0$ by \ref{term}}.\\	
-	1+T(i-1,j-1), & \text{$a_i = b_j$ by \ref{match}}.\\
-	\text{max}\{T(i-1,j), T(i,j-1)\}, & \text{$a_i \neq b_j$}.
-				
+	0, & \text{if } a_i \neq b_j \text{ by \ref{match}}.\\
+	1+T(i-1,j-1), & \text{$a_i = b_j$ by \ref{match}}.				
 	\end{cases}
-	\end{equation}	
-
+	\end{equation}
 \end{document}
