@@ -8,3 +8,4 @@
 *.synctex*
 *.pdf
 .vscode
+.DS_Store
