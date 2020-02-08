@@ -1,0 +1,31 @@
+\documentclass{article}
+\usepackage{amsmath}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}{Remark}
+
+\begin{document}	
+\section{Make Change with Repeated Denominations}
+Given a value, v, a set of non-zero denominations X, K(v) determines if $\exists$ a subset of X whose sum is v.
+
+\begin{lemma} [No value]
+\label{bc1}	
+For v = 0, K(0) = true, an auxiliary lemma to help with the inductive hypothesis.
+\end{lemma}
+
+\begin{lemma} [Change]
+\label{bc2}	
+If $v - x = 0$ for some x $\in$ X, K(v) = true. I.e., change has been made.
+\end{lemma}
+
+\subsection{Recurrence}
+\begin{equation}
+K(v)=			
+\begin{cases}
+v = 0 \to true.\\	
+\underset{x_i \in X \land x_i \leq v}{\bigvee} K(v-x_i).\\
+false \text{, otherwise.}
+\end{cases}
+\end{equation}
+\end{document}

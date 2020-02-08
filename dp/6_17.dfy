@@ -3,107 +3,60 @@ include "../authoring/seq.dfy"
 module SixSeventeen {
     import Seq = Seq
 
-    class Obj {
-        var weight: int;
-        var value: int;
-    }
-
-    function totalWeight(s: seq<Obj>): int
-    requires |s|>0
-    decreases |s|
-    reads s
-    {
-        if |s| == 1 then s[0].weight else
-        s[0].weight + totalWeight(s[1..])
-    }
-
-    function method weightsLT(s: seq<Obj>, weight: int): seq<Obj>
-    requires |s|>0
-    decreases |s|
-    reads s
-    {
-        if |s| == 1 then if s[0].weight <= weight then [s[0]] else []
-        else if s[0].weight <= weight then [s[0]] + weightsLT(s[1..], weight)
-        else weightsLT(s[1..], weight)
-    }
-
     /**
-     * The sum of weights in the optimum subset
-     * is no more than the knapsack capacity.
+     * O(v|X|).
+     * This implementation was a little tricky. The interesting note
+     * is the semantics of what data a[i] represents. In this case,
+     * it holds true if 0 <= i < v and i >= X[j], for some j, and 
+     * a[i-X[j]] also exhibits this property. 
+     *
+     * I.e., if i is >= some
+     * denom. X[j] AND a change could be made for i-X[j], change can
+     * be made for i.
+     * 
+     * E.g., say i == X[j]. This indicates their difference is 0, which
+     * hits our base case that a[0] is initialized to `true`.
+     *
+     * The lemma seems to be that if each value, i, up to the target
+     * value, v, can be made change for at least `one` domination, 
+     * and so does i-1, then the final value v can as well.
      */
-    predicate a1(totWeight: int, capacity: nat)
+    method coinsDP(v: nat, X: seq<nat>) returns (change: bool)
+    ensures v == 0 ==> !change
     {
-        totWeight <= capacity
-    }
+        if v == 0 { return false; }
 
-    /**
-     * This helps rule out trivial corner cases. 
-     * Total weight is the sum of all object weights before algorithm begins.
-     * See: https://pdfs.semanticscholar.org/8bc5/7f44bdd880a385b7c1338293ea4183f930ea.pdf
-     */
-     predicate a5(objs: seq<Obj>, totWeight: int, capacity: nat)
-     reads objs
-     {
-         totWeight > capacity
-         && forall o :: o in objs ==> o.weight <= capacity
-     }
+        var a := new bool[v+1];
+        a[0] := true;
+        var i, j := 1, 0;
 
-    /**
-     * Optimum sum of values in the set.
-     */
-    predicate a2(maxVal: int, objs: seq<Obj>)
-    {
-        false
-        //forall i :: i <= objs ==> maxVal >= 
-    }
-
-    /**
-     * Knapsack type 2: with repetitions, i.e., unlimited
-     * copies of each object.
-     */
-    method coinsDP(objs: seq<Obj>, s: seq<int>, capacity: nat) returns (maxVal: int)
-    requires |s| == capacity+1 > 0 && s[0] == 0
-    requires capacity > 1
-    requires |objs| > 0
-    requires a5(objs, totalWeight(objs), capacity)
-    ensures a2(maxVal, objs)
-    {
-        var se := s;
-        var i := 1;
-
-        while i < capacity
-        invariant capacity == capacity
-        invariant |se| == capacity+1
-        invariant 0 <= i <= capacity
-        decreases capacity-i
+        while i < a.Length
+        decreases a.Length-i
         {
-            var objslt := weightsLT(objs, i);
-            assert |objslt| <= |objs|;
-            assert multiset(objslt) <= multiset(objs);
-            var j := 0;
-            var subOpt := 0;
-
-            while j < |objslt|-1
-            invariant 0 <= j <= |objslt|-1
-            invariant forall o :: o in objslt ==> o.weight <= i
-            decreases |objslt|-j
+            a[i] := false;
+            while j < |X|
+            decreases |X|-j
             {
-                var nw := i-objslt[j].weight;
-                var nw' := i-objslt[j+1].weight;
-                if se[nw] + objslt[j].value <= se[nw'] + objslt[j+1].value
-                {
-                    subOpt := se[nw']+objslt[j+1].value;
-                } else { subOpt := se[nw]+objslt[j].value; }
-
+                // https://huadonghu.com/archives/en/dpv-6-17-coins-of-denominations/
+                if X[j] <= i && a[i-X[j]] { a[i] := true; break; }
                 j := j+1;
             }
-
-            assert |se| == capacity+1;
-            assert i <= |se| == capacity+1;
-
-            if j >= 1 {se := se[i := subOpt]; }
+            print a[i];
             j := 0;
             i := i+1;
         }
+
+        return a[a.Length-1];
+    }
+
+    method Main()
+    {
+        var x := [4, 2];
+        var v := 5;
+        var v' := 6;
+        var ans := coinsDP(v, x);
+        //var ans' := coinsDP(v', x);
+        //print ans;
+        //print ans';
     }
 }
