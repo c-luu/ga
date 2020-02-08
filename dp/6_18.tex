@@ -20,11 +20,12 @@ If $v - x = 0$ for some x $\in$ X, K(v) = true. I.e., change has been made.
 \end{lemma}
 
 \subsection{Recurrence}
+$\forall x_j \in X$:\\
 \begin{equation}
 K(v,j)=			
 \begin{cases}
 v = 0 \to true.\\	
-\underset{x_j \in X \land x_j \leq v}{\bigvee} K(v-x_j, j-1), K(v, j-1).\\
+\underset{x_j \leq v}{\bigvee} K(v-x_j, j-1), K(v, j-1).\\
 false \text{, otherwise.}
 \end{cases}
 \end{equation}
