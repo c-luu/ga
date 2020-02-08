@@ -49,6 +49,7 @@ module SixSeventeen {
         return a[a.Length-1];
     }
 
+/*
     method Main()
     {
         var x := [4, 2];
@@ -59,4 +60,5 @@ module SixSeventeen {
         //print ans;
         //print ans';
     }
+*/
 }
