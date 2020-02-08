@@ -8,7 +8,14 @@ module SixSeventeen {
      * This implementation was a little tricky. The interesting note
      * is the semantics of what data a[i] represents. In this case,
      * it holds true if 0 <= i < v and i >= X[j], for some j, and 
-     * a[i-1] also exhibits this property.
+     * a[i-X[j]] also exhibits this property. 
+     *
+     * I.e., if i is >= some
+     * denom. X[j] AND a change could be made for i-X[j], change can
+     * be made for i.
+     * 
+     * E.g., say i == X[j]. This indicates their difference is 0, which
+     * hits our base case that a[0] is initialized to `true`.
      *
      * The lemma seems to be that if each value, i, up to the target
      * value, v, can be made change for at least `one` domination, 
@@ -34,9 +41,11 @@ module SixSeventeen {
                 if X[j] <= i && a[i-X[j]] { a[i] := true; break; }
                 j := j+1;
             }
+            print a[i];
             j := 0;
             i := i+1;
         }
+
         return a[a.Length-1];
     }
 
@@ -46,8 +55,8 @@ module SixSeventeen {
         var v := 5;
         var v' := 6;
         var ans := coinsDP(v, x);
-        var ans' := coinsDP(v', x);
-        print ans;
-        print ans';
+        //var ans' := coinsDP(v', x);
+        //print ans;
+        //print ans';
     }
 }
