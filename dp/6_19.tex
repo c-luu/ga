@@ -25,11 +25,19 @@ false \text{, otherwise.}
 \end{cases}
 \end{equation}
 
-\subsection{Recurrence as a minimum function}
+\begin{remark}
+While more elegant, this recurrence does not lend well to a straightforward implementation. As a hint, I think its runtime is $O(|X|kv)$.
+\end{remark}
+
+\subsection{Recurrence as a minima}
 $\forall x_j \in X$:\\
 \begin{equation}
 K(v)=			
 \underset{x_j \leq v}{min} \{1+K(v-x_j)\}.
 \end{equation}
+
+\begin{remark}
+Thinking in terms of taking the minimum, with a base case: $T(0) = \infty$ allows the use of an array yielding $O(|X|v)$ runtime.
+\end{remark}
 
 \end{document}
