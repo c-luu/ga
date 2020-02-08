@@ -19,7 +19,7 @@ $\forall x_j \in X$:\\
 \begin{equation}
 K(v,j)=			
 \begin{cases}
-v = 0 \to true.\\	
+v = 0 \land k \geq 0 \to true.\\	
 k>0 \to \underset{x_j \leq v}{\bigvee} K(v-x_j, k-1).\\
 false \text{, otherwise.}
 \end{cases}
