@@ -7,23 +7,29 @@
 
 \begin{document}	
 \section{Make Change with Unlimited Denominations and Knapsack of size k}
-Given a value v, a set of non-zero denominations X, K(v, j) determines if $\exists$ a subset of X whose sum is v, with available denominations ending at $x_j$. x must be a set, rather than a multi-set as in 6.17 (repeated denominations allowed).
+Given a value v, a set of non-zero denominations X, K(v) determines if $\exists$ a subset of X whose sum is v, with available denominations ending at $x_j$. The quantity of x must be $\leq$ k.
 
 \begin{lemma} [Change]
 \label{bc1}	
 K(0,0) = true, an auxiliary lemma to help with the inductive hypothesis.
-If $v - x_j = 0$ for some $x_j \in X$, $K(v-x_j, j-1) = true$. I.e., change has been made.
 \end{lemma}
 
-\subsection{Recurrence}
-$\forall x_j \in X, j>0$:\\
+\subsection{Recurrence as a predicate}
+$\forall x_j \in X$:\\
 \begin{equation}
 K(v,j)=			
 \begin{cases}
 v = 0 \to true.\\	
-\underset{x_j \leq v}{\bigvee} K(v-x_j, j-1), K(v, j-1).\\
+k>0 \to \underset{x_j \leq v}{\bigvee} K(v-x_j, k-1).\\
 false \text{, otherwise.}
 \end{cases}
 \end{equation}
-The recurrence is similar to 6.17, but we add a choice $K(v,j-1)$, which is a recursive call to see if change can be made for v with $X - \{x_j\}$ denominations.
+
+\subsection{Recurrence as a minimum function}
+$\forall x_j \in X$:\\
+\begin{equation}
+K(v)=			
+\underset{x_j \leq v}{min} \{1+K(v-x_j)\}.
+\end{equation}
+
 \end{document}
