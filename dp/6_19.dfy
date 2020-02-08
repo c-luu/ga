@@ -3,6 +3,10 @@ include "../authoring/seq.dfy"
 module SixNineteen {
     import Seq = Seq
 
+    /**
+     * A less optimal but more straightforward solution than the reference model.
+     * https://huadonghu.com/archives/en/dpv-6-19-solution-coin-change-with-at-most-k-uses-of-each-coin/
+     */
     method coinsDP(v: nat, k: nat, X: seq<nat>) returns (change: bool)
     ensures v == 0 ==> !change
     {
