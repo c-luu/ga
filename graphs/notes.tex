@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{amsmath}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{property}{Property}[section]
+\newtheorem{eg}{Example}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}{Remark}
+
+\begin{document}	
+\section{Graphs}
+Given an unordered sequence, $A$, we want to find the $k$'th largest or smallest element without sorting $A$ in $O(n)$. 
+
+\begin{remark}
+\label{bc1}	
+Medians is inspired by the QuickSort algorithm.
+\end{remark}
+
+\begin{eg}
+\label{eg1}
+\end{eg}
+Let $A = [5,2,20,17,11,13,8,9,11]$ and $p = 11$.\\
+If we use $p$ to partition $A$ into the subsequences $A_{<p}, A_{=p}, A_{>p}$ in $O(n)$, we get the following:\\
+
+\begin{align*}
+&A_{<p} = [5,2,8,9,11]\\
+&A_{=p} = [11,11]\\
+&A_{<p} = [20,17,13]
+\end{align*}
+
+We have a useful property from the subsequences:
+\begin{align*}
+&|A_{<p}| = 5\\
+&|A_{=p}| = 2\\
+&|A_{>p}| = 3
+\end{align*}
+
+S.t. if we copied those three subsequence to a new array: $$A'= A_{<p} + A_{=p} + A_{<p}$$ we have a property that $A'[0..|A_{<p}|] = A_{<p}$ and so on. Thus, if we wanted to find $k$ s.t. $k<5$, we know to look in $A_{<p}$. If we wanted to find $k$ s.t. $7 \leq k < |A'|$, we know to look in $A_{>p}$ since $A'[7..|A'|] = A_{>p}$ .
+
+\begin{property}
+\label{p1}
+What if we want to find $k$ s.t. $|A_{<p}| < k \leq |A_{=p}|+|A_{<p}|$? E.g., in the case of ex. $\ref{eg1}$ above: 
+
+$$5 < k \leq 2+5 = 5 < k \leq 7$$
+
+We simply return any element in $A_{=p}$. A corollary is this property saves a recursive search.
+\end{property}
+
+\begin{remark}[Good Pivot via Random Picking]
+We can find a good pivot in \textbf{expected} time of $O(n)$ since there is a $50\%$ chance of picking one, however this is NOT the same as saying this is the guaranteed worst-case running time of $O(n)$.
+\end{remark}
+
+\end{document}
