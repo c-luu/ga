@@ -7,5 +7,6 @@
 *.log
 *.synctex*
 *.pdf
+*.loa
 .vscode
 .DS_Store
