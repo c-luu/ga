@@ -15,26 +15,33 @@
 \subsection{DFS, un-directed graphs}
 
 \begin{algorithm}
+\label{alg:dfs_und}
 \caption{$DFS(G)$: Given vertices $V$ in graph $G$, find all strongly connected components.}
 \begin{algorithmic}[1]
 \REQUIRE $G$ is an un-directed graph in adjacency-list form.
+\REQUIRE $cc$ is a global connected-component counter.
+\STATE $cc \gets 0$
 \FORALL{$v \in V$}
 \STATE $Visited(v) \gets 0$
 \ENDFOR
 \FORALL{$v \in V$}
 \IF{$\neg Visited(v)$}
+	\STATE $cc \gets cc + 1$
 	\STATE $Explore(v)$
 \ENDIF
 \ENDFOR
 \end{algorithmic}
+ Running time is $O(|V|+|E|)$.
 \end{algorithm}
 
 \begin{algorithm}
-\caption{$Explore(v)$: $E$ edges in $G$.}
+\caption{$Explore(v)$}
 \begin{algorithmic}[1]
-\REQUIRE $v \in V$.
+\REQUIRE $v \in V, E \text{ edges in } G$.
+\REQUIRE $cc$ is a global connected-component counter.
+\STATE $ccnum(z) \gets cc$  \COMMENT{Store $z$'s connected-component \# as the current count for the connected-components.}
 \STATE $Visited(v) \gets 1$
-\FORALL{$(v, w) \in E$}
+\FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
 \IF{$\neg Visited(v)$}
 	\STATE $Explore(v)$
 \ENDIF
