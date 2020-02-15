@@ -12,7 +12,8 @@
 \begin{document}	
 \listofalgorithms
 \section{Graphs}
-\subsection{DFS, un-directed graphs}
+\subsection{Connected components, un-directed graphs}
+\label{cc_und}
 
 \begin{algorithm}
 \label{alg:dfs_und}
@@ -49,7 +50,14 @@
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{DFS, directed graphs}
+\subsection{Connected components, directed graphs}
+Similar approach as section $\ref{cc_und}$, except when visiting a vertex $v$: 
+\begin{enumerate}
+\item Assign $v$ a pre-order number on initial visit.
+\item Increment $cc$.
+\item Assign $v$ a post-order number after visiting all of its neighbors.
+\item Increment $cc$.
+\end{enumerate}
 
 
 \end{document}
