@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{algorithmic}
 \usepackage{algorithm}
 \newtheorem{theorem}{Theorem}[section]
@@ -8,6 +9,8 @@
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 
 \begin{document}	
 \listofalgorithms
@@ -15,19 +18,23 @@
 \subsection{Connected components, un-directed graphs}
 \label{cc_und}
 
+\begin{definition}{$ccnum$}
+The number of current, connected components being explored. Each $v \in V$ has a $ccnum$, which is the connected component for that vertex. It may be accessed or assigned via:
+$$cc[v]$$
+\end{definition}
+
 \begin{algorithm}
 \label{alg:dfs_und}
 \caption{$DFS(G)$: Given vertices $V$ in graph $G$, find all strongly connected components.}
 \begin{algorithmic}[1]
 \REQUIRE $G$ is an un-directed graph in adjacency-list form.
-\REQUIRE $cc$ is a global connected-component counter.
-\STATE $cc \gets 0$
+\STATE $ccnum \gets 0$
 \FORALL{$v \in V$}
 \STATE $Visited(v) \gets 0$
 \ENDFOR
 \FORALL{$v \in V$}
 \IF{$\neg Visited(v)$}
-	\STATE $cc \gets cc + 1$
+	\STATE $ccnum \gets ccnum + 1$
 	\STATE $Explore(v)$
 \ENDIF
 \ENDFOR
@@ -35,12 +42,11 @@
  Running time is $O(|V|+|E|)$.
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{$Explore(v)$}
 \begin{algorithmic}[1]
 \REQUIRE $v \in V, E \text{ edges in } G$.
-\REQUIRE $cc$ is a global connected-component counter.
-\STATE $ccnum(z) \gets cc$  \COMMENT{Store $z$'s connected-component \# as the current count for the connected-components.}
+\STATE $cc[z] \gets ccnum$  \COMMENT{Store $z$'s connected-component \# as the current count for the connected-components.}
 \STATE $Visited(v) \gets 1$
 \FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
 \IF{$\neg Visited(v)$}
@@ -58,6 +64,43 @@ Similar approach as section $\ref{cc_und}$, except when visiting a vertex $v$:
 \item Assign $v$ a post-order number after visiting all of its neighbors.
 \item Increment $cc$.
 \end{enumerate}
+
+\begin{definition}{$clock$}
+A global clock counter incremented during pre and post-order vertex vistits.
+\end{definition}
+
+\begin{algorithm}
+\label{alg:dfs_dir}
+\caption{$DFS(G)$: Given vertices $V$ in directed graph $G$, find all strongly connected components.}
+\begin{algorithmic}[1]
+\REQUIRE $G$ is a directed graph in adjacency-list form.
+\FORALL{$v \in V$}
+\STATE $Visited(v) \gets 0$
+\ENDFOR
+\STATE $ccnum \gets 0$
+\FORALL{$v \in V$}
+\IF{$\neg Visited(v)$}
+	\STATE $ccnum \gets ccnum + 1$
+	\STATE $Explore(v)$
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+ Running time is $O(|V|+|E|)$.
+\end{algorithm}
+
+\begin{algorithm}
+\caption{$Explore(v)$}
+\begin{algorithmic}[1]
+\REQUIRE $v \in V, E \text{ edges in } G$.
+\STATE $cc[z] \gets ccnum$  \COMMENT{Store $z$'s connected-component \# as the current count for the connected-components.}
+\STATE $Visited(v) \gets 1$
+\FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
+\IF{$\neg Visited(v)$}
+	\STATE $Explore(v)$
+\ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 
 \end{document}
