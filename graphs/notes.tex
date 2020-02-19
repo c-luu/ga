@@ -102,6 +102,12 @@ Similar approach as section $\ref{cc_und}$, except when visiting a vertex $v$:
 \item Assign $v$ a post-order number after visiting all of its neighbors.
 \item Increment $ccnum$.
 \end{enumerate}
+We no longer need to track $cc$ and $ccnum$.
+
+\begin{remark}
+	Only the post-order number is used for connectivity algorithms. Not sure why we're tracking
+	pre-order numbers (hint, trick exam questions).
+\end{remark}
 
 \begin{definition}{$clock$}
 A global clock counter incremented during pre and post-order vertex visits.
@@ -109,17 +115,16 @@ A global clock counter incremented during pre and post-order vertex visits.
 
 \begin{algorithm}
 \label{alg:dfs_dir}
-\caption{$DFS(G)$: Given vertices $V$ in directed graph $G$, find all strongly connected components.}
+\caption{$DFS(G)$ for directed graphs.}
 \begin{algorithmic}[1]
 \REQUIRE $G$ is a directed graph in adjacency-list form.
+\STATE $clock \gets 1$ \COMMENT{initializing the global clock}
 \FORALL{$v \in V$}
 \STATE $Visited(v) \gets 0$
 \ENDFOR
-\STATE $ccnum \gets 0$
 \FORALL{$v \in V$}
 \IF{$\neg Visited(v)$}
-	\STATE $ccnum \gets ccnum + 1$
-	\STATE $Explore(v)$
+\STATE $Explore(v)$
 \ENDIF
 \ENDFOR
 \end{algorithmic}
@@ -127,14 +132,17 @@ A global clock counter incremented during pre and post-order vertex visits.
 \end{algorithm}
 
 \begin{algorithm}
-\caption{$Explore(v)$}
+\caption{$Explore(v)$ for directed graphs.}
 \begin{algorithmic}[1]
 \REQUIRE $v \in V, E \text{ edges in } G$.
-\STATE $cc[z] \gets ccnum$
+\STATE$Pre[v] \gets clock$ \COMMENT{set $v$'s pre-order \#}
+\STATE $clock \gets clock + 1$
 \STATE $Visited(v) \gets 1$
 \FORALL{$(v, w) \in E$} 
 \IF{$\neg Visited(w)$}
-	\STATE $Explore(w)$
+\STATE $Explore(w)$
+\STATE $Post[v] \gets clock$ \COMMENT{set $v$'s post-order \# now that we've traversed its forest}
+\STATE $clock \gets clock + 1$
 \ENDIF
 \ENDFOR
 \end{algorithmic}
