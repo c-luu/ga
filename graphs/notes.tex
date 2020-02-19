@@ -24,8 +24,8 @@ $$cc[v]$$
 \end{definition}
 
 \begin{algorithm}
-\label{alg:dfs_und}
 \caption{$DFS(G)$: Given vertices $V$ in graph $G$, find all strongly connected components.}
+\label{alg:dfs_und}
 \begin{algorithmic}[1]
 \REQUIRE $G$ is an un-directed graph in adjacency-list form.
 \STATE $ccnum \gets 0$
@@ -44,29 +44,67 @@ $$cc[v]$$
 
 \begin{algorithm}[H]
 \caption{$Explore(v)$}
+\label{alg:dfs_und_exp}
 \begin{algorithmic}[1]
 \REQUIRE $v \in V, E \text{ edges in } G$.
-\STATE $cc[z] \gets ccnum$  \COMMENT{Store $z$'s connected-component \# as the current count for the connected-components.}
+\STATE $cc[z] \gets ccnum$  \COMMENT{set $z$'s connected-component \# since this is the first time visiting $v$.}
 \STATE $Visited(v) \gets 1$
 \FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
-\IF{$\neg Visited(v)$}
-	\STATE $Explore(v)$
+\IF{$\neg Visited(w)$}
+	\STATE $Explore(w)$
 \ENDIF
 \ENDFOR
 \end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Finding Paths}
+We need to find paths in an un-directed graph before moving to directed graphs. To do this, we simply track a predecessor vertex when we first visit a vertex.
+
+\begin{algorithm}
+	\caption{$DFS(G)$ with path tracking.}
+	\begin{algorithmic}[1]
+		\REQUIRE $G$ is an un-directed graph in adjacency-list form.
+		\STATE $ccnum \gets 0$
+		\FORALL{$v \in V$}
+		\STATE $Visited(v) \gets 0$
+		\STATE $Prev[v] \gets NIL$
+		\ENDFOR
+		\FORALL{$v \in V$}
+		\IF{$\neg Visited(v)$}
+		\STATE $ccnum \gets ccnum + 1$
+		\STATE $Explore(v)$
+		\ENDIF
+		\ENDFOR
+	\end{algorithmic}
+	Running time is $O(|V|+|E|)$.
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{$Explore(v)$ with path tracking.}
+	\begin{algorithmic}[1]
+		\REQUIRE $v \in V, E \text{ edges in } G$.
+		\STATE $cc[z] \gets ccnum$  \COMMENT{set $z$'s connected-component \# since this is the first time visiting $v$.}
+		\STATE $Visited(v) \gets 1$
+		\FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
+		\IF{$\neg Visited(w)$}
+		\STATE $Explore(w)$
+		\STATE $Prev[w] \gets z$
+		\ENDIF
+		\ENDFOR
+	\end{algorithmic}
 \end{algorithm}
 
 \subsection{Connected components, directed graphs}
 Similar approach as section $\ref{cc_und}$, except when visiting a vertex $v$: 
 \begin{enumerate}
 \item Assign $v$ a pre-order number on initial visit.
-\item Increment $cc$.
+\item Increment $ccnum$.
 \item Assign $v$ a post-order number after visiting all of its neighbors.
-\item Increment $cc$.
+\item Increment $ccnum$.
 \end{enumerate}
 
 \begin{definition}{$clock$}
-A global clock counter incremented during pre and post-order vertex vistits.
+A global clock counter incremented during pre and post-order vertex visits.
 \end{definition}
 
 \begin{algorithm}
@@ -92,11 +130,11 @@ A global clock counter incremented during pre and post-order vertex vistits.
 \caption{$Explore(v)$}
 \begin{algorithmic}[1]
 \REQUIRE $v \in V, E \text{ edges in } G$.
-\STATE $cc[z] \gets ccnum$  \COMMENT{Store $z$'s connected-component \# as the current count for the connected-components.}
+\STATE $cc[z] \gets ccnum$
 \STATE $Visited(v) \gets 1$
-\FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
-\IF{$\neg Visited(v)$}
-	\STATE $Explore(v)$
+\FORALL{$(v, w) \in E$} 
+\IF{$\neg Visited(w)$}
+	\STATE $Explore(w)$
 \ENDIF
 \ENDFOR
 \end{algorithmic}
