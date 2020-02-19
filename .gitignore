@@ -8,5 +8,7 @@
 *.synctex*
 *.pdf
 *.loa
+*.out
+*.toc
 .vscode
 .DS_Store
