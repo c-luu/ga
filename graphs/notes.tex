@@ -3,6 +3,7 @@
 \usepackage{amsthm}
 \usepackage{algorithmic}
 \usepackage{algorithm}
+\usepackage{hyperref}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
 \newtheorem{eg}{Example}
@@ -13,6 +14,7 @@
 \newtheorem{definition}{Definition}[section]
 
 \begin{document}	
+\tableofcontents
 \listofalgorithms
 \section{Graphs}
 \subsection{Connected components, un-directed graphs}
@@ -148,5 +150,9 @@ A global clock counter incremented during pre and post-order vertex visits.
 \end{algorithmic}
 \end{algorithm}
 
+\subsubsection{Types of Edges}
+Tree, forward, and cross edges in general will have the following clock ordering for some $(z,w) \in E$: $$Post(z) > Post(w)$$ Back edges will have this clock ordering:
+
+$$Post(z) < Post(w)$$ See \href{https://classroom.udacity.com/courses/ud401/lessons/10159691481/concepts/101975518340923}{this lecture} for concrete examples. 
 
 \end{document}
