@@ -18,6 +18,12 @@
 \tableofcontents
 \listofalgorithms
 \section{Graphs}
+
+\begin{definition}{Components}
+	A component can be thought of as sub-graphs, where any two vertices are connected via a path. Components may have cycles. A graph that is itself connected has exactly one component.
+	\href{https://en.wikipedia.org/wiki/Component_(graph_theory)}{Wiki}. 
+\end{definition}
+
 \subsection{Connected components, un-directed graphs}
 \label{cc_und}
 
@@ -26,7 +32,7 @@ The number of current, connected components being explored. Each $v \in V$ has a
 $$cc[v]$$
 \end{definition}
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{$DFS(G)$: Given vertices $V$ in graph $G$, find all strongly connected components.}
 \label{alg:dfs_und}
 \begin{algorithmic}[1]
@@ -180,5 +186,30 @@ A tree is a connected, acyclic graph.
 Given an undirected graph $G = (V,E)$ with weight function $w(e),\: \forall e \in E$, find the spanning tree of minimal weight. 
 
 Given some tree $T \subset E$, minimum weight is defined as $$w(T) = \sum_{e \in T}w(e)$$.
+
+\begin{algorithm}
+	\caption{$Kruskals(G)$: finds the MST of $G$.}
+	\label{alg:kruskals}
+	\begin{algorithmic}[1]
+		\REQUIRE $G=(V,E)$ is an undirected graph with weights $w(e), \: \forall e \in E$.
+		\STATE Sort $E$ by increasing weights. \COMMENT{Sort using, e.g. merge-sort.}
+		\STATE $X \gets \{\}$
+		\FORALL {$e \in E$}
+		\IF {$X \cup e$ doesn't have a cycle,}
+			\STATE $X = X \cup e$
+		\ENDIF
+		\ENDFOR
+		\RETURN $X$
+	\end{algorithmic}
+\end{algorithm}
+
+Kruskal's algorithm runs in $O(|E|log(|V|))$ if using $MergeSort$, which runs in $O(|E|log(|V|))$ to sort $E$. How do we determine if $X \cup e$ doesn't contain a cycle? 
+
+\begin{lemma}
+	Let $comp(v), \: v \in (V,X)$ be a function that returns the component containing $v$. $X$ is what is returned from algorithm \ref{alg:kruskals}. Given edge $(u,v) \in (V,X)$, we know:
+	$$comp(u) \neq comp(v) \to X \cup e \text{ doesn't have a cycle.}$$
+	This is possible in $O(log|V|)$ time if using the \href{https://en.wikipedia.org/wiki/Disjoint-set_data_structure}{union-find data structure}.
+\end{lemma}
+
 
 \end{document}
