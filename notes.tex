@@ -185,7 +185,7 @@ A tree is a connected, acyclic graph.
 \subsubsection{Problem}
 Given an undirected graph $G = (V,E)$ with weight function $w(e),\: \forall e \in E$, find the spanning tree of minimal weight. 
 
-Given some tree $T \subset E$, minimum weight is defined as $$w(T) = \sum_{e \in T}w(e)$$.
+Given some tree $T \subset E$, we want to minimize the weight sum: $$w(T) = \sum_{e \in T}w(e)$$.
 
 \begin{algorithm}
 	\caption{$Kruskals(G)$: finds the MST of $G$.}
