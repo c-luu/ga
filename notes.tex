@@ -27,9 +27,9 @@
 \subsection{Connected components, un-directed graphs}
 \label{cc_und}
 
-\begin{definition}{$ccnum$}
-The number of current, connected components being explored. Each $v \in V$ has a $ccnum$, which is the connected component for that vertex. It may be accessed or assigned via:
-$$cc[v]$$
+\begin{definition}{$cc$}
+The number of current, connected component being explored. Each $v \in V$ belongs to a connected component identified by $cc$. It may be accessed or assigned via:
+$$ccnum[v]$$
 \end{definition}
 
 \begin{algorithm}[H]
@@ -37,14 +37,14 @@ $$cc[v]$$
 \label{alg:dfs_und}
 \begin{algorithmic}[1]
 \REQUIRE $G$ is an un-directed graph in adjacency-list form.
-\STATE $ccnum \gets 0$
+\STATE $cc \gets 0$
 \FORALL{$v \in V$}
 \STATE $Visited(v) \gets 0$
 \ENDFOR
 \FORALL{$v \in V$}
 \IF{$\neg Visited(v)$}
-	\STATE $ccnum \gets ccnum + 1$
-	\STATE $Explore(v)$
+	\STATE $cc \gets cc + 1$
+	\STATE $Explore(v)$ \COMMENT{Each time $Explore$ is called, a new connected component is picked out.}
 \ENDIF
 \ENDFOR
 \end{algorithmic}
@@ -52,13 +52,13 @@ $$cc[v]$$
 \end{algorithm}
 
 \begin{algorithm}[H]
-\caption{$Explore(v)$}
+\caption{$Explore(v)$: identifies the connected component containing $v$.}
 \label{alg:dfs_und_exp}
 \begin{algorithmic}[1]
 \REQUIRE $v \in V, E \text{ edges in } G$.
-\STATE $cc[z] \gets ccnum$  \COMMENT{set $z$'s connected-component \# since this is the first time visiting $v$.}
+\STATE $ccnum[v] \gets cc$  \COMMENT{set $v$'s connected-component \# since this is the first time visiting $v$.}
 \STATE $Visited(v) \gets 1$
-\FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
+\FORALL[We can access edges in this manner due to algorithm $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
 \IF{$\neg Visited(w)$}
 	\STATE $Explore(w)$
 \ENDIF
@@ -73,14 +73,14 @@ We need to find paths in an un-directed graph before moving to directed graphs. 
 	\caption{$DFS(G)$ with path tracking.}
 	\begin{algorithmic}[1]
 		\REQUIRE $G$ is an un-directed graph in adjacency-list form.
-		\STATE $ccnum \gets 0$
+		\STATE $cc \gets 0$
 		\FORALL{$v \in V$}
 		\STATE $Visited(v) \gets 0$
 		\STATE $Prev[v] \gets NIL$
 		\ENDFOR
 		\FORALL{$v \in V$}
 		\IF{$\neg Visited(v)$}
-		\STATE $ccnum \gets ccnum + 1$
+		\STATE $cc \gets cc + 1$
 		\STATE $Explore(v)$
 		\ENDIF
 		\ENDFOR
@@ -92,35 +92,35 @@ We need to find paths in an un-directed graph before moving to directed graphs. 
 	\caption{$Explore(v)$ with path tracking.}
 	\begin{algorithmic}[1]
 		\REQUIRE $v \in V, E \text{ edges in } G$.
-		\STATE $cc[z] \gets ccnum$  \COMMENT{set $z$'s connected-component \# since this is the first time visiting $v$.}
+		\STATE $ccnum[v] \gets cc$ 
 		\STATE $Visited(v) \gets 1$
-		\FORALL[We can access edges in this manner due to algo. $\ref{alg:dfs_und}$'s adjacency-list requirement on $G$.]{$(v, w) \in E$} 
+		\FORALL{$(v, w) \in E$} 
 		\IF{$\neg Visited(w)$}
 		\STATE $Explore(w)$
-		\STATE $Prev[w] \gets z$
+		\STATE $Prev[w] \gets v$
 		\ENDIF
 		\ENDFOR
 	\end{algorithmic}
 \end{algorithm}
 
 \subsection{Connected components, directed graphs}
+\begin{definition}{$clock$}
+A global counter incremented during pre and post-order vertex visits.
+\end{definition}
+
 Similar approach as section $\ref{cc_und}$, except when visiting a vertex $v$: 
 \begin{enumerate}
 \item Assign $v$ a pre-order number on initial visit.
-\item Increment $ccnum$.
+\item Increment $clock$.
 \item Assign $v$ a post-order number after visiting all of its neighbors.
-\item Increment $ccnum$.
+\item Increment $clock$.
 \end{enumerate}
-We no longer need to track $cc$ and $ccnum$.
+We no longer need to manage $ccnum$.
 
 \begin{remark}
 	Only the post-order number is used for connectivity algorithms. Not sure why we're tracking
 	pre-order numbers (hint, trick exam questions).
 \end{remark}
-
-\begin{definition}{$clock$}
-A global clock counter incremented during pre and post-order vertex visits.
-\end{definition}
 
 \begin{algorithm}
 \label{alg:dfs_dir}
@@ -167,6 +167,11 @@ $$Post(z) < Post(w)$$ This leads us to our first lemma:
 \end{lemma}
 
 See \href{https://classroom.udacity.com/courses/ud401/lessons/10159691481/concepts/101975518340923}{this lecture} for concrete examples. 
+
+\begin{lemma}
+\label{containment}
+For any nodes $u$ and $v$, intervals $[ Pre(u), Post(u) ]$ and $[Pre(v), Post(v)]$ are either disjoint, or one is contained in the other.
+\end{lemma}
 
 \subsection{Minimum Spanning Tree}
 \begin{definition}
