@@ -216,5 +216,36 @@ Kruskal's algorithm runs in $O(|E|log(|V|))$ if using $MergeSort$, which runs in
 	This is possible in $O(log|V|)$ time if using the \href{https://en.wikipedia.org/wiki/Disjoint-set_data_structure}{union-find data structure}.
 \end{lemma}
 
+\subsection{Max-Flow}
+
+\begin{definition}{$Flow \, networks$}
+\label{def:flow_networks}
+A directed graph, $G = (V, E)$, with capacities $c_e > 0, \, \forall e \in E$.
+\end{definition}
+
+\begin{definition}{Flow-in to $v$}
+\label{def:flowin}
+$$\sum_{\overrightarrow{wv} \in E}{f_w v}$$
+\end{definition}
+
+\begin{definition}{Flow-out of $v$}
+\label{def:flowout}
+$$\sum_{\overrightarrow{vz} \in E}{f_v z}$$
+\end{definition}
+
+\begin{property}{$\text{Capacity constraint}$}
+\label{prop:capacity}
+$$\forall e \in E, \, 0 \leq f_e \leq c_e$$
+\end{property}
+
+\begin{property}{$\text{Conservation of flow}$}
+\label{prop:conservation}
+
+Given source and sink node $(s,t) \in E$:
+$$\forall v \in V - \{s \cup t\}, \, \text{flow-in to } v = \text{flow-out of } v$$ 
+\end{property}
+
+\subsubsection{Problem}
+Given a flow network, find flows $f_e, \, \forall e \in E$, s.t. $f_e$ satisfies properties \ref{prop:capacity} and \ref{prop:conservation}.
 
 \end{document}
