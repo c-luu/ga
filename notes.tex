@@ -222,11 +222,28 @@ Kruskal's algorithm runs in $O(|E|log(|V|))$ if using $MergeSort$, which runs in
 \end{lemma}
 
 \subsection{Max-Flow}
-
+\subsubsection{Definitions}
 \begin{definition}{Flow Networks}
 \label{def:flow_networks}
 
-A directed graph, $G = (V, E)$, with capacities $c_e > 0, \, \forall e \in E$. It also has source vertex $s \in V$ and sink vertex $t \in V$ and capacity function $c:E \to \mathbb{N}$.
+A directed graph, $G = (V, E, s, t, c)$. Where $s, t$ is the source vertex $s \in V$ and sink vertex $t \in V$ and capacity function $c:E \to \mathbb{N}$.
+\end{definition}
+
+
+\begin{definition}{Flow of an edge, $f_e$}
+	\label{prop:flow_edge}
+	
+	A function, $f:E \to \mathbb{N}$, representing the flow along an edge, $e \in E$ satisfying \ref{prop:capacity} and \ref{prop:conservation}.
+\end{definition}
+
+\begin{definition}{$size(f)$}
+	\label{prop:size}
+	
+	Flow size represents the total flow of the network and has a useful property:
+	
+	$$\text{Total flow out of } s = \text{Total flow into } t$$
+	
+	given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}.
 \end{definition}
 
 \begin{definition}{Flow-in to $v$}
@@ -251,20 +268,6 @@ Given source and sink node $(s,t) \in E$:
 $$\forall v \in V - \{s \cup t\}, \, \text{flow-in to } v = \text{flow-out of } v$$ 
 \end{definition}
 
-\begin{definition}{Flow of an edge, $f_e$}
-\label{prop:flow_edge}
 
-Represents the flow along an edge, $e \in E$ satisfying properties \ref{prop:capacity} and \ref{prop:conservation}.
-\end{definition}
-
-\begin{definition}{$size(f)$}
-\label{prop:size}
-
-Flow size represents the total flow of the network and has a useful property:
-
-$$\text{Total flow out of } s = \text{Total flow into } t$$
-
-given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}.
-\end{definition}
 
 \end{document}
