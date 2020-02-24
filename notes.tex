@@ -223,8 +223,9 @@ Kruskal's algorithm runs in $O(|E|log(|V|))$ if using $MergeSort$, which runs in
 
 \subsection{Max-Flow}
 
-\begin{definition}{$Flow \, networks$}
+\begin{definition}{Flow Networks}
 \label{def:flow_networks}
+
 A directed graph, $G = (V, E)$, with capacities $c_e > 0, \, \forall e \in E$. It also has source vertex $s \in V$ and sink vertex $t \in V$ and capacity function $c:E \to \mathbb{N}$.
 \end{definition}
 
@@ -252,7 +253,18 @@ $$\forall v \in V - \{s \cup t\}, \, \text{flow-in to } v = \text{flow-out of } 
 
 \begin{definition}{Flow of an edge, $f_e$}
 \label{prop:flow_edge}
+
 Represents the flow along an edge, $e \in E$ satisfying properties \ref{prop:capacity} and \ref{prop:conservation}.
+\end{definition}
+
+\begin{definition}{$size(f)$}
+\label{prop:size}
+
+Flow size represents the total flow of the network and has a useful property:
+
+$$\text{Total flow out of } s = \text{Total flow into } t$$
+
+given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}.
 \end{definition}
 
 \end{document}
