@@ -4,6 +4,7 @@
 \usepackage{algorithmic}
 \usepackage{algorithm}
 \usepackage{hyperref}
+\usepackage{amssymb}
 \usepackage[parfill]{parskip}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
@@ -175,15 +176,19 @@ For any nodes $u$ and $v$, intervals $[ Pre(u), Post(u) ]$ and $[Pre(v), Post(v)
 
 \subsection{Minimum Spanning Tree}
 \begin{definition}
-A spanning tree is a connected sub-graph of minimal size.
+	A tree is a connected, acyclic graph.
+	\begin{enumerate}
+		\item A tree on $n$ vertices has $n-1$ edges.
+		\item In a tree, $\exists$ only one path between every pair of vertices.
+		\item Any connected graph with $|E|=|V|-1$ is a tree.
+	\end{enumerate}
 \end{definition}
-\begin{definition}
-A tree is a connected, acyclic graph.
 
+\begin{definition}
+A spanning tree $F \subseteq E$, is a minimal-weight, connected component s.t.:
 \begin{enumerate}
-\item A tree on $n$ vertices has $n-1$ edges.
-\item In a tree, $\exists$ only one path between every pair of vertices.
-\item Any connected graph with $|E|=|V|-1$ is a tree.
+	\item $F$ is acyclic. 
+	\item $F$ has $|V|-1=n-1$ edges.
 \end{enumerate}
 \end{definition}
 
@@ -220,7 +225,7 @@ Kruskal's algorithm runs in $O(|E|log(|V|))$ if using $MergeSort$, which runs in
 
 \begin{definition}{$Flow \, networks$}
 \label{def:flow_networks}
-A directed graph, $G = (V, E)$, with capacities $c_e > 0, \, \forall e \in E$.
+A directed graph, $G = (V, E)$, with capacities $c_e > 0, \, \forall e \in E$. It also has source vertex $s \in V$ and sink vertex $t \in V$ and capacity function $c:E \to \mathbb{N}$.
 \end{definition}
 
 \begin{definition}{Flow-in to $v$}
@@ -233,19 +238,21 @@ $$\sum_{\overrightarrow{wv} \in E}{f_{wv}}$$
 $$\sum_{\overrightarrow{vz} \in E}{f_{vz}}$$
 \end{definition}
 
-\begin{property}{$\text{Capacity constraint}$}
+\begin{definition}{$\text{Capacity constraint}$}
 \label{prop:capacity}
 $$\forall e \in E, \, 0 \leq f_e \leq c_e$$
-\end{property}
+\end{definition}
 
-\begin{property}{$\text{Conservation of flow}$}
+\begin{definition}{$\text{Conservation of flow}$}
 \label{prop:conservation}
 
 Given source and sink node $(s,t) \in E$:
 $$\forall v \in V - \{s \cup t\}, \, \text{flow-in to } v = \text{flow-out of } v$$ 
-\end{property}
+\end{definition}
 
-\subsubsection{Problem}
-Given a flow network, find flows $f_e, \, \forall e \in E$, s.t. $f_e$ satisfies properties \ref{prop:capacity} and \ref{prop:conservation}.
+\begin{definition}{Flow of an edge, $f_e$}
+\label{prop:flow_edge}
+Represents the flow along an edge, $e \in E$ satisfying properties \ref{prop:capacity} and \ref{prop:conservation}.
+\end{definition}
 
 \end{document}
