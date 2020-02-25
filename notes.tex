@@ -282,15 +282,15 @@ $\cal{P}$ is a path between $(s,t)$ with some available capacity, $\ref{def:avai
 \end{definition}
 
 \begin{algorithm}
-	\caption{$NaiveMaxFlow$}
-	\label{alg:naive_max_flow}
-	\begin{algorithmic}[1]
-		\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$.
-		\WHILE {$\exists \cal{P}$}
-		\STATE $c(\cal{P}) = \underset{e \in \cal{P}}{\text{min}}(c_e-f_e)$.
-		\STATE Augment $f$ by $c(\cal{P})$ along $\cal{P}$.
-		\ENDWHILE
-	\end{algorithmic}
+\caption{$NaiveMaxFlow$}
+\label{alg:naive_max_flow}
+\begin{algorithmic}[1]
+	\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$
+	\WHILE {$\exists \cal{P}$}
+		\STATE $c(\cal{P}) \gets \min_{\forall e \in \cal{P}} (c_{e}-f_e)$ \COMMENT{Revisit garbled characters.}
+		\STATE Augment $f$ by $c(\cal{P})$ along $\cal{P}$
+	\ENDWHILE
+\end{algorithmic}
 \end{algorithm}
 
 \subsubsection{Anti-parallel Edges}
