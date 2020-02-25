@@ -160,4 +160,12 @@
 	For a flow, $f^*$: $$\nexists \text{ an augmenting path} \in G^{f^*} \to f^* \text{is a max-flow}$$.
 \end{lemma}
 
+\begin{claim}
+	|f| can be computed in $O(n+m)$ by simply constructing $G^f$ and applying \ref{lem:aug_path}.
+\end{claim}
+
+We are given a network-graph $G$, and the maximal flows, $f'=\{f_e\}_{e \in E}$. $f'$ can be thought of as our flow-graph, that has already been calculated for us. We have everything needed to compute $G^f$, which \textit{should be} done in $O(n+m)$ time per lectures.
+
+Once $G^f$ is constructed, we can run $DFS$ on $G^f$ to see if $\exists$ a path from $s$ to $t$- but then what? 
+ 
 \end{document}
