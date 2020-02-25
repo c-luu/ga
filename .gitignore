@@ -1,3 +1,5 @@
+*.blg
+*.bbl
 *.dll
 *.mdb
 *.bvd
