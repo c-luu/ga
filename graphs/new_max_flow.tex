@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[parfill]{parskip}
 \usepackage[T1]{fontenc}
 \usepackage{amssymb, amsmath, graphicx, subfigure, enumerate}
 \usepackage{amsthm,alltt}
@@ -15,8 +16,6 @@
 \setlength{\textwidth}{6in}
 \setlength{\topmargin}{-0.4in}
 \setlength{\textheight}{8.5in}
-
-
 
 \newcommand{\heading}[6]{
   \renewcommand{\thepage}{\arabic{page}} % used to be #1-\arabic{page}
@@ -144,10 +143,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 % \problemset{\problemsetnum}{\duedate}{\studentname}
-\begin{problem} {(New maximal flow)}
+\begin{problem} {(New maximal flow)}	
+	You are given a directed graph $G = (V,E)$ with positive integer capacities $\{c_e\}_{e\in E}$ on each edge, a
+	source $s$ and a sink $t$. You are also given an integer value maximal flow $\{f_e\}_{e\in E}$. Suppose we pick
+	a specific edge $e$ and increase its capacity by 1. 
+		
+	Describe an algorithm to find a maximum flow on
+	the new network. Your algorithm should run in linear time $O(n + m)$, where $n$ is the number of
+	vertices and $m$ is the number of edges of G. Explain why your algorithm is correct (no pseudocode)
+	and analyze its running time.
 \end{problem}
 
-%TODO: type your solution here
-
+%TODO
 
 \end{document}
