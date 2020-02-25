@@ -248,7 +248,7 @@ given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}.
 \begin{definition}{Available Capacity}
 \label{def:available_cap}
 
-The available capacity at some $e \in E$ is:
+The available capacity at some $e \in E$ is (TODO: this doesn't look right):
 $$c_e + f_e$$
 \end{definition}
 
@@ -327,15 +327,17 @@ The reason we do not want anti-parallel edges is because if $G$ had some, we cou
 \end{algorithmic}
 \end{algorithm}
 
+In \ref{alg:ford_fulk}, we augment by increasing flow along forward edges by $c(\cal{P})$, and decreasing flow by $c(\cal{P})$ for back-edges. 
+
 \textbf{Correctness}
 
-In \ref{alg:ford_fulk}, we augment by increasing flow along forward edges by $c(\cal{P})$, and decreasing flow by $c(\cal{P})$ for back-edges. The proof-of-correctness relies on the max-flow = min-cut theorem, \ref{thm:maxflowmincut}. 
+The proof-of-correctness relies on the max-flow = min-cut theorem, \ref{thm:maxflowmincut}. 
 
 \textbf{Time Complexity}
 
 Due to the requirement in \ref{alg:ford_fulk}, the flow will increase by $\geq 1$ unit per round. How do we determine how many rounds then? Let $C=$ size of max flow. Given that the flow must increase by $\geq 1$ per round, then we know there are $\leq C$ rounds. 
 
-It takes $O(|V|)$ time to update $G^f$, and it takes $O(|E|)$ time, assuming $|E| \geq |V|-1$ since $G$ may have multiple cycles, by running $DFS$ or $BFS$ to find \cal{P} in the loop. Augmenting $f$ in the loop is also $O(|V|$, thus the running time is dominated by $O(|E|)$. 
+It takes $O(|V|)$ time to update $G^f$, and it takes $O(|E|)$ time, assuming $|E| \geq |V|-1$ since $G$ may have multiple cycles, by running $DFS$ or $BFS$ to find $\cal{P}$ left in the loop. Augmenting $f$ in the loop is also $O(|V|$, thus the running time is dominated by $O(|E|)$. 
 
 We must take into account that there's $\leq C$ rounds we iterate through, thus the final running time pseudo-polynomial at:
 
