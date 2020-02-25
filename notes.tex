@@ -288,10 +288,28 @@ $\cal{P}$ is a path between $(s,t)$ with some available capacity, $\ref{def:avai
 	\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$
 	\STATE Find some $\cal{P}$ \COMMENT{Can use $DFS$ or $BFS$ for this}
 	\WHILE {$\exists \cal{P}$}
-		\STATE $c(\cal{P}) \gets \min_{\forall e \in \cal{P}} (c_{e}-f_e)$ \COMMENT{Revisit garbled characters.}
+		\STATE $c(\cal{P}) \gets \min_{\forall e \in \cal{P}} (c_e-f_e)$ \COMMENT{Revisit garbled characters.}
 		\STATE Augment $f$ by $c(\cal{P})$ along $\cal{P}$
 	\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
+
+\subsubsection{Residual Network, $G^f$}
+\label{residual_net}
+$G^f$ is useful for finding the max-flow because it lets us augment $f$ with back-edges. It is related to the original, network graph $G$:
+
+$$G^f = (V, E^f)$$
+
+There are constraints to be met before adding an edge $e \in E$ to $E^f$. The first is for forward edges:
+
+$$\overrightarrow{vw} \in E \land f_{vw} < c_{vw} \to \text{ add } \overrightarrow{vw} \text { to } E^f \text { with capacity } c_{vw} - f_{vw}$$
+
+and for back-edges:
+
+$$\overrightarrow{vw} \in E \land f_{vw} > 0 \to \text{ add } \overrightarrow{wv} \text { to } E^f \text { with capacity } f_{vw}$$
+
+\begin{remark}
+The reason we do not want anti-parallel edges is because if $G$ had some, we could not construct $G^f$ with forward and back-edges as noted in \ref{residual_net}.
+\end{remark}
 
 \end{document}
