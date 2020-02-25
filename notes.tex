@@ -286,6 +286,7 @@ $\cal{P}$ is a path between $(s,t)$ with some available capacity, $\ref{def:avai
 \label{alg:naive_max_flow}
 \begin{algorithmic}[1]
 	\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$
+	\STATE Find some $\cal{P}$ \COMMENT{Can use $DFS$ or $BFS$ for this}
 	\WHILE {$\exists \cal{P}$}
 		\STATE $c(\cal{P}) \gets \min_{\forall e \in \cal{P}} (c_{e}-f_e)$ \COMMENT{Revisit garbled characters.}
 		\STATE Augment $f$ by $c(\cal{P})$ along $\cal{P}$
