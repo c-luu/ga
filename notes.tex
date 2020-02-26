@@ -275,10 +275,10 @@ Given source and sink node $(s,t) \in E$:
 $$\forall v \in V - \{s \cup t\}, \, \text{flow-in to } v = \text{flow-out of } v$$ 
 \end{definition}
 
-\begin{definition}{$\cal{P}$}
+\begin{definition}{$\mathcal{P}$}
 	\label{prop:cal_p}
 	
-	$\cal{P}$ is a path between $(s,t)$ with some available capacity, $\ref{def:available_cap}$. I.e. (maybe?) $\cal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$.
+	$\mathcal{P}$ is a path between $(s,t)$ with some available capacity, $\ref{def:available_cap}$. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$.
 \end{definition}
 
 \subsubsection{Problem}
@@ -290,10 +290,10 @@ The Max-Flow problem is: given a flow network, $G$, find $f$ that maximizes $siz
 \label{alg:naive_max_flow}
 \begin{algorithmic}[1]
 	\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$
-	\STATE Find some $\cal{P}$ \COMMENT{Can use $DFS$ or $BFS$ for this}
-	\WHILE {$\exists \cal{P}$}
-		\STATE $c(\cal{P}) \gets \min_{\forall e \in \cal{P}} (c_e-f_e)$ \COMMENT{Revisit garbled characters.}
-		\STATE Augment $f$ by $c(\cal{P})$ along $\cal{P}$
+	\STATE Find some $\mathcal{P}$ \COMMENT{Can use $DFS$ or $BFS$ for this}
+	\WHILE {$\exists \mathcal{P}$}
+		\STATE $c(\mathcal{P}) \gets \min_{\forall e \in \mathcal{P}} (c_e-f_e)$
+		\STATE Augment $f$ by $c(\mathcal{P})$ along $\mathcal{P}$
 	\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
@@ -322,16 +322,16 @@ The reason we do not want anti-parallel edges is because if $G$ had some, we cou
 \begin{algorithmic}[1]
 	\REQUIRE $c : E \to \mathbb{N}$ \COMMENT{This is a crucial limitation for $FordFulkerson$ to work}
 	\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$
-	\WHILE {$\exists \cal{P} \in G^f$}
-		\STATE Find $\cal{P}$
-		\STATE $c(\cal{P}) \gets \text{the minimum capacity along } \cal{P}$
-		\STATE Augment $f$ by $c(\cal{P})$ unit along $\cal{P}$
+	\WHILE {$\exists \mathcal{P} \in G^f$}
+		\STATE Find $\mathcal{P}$
+		\STATE $c(\mathcal{P}) \gets \text{the minimum capacity along } \mathcal{P}$
+		\STATE Augment $f$ by $c(\mathcal{P})$ unit along $\mathcal{P}$
 	\ENDWHILE
 	\RETURN {$f$}
 \end{algorithmic}
 \end{algorithm}
 
-In \ref{alg:ford_fulk}, we augment by increasing flow along forward edges by $c(\cal{P})$, and decreasing flow by $c(\cal{P})$ for back-edges. 
+In \ref{alg:ford_fulk}, we augment by increasing flow along forward edges by $c(\mathcal{P})$, and decreasing flow by $c(\mathcal{P})$ for back-edges. 
 
 \textbf{Correctness}
 
@@ -341,7 +341,7 @@ The proof-of-correctness relies on the max-flow = min-cut theorem, \ref{thm:maxf
 
 Due to the requirement in \ref{alg:ford_fulk}, the flow will increase by $\geq 1$ unit per round. How do we determine how many rounds then? Let $C=$ size of max flow. Given that the flow must increase by $\geq 1$ per round, then we know there are $\leq C$ rounds. 
 
-It takes $O(|V|)$ time to update $G^f$, and it takes $O(|E|)$ time, assuming $|E| \geq |V|-1$ since $G$ may have multiple cycles, by running $DFS$ or $BFS$ to find $\cal{P}$ left in the loop. Augmenting $f$ in the loop is also $O(|V|$, thus the running time is dominated by $O(|E|)$. 
+It takes $O(|V|)$ time to update $G^f$, and it takes $O(|E|)$ time, assuming $|E| \geq |V|-1$ since $G$ may have multiple cycles, by running $DFS$ or $BFS$ to find $\mathcal{P}$ left in the loop. Augmenting $f$ in the loop is also $O(|V|$, thus the running time is dominated by $O(|E|)$. 
 
 We must take into account that there's $\leq C$ rounds we iterate through, thus the final running time is \textit{pseudo-polynomial} at:
 
@@ -350,7 +350,9 @@ $$O(|E|C)$$
 \subsection{Max-flow = Min-cut}
 \begin{lemma}
 \label{lem:aug_path}
-	For a flow, $f^*$: $$\nexists \text{ an augmenting path} \in G^{f^*} \to f^* \text{is a max-flow}$$.
+For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \to f^* \text{is a max-flow}$$.
+	
+Where $\mathcal{P}$ is \ref{prop:cal_p}.
 \end{lemma}
 
 \begin{definition}{\textit{st-cut} capacity}
