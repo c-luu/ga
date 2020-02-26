@@ -243,7 +243,7 @@ Flow size represents the total flow of the network and has a useful property:
 	
 $$\text{Total flow out of } s = \text{Total flow into } t$$
 	
-given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}.
+given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}. TODO: verify this is equivalent to $|f|$.
 \end{definition}
 
 \begin{definition}{Available Capacity}
@@ -275,13 +275,16 @@ Given source and sink node $(s,t) \in E$:
 $$\forall v \in V - \{s \cup t\}, \, \text{flow-in to } v = \text{flow-out of } v$$ 
 \end{definition}
 
-\subsubsection{Algorithm Idea}
 \begin{definition}{$\cal{P}$}
-\label{prop:cal_p}
-
-$\cal{P}$ is a path between $(s,t)$ with some available capacity, $\ref{def:available_cap}$.
+	\label{prop:cal_p}
+	
+	$\cal{P}$ is a path between $(s,t)$ with some available capacity, $\ref{def:available_cap}$.
 \end{definition}
 
+\subsubsection{Problem}
+The Max-Flow problem is: given a flow network, $G$, find $f$ that maximizes $size(f)$, \ref{prop:size}.
+
+\subsubsection{Algorithm Idea}
 \begin{algorithm}
 \caption{$NaiveMaxFlow$}
 \label{alg:naive_max_flow}
