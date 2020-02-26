@@ -8,6 +8,7 @@
 \usepackage[parfill]{parskip}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
+\newtheorem{claim}[theorem]{Claim}
 \newtheorem{eg}{Example}
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -357,10 +358,23 @@ Let a \textit{cut} be a partition of $V = L \cup R$. An \textit{st-cut} is a cut
 $$\sum_{\overrightarrow{vw} \in E : v \in L, w \in R} c_{vw}$$
 \end{definition}
 
+\begin{claim}
+$$size(f) = f^{out} (L) - f^{in} (L)$$
+
+Where $L$ comes from some \textit{st-cut} via \ref{def:st_cut_cap}.
+\end{claim}
+\begin{proof}
+
+\end{proof}
+
 \begin{theorem}{Max-flow = Min-cut}
 \label{thm:maxflowmincut}
+
+I.e., the size of max-flow = the minimum capacity of some \textit{st-cut}.
 \end{theorem}
 
+\begin{proof}
 
+\end{proof}
 
 \end{document}
