@@ -165,7 +165,13 @@
 \begin{definition}{$\mathcal{P}$}
 \label{prop:cal_p}	
 
-	$\mathcal{P}$ is a path between $(s,t) \in G^f$ with some available capacity. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$. 
+	A path between $(s,t) \in G^f$ with some available capacity. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$. 
+\end{definition}
+
+\begin{definition}{$C$}
+\label{def:c_rounds}
+
+The size of max flow \textit{prior} to increasing the capacity of some $e$ by 1.
 \end{definition}
 
 \begin{lemma}
@@ -173,13 +179,12 @@
 	For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \to f^* \text{is a max-flow}$$\\
 \end{lemma}
 
-\textbf{Solution}
 \begin{claim}
-Since we are given the maximal flow integer values for all $f_e \in E$, we could run a non-looping variant of $FordFulkerson$ to compute the new maximum flow in $O(m)$.
+Since we are given the maximal flow integer values for all $f_e \in E$, we could run $FordFulkerson$ to compute the new maximum flow in $O(m)$ in one round instead of $C = max flow$ rounds.
 \end{claim}
 
 \begin{proof}
-	Let $C = $ the size of max flow \textit{prior} to increasing the capacity of some $e$ by 1. After increasing $e$'s capacity by 1, we construct $G^{f^*}$ using $f^*$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f^*}$ because we just increased some $e$'s capacity. We then check \ref{lem:aug_path} using $DFS$, taking $O(m)$ time. If $\mathcal{P}$ was found, we augment $f^*$ along this path in $O(n)$ time, otherwise return $f^*$.
+	After increasing $e$'s capacity by 1, we construct $G^{f^*}$ using $f^*$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f^*}$ because we just increased some $e$'s capacity. We then check \ref{lem:aug_path} using $DFS$, taking $O(m)$ time. If $\mathcal{P}$ was found, we augment $f^*$ along this path in $O(n)$ time, otherwise return $f^*$.
 	
 	$C$ rounds have already been iterated to give us \ref{def:f_star}, so we only loop once more to generate the new max flow. Because capacity for some $e$ increases by 1, $C$ will increase by no more than 1 to arrive at the new max flow. $O(m) >O(n)$, since we assume $m = |E| \geq n-1 = |V|-1|$. Thus we can compute the new max flow in $O(m*1) = O(m)$ time.
 \end{proof}
