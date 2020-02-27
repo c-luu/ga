@@ -9,7 +9,8 @@
 \usepackage[boxed]{algorithm2e}
 \usepackage{mathdots}
 \usepackage{fancyhdr} %Fancy-header package to modify header/page numbering
-\usepackage{cleveref}
+\usepackage{hyperref}
+
 
 \setlength{\oddsidemargin}{.25in}
 \setlength{\evensidemargin}{.25in}
@@ -154,6 +155,13 @@
 	and analyze its running time.
 \end{problem}\\
 
+\begin{definition}{$f^* = \{f_e\}_{e \in E}$}
+\label{def:f_star}
+	(This definition should be verified via \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=616}{this thread.})
+	
+	The already computed maximum flow for all edges, $e \in E$.
+\end{definition}
+
 \begin{definition}{$\mathcal{P}$}
 \label{prop:cal_p}	
 
@@ -172,6 +180,19 @@
 
 We are given a network-graph $G$, and the maximal flows, $f'=\{f_e\}_{e \in E}$. $f'$ can be thought of as our flow-graph, that has already been calculated for us. We have everything needed to compute $G^f$, which \textit{should be} done in $O(n+m)$ time per lectures.
 
-Once $G^f$ is constructed, we can run $DFS$ on $G^f$ to see if $\exists$ a path from $s$ to $t$- but then what? 
+Once $G^f$ is constructed, we can run $DFS$ on $G^f$ to see if $\exists$ a path from $s$ to $t$- but then what?
+
+\newpage
+
+\textbf{Solution 2}
+\begin{claim}
+Since we are given the maximal flow integer values for all $f_e \in E$, we could run a non-looping variant of $FordFulkerson$ to compute the new maximum flow in $O(m)$.
+\end{claim}
+
+\begin{proof}
+	Let $C = $ the size of max flow \textit{prior} to increasing the capacity of some $e$ by 1. After increasing $e$'s capacity by 1, we construct $G^{f^*}$ using $f^*$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f^*}$ because we just increased some $e$'s capacity. We then check \ref{lem:aug_path} using $DFS$, taking $O(m)$ time. If $\mathcal{P}$ was found, we augment $f^*$ along this path in $O(n)$ time, otherwise return $f^*$.
+	
+	$C$ rounds have already been iterated to give us \ref{def:f_star}, so we only loop once more to generate the new max flow. Because capacity for some $e$ increases by 1, $C$ will increase by no more than 1 to arrive at the new max flow. $O(m) >O(n)$, since we assume $m = |E| \geq n-1 = |V|-1|$. Thus we can compute the new max flow in $O(m*1) = O(m)$ time.
+\end{proof}
  
 \end{document}
