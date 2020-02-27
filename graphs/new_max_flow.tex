@@ -188,5 +188,9 @@ Since we are given the maximal flow integer values for all $f_e \in E$, we could
 	
 	$C$ rounds have already been iterated to give us \ref{def:f_star}, so we only loop once more to generate the new max flow. Because capacity for some $e$ increases by 1, $C$ will increase by no more than 1 to arrive at the new max flow. $O(m) >O(n)$, since we assume $m = |E| \geq n-1 = |V|-1|$. Thus we can compute the new max flow in $O(m*1) = O(m)$ time.
 \end{proof}
+
+\begin{remark}
+	$O(n)$ and $O(|E|)$ are not equivalent; I think you probably meant $O(m)$. To know how long it takes to loop through the edges depends how exactly the graph is stored, and we use adjacency list format, so there is no direct way to loop through the edges without looping through the vertices. This is the same reason that DFS is $O(n+m)$ even though intuitively it might only need to be $O(m)$ since you're really just exploring every edge. 
+\end{remark}
  
 \end{document}
