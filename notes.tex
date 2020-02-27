@@ -352,7 +352,7 @@ An excellent \href{https://stackoverflow.com/questions/19649026/is-network-flow-
 \subsection{Max-flow = Min-cut}
 \begin{lemma}
 \label{lem:aug_path}
-For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \to f^* \text{is a max-flow}$$.
+For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \to f^* \text{is a max-flow}$$
 	
 Where $\mathcal{P}$ is \ref{prop:cal_p}.
 \end{lemma}
@@ -360,7 +360,7 @@ Where $\mathcal{P}$ is \ref{prop:cal_p}.
 \begin{definition}{\textit{st-cut} capacity}
 \label{def:st_cut_cap}
 
-Let a \textit{cut} be a partition of $V = L \cup R$. An \textit{st-cut} is a cut s.t. $s \in L, t \in R$. The capacity from $L$ to $R$ is calculated as:
+An \textit{st-cut} is a partition of $V = L \cup R$, s.t. $s \in L, t \in R, L \cap R = \emptyset$. The capacity from $L$ to $R$ is calculated as:
 
 $$\sum_{\overrightarrow{vw} \in E : v \in L, w \in R} c_{vw}$$
 \end{definition}
