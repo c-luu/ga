@@ -154,12 +154,18 @@
 	and analyze its running time.
 \end{problem}\\
 
-\textbf{Solution}
+\begin{definition}{$\mathcal{P}$}
+\label{prop:cal_p}	
+
+	$\mathcal{P}$ is a path between $(s,t) \in G^f$ with some available capacity. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$. 
+\end{definition}
+
 \begin{lemma}
 \label{lem:aug_path}
-	For a flow, $f^*$: $$\nexists \text{ an augmenting path} \in G^{f^*} \to f^* \text{is a max-flow}$$.
+	For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \to f^* \text{is a max-flow}$$.\\
 \end{lemma}
 
+\textbf{Solution 1}
 \begin{claim}
 	New max-flow can be computed in $O(n+m)$ by simply constructing $G^f$ and applying \ref{lem:aug_path}.
 \end{claim}
