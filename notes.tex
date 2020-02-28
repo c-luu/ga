@@ -5,6 +5,7 @@
 \usepackage{algorithm}
 \usepackage{hyperref}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage[parfill]{parskip}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
@@ -371,12 +372,26 @@ $$\sum_{\overrightarrow{vw} \in E : v \in L, w \in R} c_{vw}$$
 \end{definition}
 
 \begin{claim}
+\label{clm:in_out_flow}
 $$size(f) = f^{out} (L) - f^{in} (L)$$
-
-Where $L$ comes from some \textit{st-cut} via \ref{def:st_cut_cap}.
 \end{claim}
-\begin{proof}
 
+\begin{proof}
+	\begin{flalign*}
+		f^{out}(L) - f^{in}(L) &= \\
+		\shortintertext{First term captures flow \textit{out} of $L$, second term captures flow \textit{into} $L$.}
+		&= \sum_{\overrightarrow{vw} \in E:v \in L, w \in R}f_{vw} - \sum_{\overrightarrow{wv} \in E:w \in R, v \in L}f_{wv}\\ 
+		\shortintertext{We add and subtract a third and fourth term, representing representing the sum of flows \textit{within} $L$.}
+		&+ \sum_{\overrightarrow{vw} \in E:v \in L, w \in L}f_{vw} - \sum_{\overrightarrow{wv} \in E:w \in L, v \in L}f_{wv}\\ 
+		\shortintertext{The first and third terms above consider edges from $v \in L$ to $R$, plus edges within $L$. Combined together, we have \textit{all edges} out of $v \in L$, represented as the first term below. Similarly, the second and last terms give the total flow \textit{into} $v \in L$.}
+		&= \sum_{v \in L} f^{out}(v) - \sum_{v \in L} f^{in}(v)\\ 
+		\shortintertext{We tease out vertex $s$ from the two flow summations above and add $f^{out}(s)$ to maintain equivalence. There is no $f^{in}(s)$ term below, because \emph{$s$ never has flow into it.}}
+		&= \sum_{v \in L-s}(f^{out}(v) - f^{in}(v)) + f^{out}(s)\\
+		\shortintertext{By conservation of flow, \ref{prop:conservation}, the flow summations in and out of $v$ cancel out.}
+		&= \sum_{v \in L-s}0 + f^{out}(s)\\
+		\shortintertext{By \ref{prop:size}.}
+		&= f^{out}(s) = size(f)&
+	\end{flalign*}
 \end{proof}
 
 \begin{theorem}{Max-flow = Min-cut}
@@ -385,7 +400,14 @@ Where $L$ comes from some \textit{st-cut} via \ref{def:st_cut_cap}.
 I.e., the size of max-flow = the minimum capacity of some \textit{st-cut}.
 \end{theorem}
 
+To prove \ref{thm:maxflowmincut}, we first prove $\text{max-flow} \leq \text{minimum st-cut}$, then we prove the reverse inequality, $\text{max-flow} \geq \text{minimum st-cut}$.
+
 \begin{proof}
+	To prove that $\text{max-flow} \leq \text{minimum st-cut}$, we can prove an easier, more general property: for any flow $f$ and any st-cut $(L,R)$:
+	
+	$$size(f) \leq c(L,R)$$
+	
+	where, $c(L,R)$ is the capacity defined in \ref{def:st_cut_cap}. The intuition being that the max-flow of $size(f)$ is just a special case of some $size(f)$, and that the minimum $c(L,R)$ is just a special case of finding some $c(L,R)$. To prove this property, see \ref{clm:in_out_flow}.
 
 \end{proof}
 
