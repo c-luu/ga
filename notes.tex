@@ -347,7 +347,7 @@ The proof-of-correctness relies on the max-flow = min-cut theorem, \ref{thm:maxf
 
 Due to the requirement in \ref{alg:ford_fulk}, the flow will increase by $\geq 1$ unit per round. How do we determine how many rounds then? Let $C=$ size of max flow. Given that the flow must increase by $\geq 1$ per round, then we know there are $\leq C$ rounds. 
 
-It takes $O(|V|)$ time to update $G^f$, and it takes $O(|E|)$ time, assuming $|E| \geq |V|-1$ since $G$ may have multiple cycles, by running $DFS$ or $BFS$ to find $\mathcal{P}$ left in the loop. Augmenting $f$ in the loop is also $O(|V|$, thus the running time is dominated by $O(|E|)$. 
+It takes $O(|V|)$ time to update $G^f$, and it takes $O(|E|)$ time, assuming $|E| \geq |V|-1$ since $G$ may have multiple cycles, by running $DFS$ or $BFS$ to find $\mathcal{P}$ left in the loop. Augmenting $f$ in the loop is also $O(|V|)$, thus the running time is dominated by $O(|E|)$. 
 
 We must take into account that there's $\leq C$ rounds we iterate through, thus the final running time is \textit{pseudo-polynomial} at:
 
@@ -426,20 +426,20 @@ To prove \ref{thm:maxflowmincut}, we first prove $\text{max-flow} \leq \text{min
 		\shortintertext{Along every edge $e$ leaving $L$, we know $f_e$ is $\leq c_e$ by \ref{prop:capacity}:} 
 		f^{out} (L) - f^{in} (L) \leq f^{out}(L) \leq c(L,R)
 	\end{align*}
-	Thus the total flow out of L is at most the total capacity of the edges from $L$ to $R$:
+	Thus the total flow out of $L$ is at most the total capacity of the edges from $L$ to $R$:
 
 	$$f^{out}(L) \leq c(L,R)$$
 
 	We now show the reverse inequality:
 	$$\text{max-flow} \geq \text{minimum st-cut}$$
 	Rephrased as:
-	$$\text{After maximizing over $f$, } size(f) \geq \text{minimal }c(L,R)$$
+	$$\text{after maximizing over $f$, } size(f) \geq \text{minimal }c(L,R)$$
 	To do so, take some $f^*$ produced from the $FordFulkerson$ algorithm. From \ref{lem:aug_path}, we know that $f^*$ is a max-flow. We want to construct an $(L,R)$ from $f^*$ s.t.:
 	$$size(f^*) = c(L,R)$$
-	How does the above equality imply $\text{max-flow} \geq \text{minimum st-cut}$? Because we know the max $size(f)$ is at least the $size(f^*)$- note that $f^*$ is just \textit{some} flow. 
-	So, if we maximize of flow $f$:
+	How does the above equality imply $\text{max-flow} \geq \text{minimum st-cut}$? Because we know the max $size(f)$ is at least the $size(f^*)$- note that $f^*$ is just \textit{some} flow calculated during the execution of $FordFulkerson$. 
+	So, if we maximize over flow $f$:
 	$$size(f) \geq size(f^*) = c(L,R)$$
-	Now, how does $c(L,R)$ compare to $\text{minimal }c(L,R)$? Surely, $c(L,R) \geq \text{minimal }c(L,R)$.
+	Now, how does $c(L,R)$ compare to $\text{minimal }c(L,R)$? Obviously, $c(L,R) \geq \text{minimal }c(L,R)$.
 	Using the hypothesis above, we now just need to prove the middle equality term of:
 	$$\text{maximum } size(f) \geq size(f^*) = c(L,R) \geq \text{minimal }c(L,R)$$
 	which we've proved in \ref{clm:in_out_flow}.
