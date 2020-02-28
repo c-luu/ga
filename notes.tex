@@ -219,7 +219,7 @@ Kruskal's algorithm runs in $O(|E|log(|V|))$ if using $MergeSort$, which runs in
 
 \begin{lemma}
 	Let $comp(v), \: v \in (V,X)$ be a function that returns the component containing $v$. $X$ is what is returned from algorithm \ref{alg:kruskals}. Given edge $(u,v) \in (V,X)$, we know:
-	$$comp(u) \neq comp(v) \to X \cup e \text{ doesn't have a cycle.}$$
+	$$comp(u) \neq comp(v) \implies X \cup e \text{ doesn't have a cycle.}$$
 	This is possible in $O(log|V|)$ time if using the \href{https://en.wikipedia.org/wiki/Disjoint-set_data_structure}{union-find data structure}.
 \end{lemma}
 
@@ -227,14 +227,14 @@ Kruskal's algorithm runs in $O(|E|log(|V|))$ if using $MergeSort$, which runs in
 \begin{definition}{Flow Networks}
 \label{def:flow_networks}
 
-A directed graph, $G = (V, E, s, t, c)$. Where $s, t$ is the source vertex $s \in V$ and sink vertex $t \in V$ and capacity function $c:E \to \mathbb{N}$.
+A directed graph, $G = (V, E, s, t, c)$. Where $s, t$ is the source vertex $s \in V$ and sink vertex $t \in V$ and capacity function $c:E \mapsto \mathbb{N}$.
 \end{definition}
 
 
 \begin{definition}{Flow of an edge, $f_e$}
 \label{prop:flow_edge}
 	
-A function, $f:E \to \mathbb{N}$, representing the flow along an edge, $e \in E$ satisfying \ref{prop:capacity} and \ref{prop:conservation}.
+A function, $f:E \mapsto \mathbb{N}$, representing the flow along an edge, $e \in E$ satisfying \ref{prop:capacity} and \ref{prop:conservation}.
 \end{definition}
 
 \begin{definition}{$size(f)$}
@@ -358,7 +358,7 @@ An excellent \href{https://stackoverflow.com/questions/19649026/is-network-flow-
 \subsection{Max-flow = Min-cut}
 \begin{lemma}
 \label{lem:aug_path}
-For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \to f^* \text{is a max-flow}$$
+For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \implies f^* \text{is a max-flow}$$
 	
 Where $\mathcal{P}$ is \ref{prop:cal_p}.
 \end{lemma}
@@ -373,6 +373,7 @@ $$\sum_{\overrightarrow{vw} \in E : v \in L, w \in R} c_{vw}$$
 
 \begin{claim}
 \label{clm:in_out_flow}
+For any flow $f$ and any st-cut $(L,R)$:
 $$size(f) = f^{out} (L) - f^{in} (L)$$
 \end{claim}
 
@@ -394,6 +395,14 @@ $$size(f) = f^{out} (L) - f^{in} (L)$$
 	\end{flalign*}
 \end{proof}
 
+\begin{claim}
+\label{clm:size_f_star_is_clr}
+	For some $f^*$ generated from $FordFulkerson$:
+	$$size(f^*) = c(L,R)$$
+	
+	\href{https://classroom.udacity.com/courses/ud401/lessons/e4f767e0-9806-46b6-a7e2-5516c4572aff/concepts/55b82fb7-3c7c-46d6-8524-9aa8d2a4b452}{TODO: Proof.}.
+\end{claim}
+
 \begin{theorem}{Max-flow = Min-cut}
 \label{thm:maxflowmincut}
 
@@ -403,12 +412,37 @@ I.e., the size of max-flow = the minimum capacity of some \textit{st-cut}.
 To prove \ref{thm:maxflowmincut}, we first prove $\text{max-flow} \leq \text{minimum st-cut}$, then we prove the reverse inequality, $\text{max-flow} \geq \text{minimum st-cut}$.
 
 \begin{proof}
-	To prove that $\text{max-flow} \leq \text{minimum st-cut}$, we can prove an easier, more general property: for any flow $f$ and any st-cut $(L,R)$:
+	To prove that $$\text{max-flow} \leq \text{minimum st-cut},$$ we can prove an easier, more general property: for any flow $f$ and any st-cut $(L,R)$:
 	
-	$$size(f) \leq c(L,R)$$
+	$$size(f) \leq c(L,R) \implies \text{max-flow} \leq \text{minimum st-cut}$$
 	
-	where, $c(L,R)$ is the capacity defined in \ref{def:st_cut_cap}. The intuition being that the max-flow of $size(f)$ is just a special case of some $size(f)$, and that the minimum $c(L,R)$ is just a special case of finding some $c(L,R)$. To prove this property, see \ref{clm:in_out_flow}.
+	where, $c(L,R)$ is the capacity defined in \ref{def:st_cut_cap}. The intuition being that the max-flow of $size(f)$ is just a special case of some $size(f)$, and that the minimum $c(L,R)$ is just a special case of finding some $c(L,R)$.
+	
+	\begin{align*}
+		\shortintertext{By claim \ref{clm:in_out_flow}, we know:}
+		size(f) = f^{out} (L) - f^{in} (L)\\
+		\shortintertext{It's trivial that $f^{in}(L)$ subtracted from $f^{out}(L)$ makes $f^{out}(L)$ smaller:}
+		f^{out} (L) - f^{in} (L) \leq f^{out}(L)\\
+		\shortintertext{Along every edge $e$ leaving $L$, we know $f_e$ is $\leq c_e$ by \ref{prop:capacity}:} 
+		f^{out} (L) - f^{in} (L) \leq f^{out}(L) \leq c(L,R)
+	\end{align*}
+	Thus the total flow out of L is at most the total capacity of the edges from $L$ to $R$:
 
+	$$f^{out}(L) \leq c(L,R)$$
+
+	We now show the reverse inequality:
+	$$\text{max-flow} \geq \text{minimum st-cut}$$
+	Rephrased as:
+	$$\text{After maximizing over $f$, } size(f) \geq \text{minimal }c(L,R)$$
+	To do so, take some $f^*$ produced from the $FordFulkerson$ algorithm. From \ref{lem:aug_path}, we know that $f^*$ is a max-flow. We want to construct an $(L,R)$ from $f^*$ s.t.:
+	$$size(f^*) = c(L,R)$$
+	How does the above equality imply $\text{max-flow} \geq \text{minimum st-cut}$? Because we know the max $size(f)$ is at least the $size(f^*)$- note that $f^*$ is just \textit{some} flow. 
+	So, if we maximize of flow $f$:
+	$$size(f) \geq size(f^*) = c(L,R)$$
+	Now, how does $c(L,R)$ compare to $\text{minimal }c(L,R)$? Surely, $c(L,R) \geq \text{minimal }c(L,R)$.
+	Using the hypothesis above, we now just need to prove the middle equality term of:
+	$$\text{maximum } size(f) \geq size(f^*) = c(L,R) \geq \text{minimal }c(L,R)$$
+	which we've proved in \ref{clm:in_out_flow}.
 \end{proof}
 
 \end{document}
