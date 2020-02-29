@@ -254,6 +254,12 @@ The available capacity at some $e \in E$ is:
 $$c_e - f_e$$
 \end{definition}
 
+\begin{definition}{Saturated edge}
+\label{def:sat_edge}
+
+An edge $e \in E$ is \textit{saturated} if $f_e = c_e$.
+\end{definition}
+
 \begin{definition}{Flow-in to $v$}
 \label{def:flowin}
 $$\sum_{\overrightarrow{wv} \in E}{f_{wv}}$$
@@ -312,11 +318,17 @@ $$G^f = (V, E^f)$$
 
 There are constraints to be met before adding an edge $e \in E$ to $E^f$. The first is for forward edges:
 
+\begin{definition}
+\label{def:add_unsat_2_resid}
 $$\overrightarrow{vw} \in E \land f_{vw} < c_{vw} \to \text{ add } \overrightarrow{vw} \text { to } E^f \text { with capacity } c_{vw} - f_{vw}$$
+\end{definition}
 
 and for back-edges:
 
+\begin{definition}
+\label{def:add_back_edge_unsat_2_resid}
 $$\overrightarrow{vw} \in E \land f_{vw} > 0 \to \text{ add } \overrightarrow{wv} \text { to } E^f \text { with capacity } f_{vw}$$
+\end{definition}
 
 \begin{remark}
 The reason we do not want anti-parallel edges is because if $G$ had some, we could not construct $G^f$ with forward and back-edges as noted in \ref{residual_net}.
@@ -398,10 +410,36 @@ $$size(f) = f^{out} (L) - f^{in} (L)$$
 \begin{claim}
 \label{clm:size_f_star_is_clr}
 	For some $f^*$ generated from $FordFulkerson$:
-	$$size(f^*) = c(L,R)$$
-	
-	\href{https://classroom.udacity.com/courses/ud401/lessons/e4f767e0-9806-46b6-a7e2-5516c4572aff/concepts/55b82fb7-3c7c-46d6-8524-9aa8d2a4b452}{TODO: Proof.}.
+	$$size(f^*) = c(L,R)$$	
 \end{claim}
+
+\begin{proof}
+Let $f^*$ be a flow without a path $\mathcal{P} \in G^{f^*}$. We now perform an st-cut, $(L, R)$ by definition \ref{def:st_cut_cap}.
+
+Since $f^*$ has no $\mathcal{P} \in G^{f^*}$, we know that sink $t$ \textbf{can't} be reachable from source $s$ in $G^{f^*}$ by \ref{prop:cal_p}. 
+
+We let $L$ be the set of reachable vertices from $s \in G^{f^*}$, and $R = V - L$. From this, we know $s$ must be in $L$ since $s$ can reach itself, and $t$ must be in $R$, since it contains the set of vertices \textit{unreachable} from $s$. 
+
+It follows that $t \notin L$, because if so, $\exists s \rightsquigarrow t$, which contradicts that $f^*$ has no $\mathcal{P} \in G^{f^*}$.
+
+Taking an st-cut $(L,R)$, we derive a few facts:
+
+\begin{enumerate}
+	\item $\forall \overrightarrow{vw} \in E : v \in L, w \in R$, $\overrightarrow{vw}$ is a saturated edge. Otherwise, $\overrightarrow{vw} \in G^{f^*}$ by \ref{def:add_unsat_2_resid}, contradicting $\mathcal{P} \notin G^{f^*}$ because $G^{f^*} \cup \overrightarrow{vw} \implies \exists s \rightsquigarrow t$.
+	\item Total $f^{out}(L) = c(L,R)$ by \ref{def:available_cap}.
+	\item  $\forall \overrightarrow{wv} \in E : w \in R, v \in L$, $f_{wv} = 0$, otherwise its back edge, $\overrightarrow{vw} \in G^{f^*}$ by \ref{def:add_back_edge_unsat_2_resid}, contradicting $\mathcal{P} \notin G^{f^*}$.
+	\item Thus, total $f^{in}(L) = 0$.
+\end{enumerate}
+
+Now we may conclude \ref{clm:size_f_star_is_clr} from such facts:
+\begin{align*}
+size(f^*) &=\\
+\shortintertext{From claim \ref{clm:in_out_flow},}
+f^{out}(L) - f^{in}(L)&=\\
+c(L,R)- 0&=\\
+c(L,R)
+\end{align*}
+\end{proof}
 
 \begin{theorem}{Max-flow = Min-cut}
 \label{thm:maxflowmincut}
