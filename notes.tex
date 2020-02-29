@@ -244,7 +244,7 @@ Flow size represents the total flow of the network and has a useful property:
 	
 $$\text{Total flow out of } s = \text{Total flow into } t$$
 	
-given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}. TODO: verify this is equivalent to $|f|$.
+given $(s, t)$ are the source and sink vertices in \ref{def:flow_networks}.
 \end{definition}
 
 \begin{definition}{Available Capacity}
@@ -290,7 +290,7 @@ $$\forall v \in V - \{s \cup t\}, \, \text{flow-in to } v = \text{flow-out of } 
 \begin{definition}{$\mathcal{P}$}
 \label{prop:cal_p}	
 
-	$\mathcal{P}$ is a path between $(s,t) \in G^f$ with some available capacity, $\ref{def:available_cap}$. Remember, $G^f$ is \textit{built} based on \ref{residual_net}. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$
+	$\mathcal{P}$ is a path connecting $(s,t) \in G^f$ with some available capacity $\in f$,  see $\ref{def:available_cap}$. Remember, $G^f$ is \textit{built} based on \ref{residual_net}. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$
 \end{definition}
 
 \subsubsection{Problem}
