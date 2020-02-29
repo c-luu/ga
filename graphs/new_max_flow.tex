@@ -1,0 +1,196 @@
+\documentclass{article}
+\usepackage[parfill]{parskip}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb, amsmath, graphicx, subfigure, enumerate}
+\usepackage{amsthm,alltt}
+\usepackage[margin=1.25in]{geometry} %geometry (sets margin) and other useful packages
+\usepackage{graphicx,ctable,booktabs}
+\usepackage{mathtools}
+\usepackage[boxed]{algorithm2e}
+\usepackage{mathdots}
+\usepackage{fancyhdr} %Fancy-header package to modify header/page numbering
+\usepackage{hyperref}
+
+
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\heading}[6]{
+  \renewcommand{\thepage}{\arabic{page}} % used to be #1-\arabic{page}
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { \textbf{#2} \hfill #3 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #6  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { \textit{Instructor: #4 \hfill #5} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+%Redefining sections as problems
+\makeatletter
+\newenvironment{problem}{\@startsection
+       {section}
+       {2}
+       {-.2em}
+       {-3.5ex plus -1ex minus -.2ex}
+       {2.3ex plus .2ex}
+       {\pagebreak[3]%forces pagebreak when space is small; use \eject for better results
+       \large\bf\noindent{Problem }
+       }
+       }
+       %{%\vspace{1ex}\begin{center} \rule{0.3\linewidth}{.3pt}\end{center}}
+       %\begin{center}\large\bf \ldots\ldots\ldots\end{center}}
+\makeatother
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+
+%\newenvironment{proof}{\noindent{\bf Proof:} \hspace*{1mm}}{
+% \hspace*{\fill} $\Box$ }
+%\newenvironment{proof_of}[1]{\noindent {\bf Proof of #1:}
+% \hspace*{1mm}}{\hspace*{\fill} $\Box$ }
+%\newenvironment{proof_claim}{\begin{quotation} \noindent}{
+% \hspace*{\fill} $\diamond$ \end{quotation}}
+
+\newcommand{\problemset}[3]{\heading{#1}{\classname}{#2}{\instructor}{#3}{}} % Don't change this line
+%%%%%%%%%%%%%%%%%%%%%%%%%% Change this stuff below, don't change the line above this one
+\newcommand{\problemsetnum}{}            % problem set number
+\newcommand{\duedate}{} % problem set deadline
+\newcommand{\studentname}{}      % name of student (i.e., you)
+\newcommand{\classname}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{fancy}
+%\addtolength{\headwidth}{\marginparsep} %these change header-rule width
+%\addtolength{\headwidth}{\marginparwidth}
+\lhead{\classname} %Problem \thesection}
+\chead{}
+\rhead{\thepage}
+%\lfoot{\small\scshape \classname}
+\cfoot{}
+%\rfoot{\footnotesize PS \#\problemsetnum}
+\renewcommand{\headrulewidth}{.3pt}
+\renewcommand{\footrulewidth}{.3pt}
+\setlength\voffset{-0.25in}
+\setlength\textheight{648pt}
+
+
+\newcommand{\sit}{\shortintertext}
+\newcommand\deq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+\newcommand{\ones}{\mathbbm{1}}
+\newcommand{\e}{\vec{e}}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\bs}{\boldsymbol}
+\mathchardef\mhyphen="2D
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\II}{\mathcal{I}}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\Y}{\mathcal{Y}}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\sse}{\subseteq}
+\newcommand{\eps}{\epsilon}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\poly}{\textup{poly}}
+
+\newcommand{\dom}{\textup{dom}}
+
+\renewcommand{\thesubsection}{\thesection.\roman{subsection}}
+
+
+% auto sized delimiters
+\newcommand{\Br}[1]{\left\{#1\right\}}
+\newcommand{\br}[1]{\left[#1\right]}
+\newcommand{\pr}[1]{\left(#1\right)}
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\sgn}{\textup{sgn}}
+
+%default delimiter for Pr and E
+\DeclarePairedDelimiter{\defaultDelim}{[}{]}
+
+\DeclareMathOperator{\capPr}{Pr}
+\renewcommand{\Pr}[2][]{\capPr_{#1}\defaultDelim*{#2}}
+\DeclareMathOperator{\capE}{E}
+\newcommand{\E}[2][]{\capE_{#1}\defaultDelim*{#2}}
+\DeclareMathOperator{\capVar}{Var}
+\newcommand{\Var}[2][]{\capVar_{#1}\defaultDelim*{#2}}
+
+%\DeclareMathOperator*{}{} puts subscript below
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+% \problemset{\problemsetnum}{\duedate}{\studentname}
+\begin{problem} {(New maximal flow)}	
+	You are given a directed graph $G = (V,E)$ with positive integer capacities $\{c_e\}_{e\in E}$ on each edge, a
+	source $s$ and a sink $t$. You are also given an integer value maximal flow $\{f_e\}_{e\in E}$. Suppose we pick
+	a specific edge $e$ and increase its capacity by 1. 
+		
+	Describe an algorithm to find a maximum flow on
+	the new network. Your algorithm should run in linear time $O(n + m)$, where $n = |V|$ and $m = |E|$ of G. Explain why your algorithm is correct (no pseudocode)
+	and analyze its running time.
+\end{problem}\\
+
+\begin{definition}{$f = \{f_e\}_{e \in E}$}
+\label{def:f_star}
+	
+	Total flow for all edges, $e \in E$, s.t. $|f|$ is maximal. We opt for shorter notation, $|f|$, i.e. $|f| = size(f)$.
+\end{definition}
+
+\begin{definition}{$\mathcal{P}$}
+\label{prop:cal_p}	
+
+	A path connecting $(s,t) \in G^f$ with some available capacity $\in f$. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$. 
+\end{definition}
+
+\begin{definition}{$C$}
+\label{def:c_rounds}
+
+The size of max flow \textit{prior} to increasing the capacity of some $e$ by 1.
+\end{definition}
+
+\begin{lemma}
+\label{lem:aug_path}
+For a flow, $f^*$: $$\mathcal{P} \notin G^{f^*} \implies f^* \text{is a max-flow}$$
+\end{lemma}
+
+\begin{claim}
+Since we are given the maximal flow integer values $\forall f_e \in E$, we could compute the new maximum flow in $O(n+m)$ with one run of $FordFulkerson$.
+\end{claim}
+
+	\textbf{Intuition:} after increasing $e$'s capacity by 1, we construct $G^{f}$ using $f$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f}$ because we just increased some $e$'s capacity.
+	
+	We then check \ref{lem:aug_path} using $DFS$, taking $O(n+m)$ time. If $\mathcal{P}$ was found, we augment $f$ along this path in $O(n)$ time, otherwise return $f$. The key here is that a maximal $f$ is provided to us prior to running our algorithm by the problem description. Using max-flow min-cut theorem we show $|f|$ is maximal upon termination.
+
+\begin{proof}
+	Let $(L,R)$ be an st-cut of $f$ after increasing the capacity of some $e$ by 1. If $\mathcal{P} \notin G^f$, then $|f| = c(L,R)$, otherwise it would imply $\exists$ some st-path $\in f$ that's unsaturated, which means $\exists$ a forward edge from $L \to R$ in $G^f$. If so, it'd follow that $t$ is reachable from $s \in G^f$, contradicting  $\mathcal{P} \notin G^f$. Thus, $|f|$ is maximal by max-flow min-cut theorem, and its flow size is unchanged at $C$.
+	
+	In the other case, where we find $\mathcal{P} \in G^f$ after increasing capacity by 1, this implies $\exists$ an unsaturated st-path $\in f$. When we take an st-cut, $(L,R)$ on $f$, we will find the total $|f| = c(L,R) -1$. Thus, $\exists$ a forward edge, $e$, from $L \to R \in G^f$ s.t. its flow is $c_e +1- f_e = 1$. It follows that $e$ is along $\mathcal{P}$, and when we find the minimal flow along $\mathcal{P} \in G^f$, it can be no more than 1. After augmenting $\mathcal{P}$ along $f$ by 1, this causes $|f| = |f|+1$ and saturates all edges from $L \to R \in f$. Therefore, $|f| = c(L,R)$ by max-flow min-cut theorem, $|f|$ is maximal again with a new flow size of $C+1$.
+	
+	Since constructing $G^f$ can be done in $O(n)$ and $DFS$, used to find an st-path $\mathcal{P} \in G^f$, runs in $O(n+m)$ we can compute the new max flow in $O(n) + O(n+m) = O(n+m)$ time.
+\end{proof}
+ 
+\end{document}
