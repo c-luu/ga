@@ -150,16 +150,15 @@
 	a specific edge $e$ and increase its capacity by 1. 
 		
 	Describe an algorithm to find a maximum flow on
-	the new network. Your algorithm should run in linear time $O(n + m)$, where $n$ is the number of
-	vertices and $m$ is the number of edges of G. Explain why your algorithm is correct (no pseudocode)
+	the new network. Your algorithm should run in linear time $O(n + m)$, where $n = |V|$ and $m = |E|$ of G. Explain why your algorithm is correct (no pseudocode)
 	and analyze its running time.
 \end{problem}\\
 
-\begin{definition}{$f^* = \{f_e\}_{e \in E}$}
+\begin{definition}{$f = \{f_e\}_{e \in E}$}
 \label{def:f_star}
 	(This definition should be verified via \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=616}{this thread.})
 	
-	The already computed maximum flow for all edges, $e \in E$.
+	Total flow for all edges, $e \in E$, s.t. $|f|$ is maximal.
 \end{definition}
 
 \begin{definition}{$\mathcal{P}$}
@@ -176,15 +175,17 @@ The size of max flow \textit{prior} to increasing the capacity of some $e$ by 1.
 
 \begin{lemma}
 \label{lem:aug_path}
-	For a flow, $f^*$: $$\nexists \mathcal{P} \in G^{f^*} \implies f^* \text{is a max-flow}$$\\
+For a flow, $f^*$: $$\mathcal{P} \notin G^{f^*} \implies f^* \text{is a max-flow}$$
 \end{lemma}
 
 \begin{claim}
-Since we are given the maximal flow integer values for all $f_e \in E$, we could run $FordFulkerson$ to compute the new maximum flow in $O(m)$ in one round instead of $C = max flow$ rounds.
+Since we are given the maximal flow integer values $\forall f_e \in E$, we could run $FordFulkerson$ to compute the new maximum flow in $O(m)$ in one round instead of $C$ rounds.
 \end{claim}
 
 \begin{proof}
-	After increasing $e$'s capacity by 1, we construct $G^{f^*}$ using $f^*$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f^*}$ because we just increased some $e$'s capacity. We then check \ref{lem:aug_path} using $DFS$, taking $O(m)$ time. If $\mathcal{P}$ was found, we augment $f^*$ along this path in $O(n)$ time, otherwise return $f^*$.
+	After increasing $e$'s capacity by 1, we construct $G^{f}$ using $f$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f}$ because we just increased some $e$'s capacity.
+	
+	We then check \ref{lem:aug_path} using $DFS$, taking $O(m)$ time. If $\mathcal{P}$ was found, we augment $f$ along this path in $O(n)$ time, otherwise return $f$. \textbf{TODO:} using max-flow min-cut theorem, describe how after this step, $|f|$ is maximal.
 	
 	$C$ rounds have already been iterated to give us \ref{def:f_star}, so we only loop once more to generate the new max flow. Because capacity for some $e$ increases by 1, $C$ will increase by no more than 1 to arrive at the new max flow. $O(m) >O(n)$, since we assume $m = |E| \geq n-1 = |V|-1|$. Thus we can compute the new max flow in $O(m*1) = O(m)$ time.
 \end{proof}
