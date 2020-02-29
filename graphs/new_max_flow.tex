@@ -156,15 +156,14 @@
 
 \begin{definition}{$f = \{f_e\}_{e \in E}$}
 \label{def:f_star}
-	(This definition should be verified via \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=616}{this thread.})
 	
-	Total flow for all edges, $e \in E$, s.t. $|f|$ is maximal.
+	Total flow for all edges, $e \in E$, s.t. $|f|$ is maximal. We opt for shorter notation, $|f|$, i.e. $|f| = size(f)$.
 \end{definition}
 
 \begin{definition}{$\mathcal{P}$}
 \label{prop:cal_p}	
 
-	A path between $(s,t) \in G^f$ with some available capacity. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$. 
+	A path connecting $(s,t) \in G^f$ with some available capacity $\in f$. I.e., $\mathcal{P}$ is an $f$-augmenting \textit{st-path} $\in G^f$. 
 \end{definition}
 
 \begin{definition}{$C$}
@@ -179,19 +178,19 @@ For a flow, $f^*$: $$\mathcal{P} \notin G^{f^*} \implies f^* \text{is a max-flow
 \end{lemma}
 
 \begin{claim}
-Since we are given the maximal flow integer values $\forall f_e \in E$, we could run $FordFulkerson$ to compute the new maximum flow in $O(m)$ in one round instead of $C$ rounds.
+Since we are given the maximal flow integer values $\forall f_e \in E$, we could compute the new maximum flow in $O(n+m)$ with one run of $FordFulkerson$.
 \end{claim}
 
-\begin{proof}
-	After increasing $e$'s capacity by 1, we construct $G^{f}$ using $f$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f}$ because we just increased some $e$'s capacity.
+	\textbf{Intuition:} after increasing $e$'s capacity by 1, we construct $G^{f}$ using $f$, taking $O(n)$ time. We can do this while still preserving the pre-condition that available capacities must exist before constructing $G^{f}$ because we just increased some $e$'s capacity.
 	
-	We then check \ref{lem:aug_path} using $DFS$, taking $O(m)$ time. If $\mathcal{P}$ was found, we augment $f$ along this path in $O(n)$ time, otherwise return $f$. \textbf{TODO:} using max-flow min-cut theorem, describe how after this step, $|f|$ is maximal.
-	
-	$C$ rounds have already been iterated to give us \ref{def:f_star}, so we only loop once more to generate the new max flow. Because capacity for some $e$ increases by 1, $C$ will increase by no more than 1 to arrive at the new max flow. $O(m) >O(n)$, since we assume $m = |E| \geq n-1 = |V|-1|$. Thus we can compute the new max flow in $O(m*1) = O(m)$ time.
-\end{proof}
+	We then check \ref{lem:aug_path} using $DFS$, taking $O(n+m)$ time. If $\mathcal{P}$ was found, we augment $f$ along this path in $O(n)$ time, otherwise return $f$. The key here is that a maximal $f$ is provided to us prior to running our algorithm by the problem description. Using max-flow min-cut theorem we show $|f|$ is maximal upon termination.
 
-\begin{remark}
-	$O(n)$ and $O(|E|)$ are not equivalent; I think you probably meant $O(m)$. To know how long it takes to loop through the edges depends how exactly the graph is stored, and we use adjacency list format, so there is no direct way to loop through the edges without looping through the vertices. This is the same reason that DFS is $O(n+m)$ even though intuitively it might only need to be $O(m)$ since you're really just exploring every edge. 
-\end{remark}
+\begin{proof}
+	Let $(L,R)$ be an st-cut of $f$ after increasing the capacity of some $e$ by 1. If $\mathcal{P} \notin G^f$, then $|f| = c(L,R)$, otherwise it would imply $\exists$ some st-path $\in f$ that's unsaturated, which means $\exists$ a forward edge from $L \to R$ in $G^f$. If so, it'd follow that $t$ is reachable from $s \in G^f$, contradicting  $\mathcal{P} \notin G^f$. Thus, $|f|$ is maximal by max-flow min-cut theorem, and its flow size is unchanged at $C$.
+	
+	In the other case, where we find $\mathcal{P} \in G^f$ after increasing capacity by 1, this implies $\exists$ an unsaturated st-path $\in f$. When we take an st-cut, $(L,R)$ on $f$, we will find the total $|f| = c(L,R) -1$. Thus, $\exists$ a forward edge, $e$, from $L \to R \in G^f$ s.t. its flow is $c_e - f_e = 1$. It follows that $e$ is along $\mathcal{P}$, and when we find the minimal flow along $\mathcal{P} \in G^f$, it can be no more than 1. After augmenting $\mathcal{P}$ along $f$ by 1, this causes $|f| = |f|+1$ and saturates all edges from $L \to R \in f$. Therefore, $|f| = c(L,R)$ by max-flow min-cut theorem since $|f|$ is maximal again, with a new flow size of $C+1$.
+	
+	Since constructing $G^f$ can be done in $O(n)$ and $DFS$, used to find an st-path $\mathcal{P} \in G^f$, runs in $O(n+m)$ we can compute the new max flow in $O(n) + O(n+m) = O(n+m)$ time.
+\end{proof}
  
 \end{document}
