@@ -6,10 +6,11 @@
 \usepackage[margin=1.25in]{geometry} %geometry (sets margin) and other useful packages
 \usepackage{graphicx,ctable,booktabs}
 \usepackage{mathtools}
-\usepackage[boxed]{algorithm2e}
 \usepackage{mathdots}
 \usepackage{fancyhdr} %Fancy-header package to modify header/page numbering
 \usepackage{hyperref}
+\usepackage{algorithmic}
+\usepackage{algorithm}
 
 
 \setlength{\oddsidemargin}{.25in}
@@ -148,10 +149,35 @@
 Consider a flow network ($G = (V, E), s, t, \{c_e\}$). The capacity of a path from $s$ to $t$ is defined as the minimum capacity of its edges. Give an algorithm to find a path from $s$ to $t$ of maximal capacity. Describe your algorithm with words (no pseudocode) and analyze its running time.
 \end{problem}\\
 
-\begin{claim}
-\end{claim}
+\begin{algorithm}
+\caption{$relax(u,v,w)$}
+\label{alg:rel}
+\begin{algorithmic}
+\IF{$d[u] > d[u]+w(u,v)$}
+	\STATE $d[v] \gets d[u]+w(u,v)$
+	\STATE $\pi[v] \gets u$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
 
-	\textbf{Intuition:} TODO.
+\begin{algorithm}
+\caption{$relax'(u,v,w)$}
+\label{alg:rel_new}
+\begin{algorithmic}
+\IF{$min(max\_c[u], c(u,v)) > max\_c[v]$}
+	\STATE $max\_c[v] \gets min(max\_c[u], c(u,v))$
+	\STATE $\pi[v] \gets u$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{claim}
+We can accomplish this by modifying $Dijkstra$'s algorithm for computing single-shortest paths. The two key modifications we make are:
+\begin{enumerate}
+\item Use a max-priority queue.
+\item Modify the $relax$ equation.
+\end{enumerate}
+\end{claim}
 
 \begin{proof}
 \end{proof}
