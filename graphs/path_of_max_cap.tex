@@ -190,7 +190,7 @@ For initial conditions, assume $\forall v \in V - \{s\}, v \in Q$ and $max\_c[v]
 
 The inductive hypothesis declares that $S$ will contain vertices with the correct shortest paths from $s$ calculated, and $Q$ has vertices where we have not calculated their shortest paths. The base case is trivial, since in the beginning it only includes $s$, and by our initial conditions its shortest path is to itself at $\infty$.
 
-For the inductive step, we pop a vertex $u$ from $Q$ and add it to $S$. By \ref{q}, we know $u$ has the shortest path from $s$, or maximum $max\_c$ in $Q$. All $s-u$ paths must have capacities $< max\_c[u]$ since the remaining reachable paths must go through some vertex in $Q$. For non $s-u$ paths: $u$ was popped before all such vertices in $Q$ due to its priority, we know $\forall v \in Q, \, max\_c[v] \leq max\_c[u]$.
+For the inductive step, we pop a vertex $u$ from $Q$ and add it to $S$. By \ref{q}, we know $u$ has the shortest path from $s$, or maximum $max\_c$ in $Q$. All $s-u$ paths must have capacities $\leq max\_c[u]$ since the remaining reachable paths must go through some vertex in $Q$. For non $s-u$ paths: $u$ was popped before all such vertices in $Q$ due to its priority, we know $\forall v \in Q, \, max\_c[v] \leq max\_c[u]$.
 
 Therefore, $max\_c[u]$ is optimal, by induction the shortest path will be correctly computed upon termination.
 
