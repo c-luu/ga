@@ -1,13 +1,14 @@
 \documentclass{article}
-\usepackage[parfill]{parskip}
 \usepackage[T1]{fontenc}
 \usepackage{amssymb, amsmath, graphicx, subfigure, enumerate}
 \usepackage{amsthm,alltt}
 \usepackage[margin=1.25in]{geometry} %geometry (sets margin) and other useful packages
 \usepackage{graphicx,ctable,booktabs}
 \usepackage{mathtools}
+\usepackage[boxed]{algorithm2e}
 \usepackage{mathdots}
 \usepackage{fancyhdr} %Fancy-header package to modify header/page numbering
+\usepackage{cleveref}
 \usepackage{hyperref}
 \usepackage{algorithmic}
 \usepackage{algorithm}
@@ -180,7 +181,7 @@ We use a heap-based priority queue, $Q$, pops vertices in descending order of th
 \end{algorithmic}
 \end{algorithm}
 
-We can accomplish this by modifying $Dijkstra$'s algorithm for computing single-shortest paths. The key modification is modifying the original $relax$ algorithm to \ref{alg:rel_new}, and returning a path using $P[t]$ starting at $t$ and back-tracking the parent links until $s$ is reached. 
+We can accomplish this by modifying $Dijkstra$'s (from $CLRS$) algorithm for computing single-shortest paths. The key modification is modifying the original $relax$ algorithm to \ref{alg:rel_new}, and returning a path using $P[t]$ starting at $t$ and back-tracking the parent links until $s$ is reached. 
 
 \begin{proof}
 We alter the definition of \textit{shortest path of some} $s \rightsquigarrow v$ to mean \textit{the maximum, minimum capacity path of some} $s \rightsquigarrow v$. 
