@@ -153,6 +153,11 @@ Consider a flow network ($G = (V, E), s, t, \{c_e\}$). The capacity of a path fr
 The array maintained by $Dijkstra$'s algorithm returning the parent of some $v \in V$.
 \end{definition}
 
+\begin{remark}
+\label{q}
+We use a heap-based priority queue, $Q$, pops vertices in descending order of their $max\_c$ priority values. I.e., if $v$ is popped from $Q$, $max\_c[v]$ is the maximum value in $Q - \{v\}$. W.l.o.g., \ref{alg:rel_new} implicitly pushes $v$ to $Q$ with priority $max\_c[v]$ if $(u,v)$ is relaxed.
+\end{remark}
+
 \begin{algorithm}
 \caption{$relax(u,v,w)$}
 \label{alg:rel}
@@ -177,15 +182,18 @@ The array maintained by $Dijkstra$'s algorithm returning the parent of some $v \
 
 We can accomplish this by modifying $Dijkstra$'s algorithm for computing single-shortest paths. The key modification is modifying the original $relax$ algorithm to \ref{alg:rel_new}, and returning a path using $P[t]$ starting at $t$ and back-tracking the parent links until $s$ is reached. 
 
-The priority queue, $Q$, pops vertices in descending order of their $max\_c$ priority values. I.e., if $v$ is popped from $Q$, $max\_c[v]$ is the maximum value in $Q - \{v\}$. W.l.o.g., \ref{alg:rel_new} implicitly pushes $v$ to $Q$ with priority $max\_c[v]$ if $(u,v)$ is relaxed.
-
 \begin{proof}
 We alter the definition of \textit{shortest path of some} $s \rightsquigarrow v$ to mean \textit{the maximum, minimum capacity path of some} $s \rightsquigarrow v$. 
 
-For initial conditions, assume $\forall v \in V - \{s\}, v \in Q$ and $max\_c[v] = -\infty$, and set $S$ contains $s$, with $max\_c[s] = \infty$. 
+For initial conditions, assume $\forall v \in V - \{s\}, v \in Q$ and $max\_c[v] = -\infty$, and set $S$ contains $s$, with $max\_c[s] = \infty$. In each iteration, $S$ holds the vertex popped from $Q$. 
 
 The inductive hypothesis declares that $S$ will contain vertices with the correct shortest paths from $s$ calculated, and $Q$ has vertices where we have not calculated their shortest paths. The base case is trivial, since in the beginning it only includes $s$, and by our initial conditions its shortest path is to itself at $\infty$.
 
+For the inductive step, we pop a vertex $u$ from $Q$ and add it to $S$. By \ref{q}, we know $u$ has the shortest path from $s$, or maximum $max\_c$ in $Q$. All $s-u$ paths must have capacities $< max\_c[u]$ since the remaining reachable paths must go through some vertex in $Q$. For non $s-u$ paths: $u$ was popped before all such vertices in $Q$ due to its priority, we know $\forall v \in Q, \, max\_c[v] \leq max\_c[u]$.
+
+Therefore, $max\_c[u]$ is optimal, by induction the shortest path will be correctly computed upon termination.
+
+Since \ref{alg:rel_new} is the core change in this modified $Dijkstra$'s algorithm, with an implicit priority increasing push to $Q$ as in the original algorithm, and it's a heap-based priority queue by \ref{q}, the algorithm can be run in $O((m+n)logn)$ time.
 
 \end{proof}
  
