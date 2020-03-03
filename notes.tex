@@ -487,7 +487,25 @@ To prove \ref{thm:maxflowmincut}, we first prove $\text{max-flow} \leq \text{min
 In this section we discuss methods to reduce problems to a form that can be solved by a black-box algorithm such as max-flow.
 
 \subsection{Perfect Bipartite matching}
-An example of this problem is \textit{matchmaking} for couples. Let $G(V,E)$ be an un-directed graph with vertices that are either male or female. An edge, $e \in E$ denotes a match between two people, $v \in V$. Is it possible to choose couples s.t. everyone has \textit{exactly one partner}, i.e. a perfect match?
+An example of this problem is \textit{matchmaking} for couples. Let $G(V,E)$ be an un-directed graph with vertices that are either male ($M \subset V$) or female ($F \subset V$). An edge, $e \in E$ denotes a match between two people, $v \in V$. Is it possible to choose couples s.t. everyone has \textit{exactly one partner}, i.e. a perfect match?
+
+We first need to translate $G$ into the flow-network $G'(V,E',s,t,c: E' \mapsto \mathbb{N})$.
+
+Assume $G$ is bipartite and $|M|=|F|$, i.e. even \# of males and females s.t. couples could be formed.
+
+We add a source $s$ node and connect it to all $v \in M$. We then connect all $v \in F$ to a sink node, $t$. This fulfills the $s,t$ node requirement for $G'$.
+
+Then, we set the max-capacity to all $e \in E'$ to 1, i.e. our capacity function is now $c : E' \mapsto 1$.
+
+Now we run $FordFulkerson$, \ref{alg:ford_fulk}, on $G'$ to generate $f^*$. If $|f^*| = $ the total number of possible couples, we have achieved a perfect match.
+
+\textbf{Intuition}: maxing out the capacity to 1 gives us a nice property which allows us to completely saturate some $\mathcal{P}$ in any given iteration of \ref{alg:ford_fulk}. 
+
+Recall from \ref{def:add_back_edge_unsat_2_resid} that only back-edges are added for saturated edges in $G'$, and once we augment along $\mathcal{P}$ in some step, the next build of ${G'}^{f^*}$ will have all back-edges of edges that comprised of $\mathcal{P}$ pre-augmentation. 
+
+Since $G$ is well-formed, from a couples and bipartite perspective, we know that if some $\mathcal{P}$ was augmented, at least one male and female along $\mathcal{P}$ were saturated. By \ref{prop:conservation}, we know the remaining edges along $\mathcal{P}$ are also saturated. 
+
+Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send any more flow across $\mathcal{P}$, otherwise a vertex could receive more flow from more than one vertex (analogous to a person matching with more than one person), which breaks our definition of a couple-matching.
 
 \subsection{Direct Bipartite matching}
 
