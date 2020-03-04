@@ -548,13 +548,11 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 \end{lemma}
 
 \begin{proof}	
+	A \textit{minimum} alternating path encloses 1 matching edge. There is another matching we could do that increases the maximal matching, i.e. making the two end-edges matching with a total of 2 matches.
 	
-	\begin{comment}
-	Some observations...:
-	\begin{enumerate}
-		\item The \# of covered vertices is $2|M|$.
-	\end{enumerate}
-	\end{comment}
+	A corollary is our original alternating path is no longer an alternating path since they no longer begin and end with covered vertices.
+	
+	Thus, it is a contradiction to have a maximal $M$ in an alternating path.
 \end{proof}
 
 \subsection{Hall's theorem}
