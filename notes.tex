@@ -6,6 +6,7 @@
 \usepackage{hyperref}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{verbatim}
 \usepackage[parfill]{parskip}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
@@ -538,7 +539,7 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 	\end{enumerate}
 \end{definition}
 
-\begin{definition} {Maximal matching}
+\begin{definition} {Maximal matching of $M$}
 	\\Let $e \in E \land e \notin M$, and $e$ is added to $M$, it is no longer maximal.
 \end{definition}
 
@@ -547,10 +548,13 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 \end{lemma}
 
 \begin{proof}	
+	
+	\begin{comment}
 	Some observations...:
 	\begin{enumerate}
 		\item The \# of covered vertices is $2|M|$.
 	\end{enumerate}
+	\end{comment}
 \end{proof}
 
 \subsection{Hall's theorem}
