@@ -528,6 +528,16 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 	\\A vertex is \textit{covered} by $M$ if it is an endpoint of any $e \in M$.
 \end{definition}
 
+\begin{definition}{Alternating path}
+	\label{def:alt_path}
+	\\A path, $a := u \rightsquigarrow v$, s.t.:
+	\begin{enumerate}
+		\item $|a|$ is odd.
+		\item $u, v$ are non-covered vertices.
+		\item $a$'s edges alternate between $M$ and $E-M$.
+	\end{enumerate}
+\end{definition}
+
 \begin{lemma}
 	$M$ is maximal $\iff \nexists$ an alternating path w.r.t. it.
 \end{lemma}
