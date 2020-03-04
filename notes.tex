@@ -514,6 +514,30 @@ Since $G$ is well-formed, from a couples and bipartite perspective, we know that
 Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send any more flow across $\mathcal{P}$, otherwise a vertex could receive more flow from more than one vertex (analogous to a person matching with more than one person), which breaks our definition of a couple-matching.
 
 \subsection{Direct Bipartite matching}
+\begin{algorithm}
+	\caption{$BFS$}
+	\label{alg:bfs}
+	\begin{algorithmic}[1]
+		\REQUIRE $Q$ is a queue, rooted graph $G$, root vertex $v$,\\discovered array $disc : V \mapsto \{0, 1\}$.
+		\STATE $disc[v] \gets 1$
+		\STATE $Q$.enqueue($v$)
+		\WHILE {$Q$ isn't empty}
+			\STATE $n \gets$ $Q$.dequeue()
+			\IF {$n$ is some goal}
+				\RETURN $n$
+			\ENDIF
+			\FOR {all neighbors $u$ of $n$}
+				\IF {$\neg disc[u]$}
+					\STATE $disc[u] \gets 1$
+					\STATE $parent[u] \gets v$
+					\STATE $Q$.enqueue($u$)
+				\ENDIF
+			\ENDFOR
+		\ENDWHILE
+		\RETURN $parent[*]$
+	\end{algorithmic}
+\end{algorithm}
+
 \begin{definition}{Matching edges}
 \label{def:match_edge}
 	\\A \textit{matching}, $M \in G$ is a set of edges with:
