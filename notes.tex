@@ -541,11 +541,13 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 
 \begin{definition} {Maximal matching of $M$}
 	\\$M$ is \textit{maximal} if $\nexists e \in E \land e \notin M$ that can be added to $M$ because it would cause $M$ to \textbf{no longer be a matching graph}. \href{https://brilliant.org/wiki/matching/}{Reference}.
+	
+	A maximal matching is only local, i.e. it does not mean you found the \textit{best} matching- that is the maximum matching. \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=618_f4}{Reference}.
 \end{definition}
 
-\begin{lemma}
+\begin{claim}
 	$M$ is maximal $\iff \nexists$ an alternating path w.r.t. it.
-\end{lemma}
+\end{claim}
 
 \begin{proof}	
 	A \textit{minimum} alternating path encloses 1 matching edge. There is another matching we could do that increases the maximal matching, i.e. making the two end-edges matching with a total of 2 matches.
@@ -553,6 +555,8 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 	A corollary is our original alternating path is no longer an alternating path since they no longer begin and end with covered vertices.
 	
 	Thus, it is a contradiction to have a maximal $M$ in an alternating path.
+	
+	\textbf{TODO:} The proof above only covers the base case so it's not a general enough proof. We also need to prove the other direction, \href{http://www-cs-students.stanford.edu/~csilvers/proof/node4.html}{see this reference}.
 \end{proof}
 
 \subsection{Hall's theorem}
