@@ -567,7 +567,7 @@ Runs in $O(|V|+|E|)$.
 \begin{definition} {Maximal matching of $M$}
 	\\$M$ is \textit{maximal} if $\nexists e \in E \land e \notin M$ that can be added to $M$ because it would cause $M$ to \textbf{no longer be a matching graph}. \href{https://brilliant.org/wiki/matching/}{Reference}.
 	
-	A maximal matching is only local, i.e. it does not mean you found the \textit{best} matching- that is the maximum matching. \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=618_f4}{Reference}.
+	A maximal matching is only local (greedy), i.e. it does not mean you found the \textit{best matching overall}- that is the \textbf{maximum} matching. \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=618_f4}{Reference}.
 \end{definition}
 
 \begin{claim}
@@ -585,7 +585,7 @@ Runs in $O(|V|+|E|)$.
 \end{proof}
 
 \begin{claim}
-	Given a bipartite graph, $G = (V_1 \cup V_2, E)$, $\exists$ an algorithm to find some alternating path $\in G$ in $O(|V|+|E|)$ using a modified $BFS$ algorithm.
+	Given a bipartite graph, $G = (V_1 \cup V_2, E)$, $\exists$ an algorithm to find some \hyperref[def:alt_path]{alternating path} $\in G$ in $O(|V|+|E|)$ using a modified $BFS$ algorithm.
 \end{claim}
 
 \textbf{HINT:} use properties of:
@@ -601,21 +601,22 @@ to construct a solution.
 \begin{proof}
 	 Let $A \subseteq V_1$ and $B \subseteq V_2$  be the set of uncovered edges.
 	
-	A post-condition we can derive is that if an alternating path is found, we know it crossed $V_1, V_2$ at least three times:
+	A post-condition we can derive is- if an alternating path is found, we know it crossed $V_1, V_2$ at least three times:
 	\begin{enumerate}
 		\item Starting at an uncovered vertex, $u \in A$, it crosses $V_1, V_2$ along an unmatched edge to some covered vertex, $v \in V_2 - B$.
 		\item From $v$, it crosses some matched edge, $e \in M$ back to some covered vertex in $V_1-A$.
 		\item To maintain an alternating path, there must exist an uncovered vertex, $v' \in B$ to cross over to next.
 	\end{enumerate}
 	
-	It's preferred to encode such invariants, and pre/ post-conditions into $BFS$, whether data structurally or algorithmically. This makes the proof of correctness easier since modifications to the core algorithm are minimized. We know from \ref{alg:bfs} that during traversal it checks if the current vertex meets some terminating condition.
+	It's preferred to encode such invariants, and pre/ post-conditions into $BFS$, whether data-structurally or algorithmically. This makes the proof of correctness easier since modifications to the core algorithm are minimized. We know from \hyperref[alg:bfs]{$BFS$} that during traversal it checks if the current vertex meets some terminating condition.
 	
 	To minimally change $BFS$, we can encode our post-condition by making the terminating condition be: $n \in B \to$ terminate. This is incomplete, because an uncovered vertex $\in A$ can be adjacent to yet another uncovered vertex $\in B$, i.e. an unmatched edge ($e \notin M$) can be traversed first. The suggested model seems to leave this out. 
 	
-	We can overcome this with a technical detail, by extending our terminating condition to also ensure that $parent[v] \neq r$, where $r$ is the root vertex we begin at. During traversing, we now must decide which edge to take. For instance, say we are traversing $r$'s neighbor $n \in B$, and $n$ is incident on both a matched and unmatched edge. Since we're looking for alternate paths, $n$ should never take the unmatched edge, otherwise it would not be alternating.
+	We can overcome this with a technical detail, by extending our terminating condition to also ensure that $parent[v] \neq r$, where $r$ is the root vertex we begin at. 
 	
-	We can encode this property by transforming $G$ to $\overrightarrow{G}$, s.t. edges are directed from $V_1$ to $V_2$ if they're \textbf{$\notin$} $M$, otherwise the edge directions will be reversed. Now, paths that lead to alternate paths are analogous to valid, directed traversals. It is left to prove that constructing $\overrightarrow{G}$ is bounded by $O(|V|+|E|)$, but this nonetheless proves our claim given we start at a vertex $r \in A$.
+	During traversals, we now must decide which edge to take. For instance, say we are traversing $r$'s neighbor $n \in B$, and $n$ is incident on both a matched and unmatched edge. Since we're looking for alternate paths, $n$ should never take the unmatched edge, otherwise it would not be alternating.
 	
+	We can encode this property by transforming $G$ to $\overrightarrow{G}$, s.t. edges are directed from $V_1$ to $V_2$ if they're \textbf{$\notin$} $M$, otherwise the edge directions will be reversed. Now, paths that lead to alternate paths are analogous to valid, directed traversals. It is left to prove that constructing $\overrightarrow{G}$ is bounded by $O(|V|+|E|)$, otherwise the claim is proven given we run $BFS$ on some start vertex $r \in A$.
 \end{proof}
 
 \subsection{Hall's theorem}
