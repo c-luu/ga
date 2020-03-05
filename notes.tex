@@ -488,7 +488,7 @@ To prove \ref{thm:maxflowmincut}, we first prove $\text{max-flow} \leq \text{min
 In this section we discuss methods to reduce problems to a form that can be solved by a black-box algorithm such as max-flow.
 
 \begin{definition}{Bipartite graphs}
-\ref{def:bipartite_graphs}
+\label{def:bipartite_graphs}
 	\\In general a bipartite graph $G=(V_1 \cup V_2, E)$ s.t. each edge has one endpoint in $V_1$ and the other in $V_2$.
 \end{definition}
 
@@ -625,6 +625,9 @@ to construct a solution.
 \end{claim}
 
 \begin{proof}
+	\textbf{Intuition}: We only need to find a maximal matching, so we can use a greedy algorithm that grows $M$ by adding valid matches until $\nexists e \in E-M$ s.t. adding $e$ to $M$ \hyperref[def:match_edge]{invalidates} it.
+	
+	We can loop through each $v \in V$, and add the first of $v$'s edges that have not already been matched to $M$.
 \end{proof}
 
 \subsection{Hall's theorem}
