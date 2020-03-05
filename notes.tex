@@ -627,7 +627,7 @@ to construct a solution.
 \begin{proof}
 	\textbf{Intuition}: We only need to find a maximal matching, so we can use a greedy algorithm that grows $M$ by adding valid matches until $\nexists e \in E-M$ s.t. adding $e$ to $M$ \hyperref[def:match_edge]{invalidates} it.
 	
-	We can loop through each $v \in V$, and add the first of $v$'s edges that have not already been matched to $M$.
+	We can loop through each $v \in V$, and add the first of $v$'s edges that have not already been matched to $M$. It's left to prove this meets $O(|V||E|)$, however the correctness is supported \href{https://www.cs.dartmouth.edu/~ac/Teach/CS105-Winter05/Notes/kavathekar-scribe.pdf}{here}.
 \end{proof}
 
 \subsection{Hall's theorem}
