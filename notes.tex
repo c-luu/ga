@@ -536,6 +536,7 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 		\ENDWHILE
 		\RETURN $parent[*]$
 	\end{algorithmic}
+Runs in $O(|V|+|E|)$.
 \end{algorithm}
 
 \begin{definition}{Matching edges}
@@ -581,6 +582,26 @@ Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send 
 	Thus, it is a contradiction to have a maximal $M$ in an alternating path.
 	
 	\textbf{TODO:} The proof above only covers the base case so it's not a general enough proof. We also need to prove the other direction, \href{http://www-cs-students.stanford.edu/~csilvers/proof/node4.html}{see this reference}.
+\end{proof}
+
+\begin{claim}
+	$\exists$ an algorithm to find some alternating path $\in G$ in $O(|V|+|E|)$ using a modified $BFS$ algorithm.
+\end{claim}
+
+\textbf{HINT:} use properties of:
+\begin{enumerate}
+	\item DAGs
+	\item BFS traversal
+	\item Bipartite graphs
+	\item Alternating paths
+	\item Match edges
+\end{enumerate}
+to construct a solution.
+
+\begin{proof}
+	Let $X$ be a set of uncovered vertices, i.e. members of endpoints in $E - M$.
+	
+	We can direct the edges for each matching edge $(u,v) \in M$, s.t. $\overrightarrow{uv}$.
 \end{proof}
 
 \subsection{Hall's theorem}
