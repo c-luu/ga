@@ -639,6 +639,14 @@ to construct a solution.
 \end{proof}
 
 \subsection{Hall's theorem}
+Given a bipartite graph, $G = (V_1 \cup V_2, E)$, where $V_1$ are boys, $V_2$ are girls, and $|V_1|=|V_2|$:
+$$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \text{ connects to at least } |S| \text{ girls.}$$
+
+\begin{proof} 
+\textbf{TODO}:
+($\Rightarrow$): In this direction, we need to encode what a \textit{perfect matching} is as a neighborhood function. Use \href{http://www-cs-students.stanford.edu/~csilvers/proof/node4.html}{directional proofs} as a guidance.
+\\($\Leftarrow$): Reduce to a flow-network and use \hyperref[thm:maxflowmincut]{max-flow min-cut} theorem to prove in the other direction.
+\end{proof}
 
 \subsection{Image segmentation}
 
