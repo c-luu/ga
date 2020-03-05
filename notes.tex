@@ -367,6 +367,22 @@ We must take into account that there's $\leq C$ rounds we iterate through, thus 
 $$O(|E|C)$$
 
 An excellent \href{https://stackoverflow.com/questions/19649026/is-network-flow-pseudo-polynomial-time}{discussion} on what pseudo-polynomial means. \href{https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm#Integral_example}{Worst-case, integral example}.
+	
+\begin{algorithm}
+	\caption{$EdmonsKarp$}
+	\label{alg:edmons_karp}
+	\begin{algorithmic}[1]
+		\REQUIRE $c : E \to \mathbb{N}$ \COMMENT{This is a crucial limitation for $FordFulkerson$ to work}
+		\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$
+		\WHILE {$\exists \mathcal{P} \in G^f$}
+		\STATE Find $\mathcal{P}$
+		\STATE $c(\mathcal{P}) \gets \text{the minimum capacity along } \mathcal{P}$
+		\STATE Augment $f$ by $c(\mathcal{P})$ unit along $\mathcal{P}$
+		\ENDWHILE
+		\RETURN {$f$}
+	\end{algorithmic}
+	\href{https://classroom.udacity.com/courses/ud401/lessons/8e8db62c-39bd-4dc2-bbe7-b9774e41756f/concepts/77dcde9a-43f0-4eea-889b-14b1ec034a28}{TODO}.
+\end{algorithm}
 
 \subsection{Max-flow = Min-cut}
 \begin{lemma}
@@ -650,5 +666,7 @@ $$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \te
 \end{proof}
 
 \subsection{Image segmentation}
+
+\subsection{Generalization}
 
 \end{document}
