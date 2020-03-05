@@ -585,7 +585,7 @@ Runs in $O(|V|+|E|)$.
 \end{proof}
 
 \begin{claim}
-	$\exists$ an algorithm to find some alternating path $\in G$ in $O(|V|+|E|)$ using a modified $BFS$ algorithm.
+	Given a bipartite graph, $G = (V_1 \cup V_2, E)$, $\exists$ an algorithm to find some alternating path $\in G$ in $O(|V|+|E|)$ using a modified $BFS$ algorithm.
 \end{claim}
 
 \textbf{HINT:} use properties of:
@@ -599,9 +599,12 @@ Runs in $O(|V|+|E|)$.
 to construct a solution.
 
 \begin{proof}
-	Let $X$ be a set of uncovered vertices, i.e. members of endpoints in $E - M$.
+	\textbf{Claim 1}:\\
+	Let $X$ be the set of edges from $V_1$ to $V_2$. We claim that $M \subseteq X$. 
 	
-	We can direct the edges for each matching edge $(u,v) \in M$, s.t. $\overrightarrow{uv}$.
+	Let $A \subseteq V_1$ and $B \subseteq V_2$  be the set of uncovered edges.
+	
+	We can find an alternating path by running $BFS$ on any of $v \in A$, visiting any of $v$'s neighbors that are incident to some $m \in M$. We traverse until we reach some $u \in B$, indicating we've found an alternating path.
 \end{proof}
 
 \subsection{Hall's theorem}
