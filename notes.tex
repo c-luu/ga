@@ -565,6 +565,7 @@ Runs in $O(|V|+|E|)$.
 \end{definition}
 
 \begin{definition} {Maximal matching of $M$}
+	\label{def:maximal_m}
 	\\$M$ is \textit{maximal} if $\nexists e \in E \land e \notin M$ that can be added to $M$ because it would cause $M$ to \textbf{no longer be a matching graph}. \href{https://brilliant.org/wiki/matching/}{Reference}.
 	
 	A maximal matching is only local (greedy), i.e. it does not mean you found the \textit{best matching overall}- that is the \textbf{maximum} matching. \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=618_f4}{Reference}.
@@ -617,6 +618,13 @@ to construct a solution.
 	During traversals, we now must decide which edge to take. For instance, say we are traversing $r$'s neighbor $n \in B$, and $n$ is incident on both a matched and unmatched edge. Since we're looking for alternate paths, $n$ should never take the unmatched edge, otherwise it would not be alternating.
 	
 	We can encode this property by transforming $G$ to $\overrightarrow{G}$, s.t. edges are directed from $V_1$ to $V_2$ if they're \textbf{$\notin$} $M$, otherwise the edge directions will be reversed. Now, paths that lead to alternate paths are analogous to valid, directed traversals. It is left to prove that constructing $\overrightarrow{G}$ is bounded by $O(|V|+|E|)$, otherwise the claim is proven given we run $BFS$ on some start vertex $r \in A$.
+\end{proof}
+
+\begin{claim}
+	Given a bipartite graph, $G = (V_1 \cup V_2, E)$, $\exists$ an algorithm to find a \hyperref[def:maximal_m]{maximal matching} $M \in G$ in $O(|V||E|)$.
+\end{claim}
+
+\begin{proof}
 \end{proof}
 
 \subsection{Hall's theorem}
