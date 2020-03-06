@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{verbatim}
+\usepackage{dirtytalk}
 \usepackage[parfill]{parskip}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
@@ -503,12 +504,71 @@ To prove \ref{thm:maxflowmincut}, we first prove $\text{max-flow} \leq \text{min
 \section{Reductions}
 In this section we discuss methods to reduce problems to a form that can be solved by a black-box algorithm such as max-flow.
 
+\subsection{Generalization (Circulation and Demand)}
+There's a large class of problems that could be solved with max-flow, but require a bit of massaging. This class of problems are usually reduced to the following, before being finally reduced to max-flow:
+
+\begin{enumerate}
+	\item Circulation with Demands (C\&D)
+	\item C\&D with lower bounds
+\end{enumerate}
+
+\begin{definition}{Demand, $d_v$}
+\label{def:demand}
+	\\A node, $v \in V$ can be associated with a demand, $d_v$. 
+	\\$d_v >0$ indicates $v$ demands $d_v$ units. 
+	\\$d_v < 0$ indicates $v$ has a \textit{supply} of $-d_v$ units.
+\end{definition}
+
+\begin{definition}{Feasible circulations}
+	\label{def:feas_circulation}
+	\\Given demands $\{d_v\}$, a \textit{feasible} circulation is function $f: E \mapsto \mathbb{R}^+$ that satisfies:
+	
+	\begin{enumerate}
+		\item (Capacity condition) $\forall e \in E, 0 \leq f(e) \leq c(e)$
+		\item (Demand condition) $\forall v \in V, f^{in}(v) - f^{out}(v) = d_v$
+	\end{enumerate}
+
+	I.e., total supply must equal total demand:
+	$$\exists \text{ a feasible circulation with demands } \{d_v\} \implies \sum_{v \in V}{d_v} = 0$$
+\end{definition}
+
+\begin{corollary}{$D$}
+	\\It follows from \ref{def:feas_circulation} that:
+	$$D = \sum_{v \in V: d_v > 0}{d_v} = \sum_{v \in V: d_v < 0}{-d_v}$$
+\end{corollary}
+
+\say{We can reduce the problem of finding a feasible circulation with demands $\{d_v\}$ to the problem of finding the max st-flow in a different network.}
+
+To do so, we first need to convert our $G$ graph to the familiar flow network, \hyperref[def:flow_networks]{$G' = (V, E, s,t, \{c_e\})$}.
+Let $S$ be the set of ``flow-generating'' sources, and $T$ be the set of ``flow-absorbing'' sinks:
+
+\begin{enumerate}
+	\item $\forall v \in S$, attach a ``super-source'', $(s^*,v)$, with $c_e = -d_v$.
+	\item $\forall v \in T$, attach a ``super-sink'', $(v,t^*)$, with $c_e = d_v$.
+\end{enumerate}
+
+We carry over everything else from $G$ to $G'$ and thus completes our structural conversion to a flow network. 
+
+Now, \textbf{where did the actual reduction happen} as we transformed $G \to G'$? Adding $s^*$ to ``supply'' the extra flow to the sources, and $t^*$ to ``siphon'' the extra flow out of the sinks is the reduction. Now we seek the max $s^*t^*$ flow $\in G'$. 
+
+What is the upper bound of any $s^*t^*$ flow? It must be $D$ due to how we set what the capacities during the reduction phase, and if we take any cut $(A,B)$ with $A = \{s^*\}$ we see that $c(A,B) = D$ by \hyperref[thm:maxflowmincut]{max-flow min-cut theorem}.
+
+The reduction can be concluded and proven equivalent to the max-flow problem with the following lemmas:
+
+\begin{lemma}
+	$\exists$ a feasible circulation with demands $\{d_v\} \in G \iff$ the max $s^*t^*$ flow $\in G' = D$. 
+\end{lemma}
+
+\begin{lemma}
+	The graph $G$ has a feasible circulation with demands $\{d_v\} \iff \forall c(A,B), \sum_{v \in B}{d_v \leq c(A,B)}$. \textbf{Note} that such cut need not be an \hyperref[def:st_cut_cap]{st-cut} in this context.
+\end{lemma}
+
+\subsection{Perfect Bipartite matching}
 \begin{definition}{Bipartite graphs}
-\label{def:bipartite_graphs}
+	\label{def:bipartite_graphs}
 	\\In general a bipartite graph $G=(V_1 \cup V_2, E)$ s.t. each edge has one endpoint in $V_1$ and the other in $V_2$.
 \end{definition}
 
-\subsection{Perfect Bipartite matching}
 An example of this problem is \textit{matchmaking} for couples. Let $G(V,E)$ be an un-directed graph with vertices that are either male ($M \subset V$) or female ($F \subset V$). An edge, $e \in E$ denotes a match between two people, $v \in V$. Is it possible to choose couples s.t. everyone has \textit{exactly one partner}, i.e. a perfect match?
 
 We first need to translate $G$ into the flow-network: $$G'(V,E',s,t,c: E' \mapsto \mathbb{N})$$
@@ -666,7 +726,5 @@ $$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \te
 \end{proof}
 
 \subsection{Image segmentation}
-
-\subsection{Generalization}
 
 \end{document}
