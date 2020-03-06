@@ -534,7 +534,7 @@ There's a large class of problems that could be solved with max-flow, but requir
 
 \begin{corollary}{$D$}
 	\\It follows from \ref{def:feas_circulation} that:
-	$$D = \sum_{v \in V: d_v > 0}{d_v} = \sum_{v \in V: d_v < 0}{-d_v}$$
+	$$D = \sum_{v \in V: d_v > 0}{d_v} = \sum_{v \in V: d_v < 0}{-d_v} = \sum_{v \in V}{d^{in}(v)} =\sum_{v \in V}{d^{out}(v)}$$
 \end{corollary}
 
 \say{We can reduce the problem of finding a feasible circulation with demands $\{d_v\}$ to the problem of finding the max st-flow in a different network.}
@@ -562,6 +562,20 @@ The reduction can be concluded and proven equivalent to the max-flow problem wit
 \begin{lemma}
 	The graph $G$ has a feasible circulation with demands $\{d_v\} \iff \forall c(A,B), \sum_{v \in B}{d_v \leq c(A,B)}$. \textbf{Note} that such cut need not be an \hyperref[def:st_cut_cap]{st-cut} in this context.
 \end{lemma}
+
+Now we generalize even further by adding \textit{lower bounds}. 
+
+\begin{definition}{Lower bound capacities}
+	\label{def:low_bounds}	
+		\begin{enumerate}
+			\item (Capacity condition) $\forall e \in E, l(e) \leq f(e) \leq c(e)$
+			\item (Demand condition) $\forall v \in V, f^{in}(v) - f^{out}(v) = d_v$
+		\end{enumerate}
+\end{definition}
+
+As before, we need to again verify what a feasible circulation under these new rules.
+
+\textbf{TODO}: Finish the lower bound K\&T chapter and reconcile with \href{https://classroom.udacity.com/courses/ud401/lessons/98e96502-88a9-4c08-9737-5bfce78d6248/concepts/12561c77-2bcd-45e0-aae5-e7c4d57eb2ef}{lectures}.
 
 \subsection{Perfect Bipartite matching}
 \begin{definition}{Bipartite graphs}
