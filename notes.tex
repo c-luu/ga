@@ -305,10 +305,13 @@ From \ref{prop:topo_sort_sinksource}, we can derive another property that we'll 
 Runs in $O(|V|+|E|)$.
 \end{algorithm}
 
-In \ref{alg:scc} we hand-wave a bit with the step that computes $G^R$. Here's pseudo-code to how we might implement in linear time:
+In \ref{alg:scc} we hand-wave a bit with the step that computes $G^R$. Here's two ways of how we might implement in linear time:
 
-\textbf{Pseudo-code}:\\
+\textbf{Pseudo-code (in-place)}:\\
 Modify \hyperref[alg:explore_digraph]{$Explore$}, at the end of the for-loop, to remove the edge $(v,w)$ and insert $(w, v)$ which should take $O(|V| + |E|)$ for adjacency lists.
+
+\textbf{Pseudo-code (copy)}:\\
+Initialize a new adjacency list of size $V$, runs in $O(|V|)$ time. For each neighbor $u$ of $v$ we explore, add a the reverse edge $(u, v)$ to the new adjacency list, which takes $O(|V|+|E|)$ time to traverse through all neighbors and edges in $G$.
 
 \subsection{Minimum Spanning Tree}
 \begin{definition}
