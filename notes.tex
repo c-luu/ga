@@ -8,6 +8,7 @@
 \usepackage{mathtools}
 \usepackage{verbatim}
 \usepackage{dirtytalk}
+\usepackage{tikz-network}
 \usepackage[parfill]{parskip}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
@@ -28,6 +29,35 @@
 	A component can be thought of as sub-graphs, where any two vertices are connected via a path. Components may have cycles. A graph that is itself connected has exactly one component.
 	\href{https://en.wikipedia.org/wiki/Component_(graph_theory)}{Wiki}. 
 \end{definition}
+
+\subsection{Topological ordering}
+\begin{tikzpicture}
+\label{def:3.3}
+\Vertex[label=A]{A} 
+\Vertex[label=B, y=-1]{B}
+\Vertex[label=C, x=2, y=-.5]{C}
+\Vertex[label=D, x=4]{D} 
+\Vertex[label=E, x=4, y=-1]{E}
+\Vertex[label=F, x=6, y=-.5]{F}
+\Vertex[label=G, x=8]{G} 
+\Vertex[label=H, x=8, y=-1]{H}
+\Edge[Direct](A)(C)
+\Edge[Direct](B)(C)
+\Edge[Direct](C)(D)
+\Edge[Direct](C)(E)
+\Edge[Direct](D)(F)
+\Edge[Direct](E)(F)
+\Edge[Direct](F)(G)
+\Edge[Direct](F)(H)
+\end{tikzpicture}
+
+After running a \hyperref[alg:dfs_dir]{DFS}-based alphabetical, topological sorting algorithm, we get the following ``pre'' and ``post'' order numbers: \textbf{TODO}.
+
+The sources we find are: $A$ and $B$ vertices, and the sinks are: $G$ and $H$ vertices. 
+
+The algorithm we ran finds a \_\_ topological ordering. 
+
+The graph has \_\_ topological orderings after running the algorithm.
 
 \subsection{Connected components, un-directed graphs}
 \label{cc_und}
