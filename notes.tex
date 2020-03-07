@@ -179,38 +179,6 @@ See \href{https://classroom.udacity.com/courses/ud401/lessons/10159691481/concep
 For any nodes $u$ and $v$, intervals $[ Pre(u), Post(u) ]$ and $[Pre(v), Post(v)]$ are either disjoint, or one is contained in the other.
 \end{lemma}
 
-\subsection{Strongly Connected Components}
-Two vertices, $v$ and $w$, are \textit{strongly connected} if $\exists v \rightsquigarrow w \land w \rightsquigarrow v$.
-
-\begin{definition}{Strongly connected component}
-	\label{def:scc}
-	\\The \textit{maximal} set of strongly connected vertices. I.e., we keep greedily adding strongly connected vertices until we can add no more without breaking the definition.
-\end{definition}
-
-For the DAG below, we can extract SCC's:
-$$\{A\}, \{D\}, \{B,E\}$$
-\begin{tikzpicture}
-\Vertex[label=A]{A} 
-\Vertex[label=B, x=2]{B}
-\Vertex[label=D, y=-1]{D} 
-\Vertex[label=E, x=4]{E}
-\Edge[Direct](A)(B)
-\Edge[Direct, bend=45](B)(E)
-\Edge[Direct](E)(B)
-\Edge[Direct](B)(D)
-\end{tikzpicture}
-
-An important property we can observe is \textit{every digraph is a DAG of its SCC's}:
-
-\begin{tikzpicture}
-\Vertex[label=A]{A} 
-\Vertex[label=BE, x=2]{B}
-\Vertex[label=D, y=-1]{D} 
-\Edge[Direct](A)(B)
-\Edge[Direct](B)(D)
-\end{tikzpicture}
-
-
 \subsection{Topological ordering}
 \begin{tikzpicture}
 \label{def:3.3}
@@ -258,7 +226,12 @@ After running a \hyperref[alg:dfs_dir]{DFS}-based alphabetical, topological sort
 	\end{tabular}
 \end{center}
 
-The sources we find are: $A$ and $B$ vertices, and the sinks are: $G$ and $H$ vertices. 
+The sources we find are: $A$ and $B$ vertices, and the sinks are: $G$ and $H$ vertices. We also see that the sources have the highest post-order numbers, and the sinks have the lowest post-order numbers.
+
+\begin{property}
+	\label{prop:topo_sort_sinksource}
+	After topologically sorting a DAG, the source vertex is guaranteed to have the highest post-order number, and the sink is guaranteed to have the lowest post-order number. 
+\end{property}
 
 We can find a topological ordering, in a DAG, by running a $DFS$ and sort by decreasing post-order number. One such ordering would be:
 $$<B, A, C, E, D, F, H,G>$$
@@ -271,6 +244,65 @@ Otherwise, we'd have the following choices to make during exploration:
 $$<B|A, C, E|D, F, H|G>$$
 
 which gives us $2^3 = 8$ possible orderings.
+
+\subsection{Strongly Connected Components}
+Two vertices, $v$ and $w$, are \textit{strongly connected} if $\exists v \rightsquigarrow w \land w \rightsquigarrow v$.
+
+\begin{definition}{Strongly connected component}
+	\label{def:scc}
+	\\The \textit{maximal} set of strongly connected vertices. I.e., we keep greedily adding strongly connected vertices until we can add no more without breaking the definition.
+\end{definition}
+
+For the DAG below, we can extract SCC's:
+$$\{A\}, \{D\}, \{B,E\}$$
+\begin{tikzpicture}
+\Vertex[label=A]{A} 
+\Vertex[label=B, x=2]{B}
+\Vertex[label=D, y=-1]{D} 
+\Vertex[label=E, x=4]{E}
+\Edge[Direct](A)(B)
+\Edge[Direct, bend=45](B)(E)
+\Edge[Direct](E)(B)
+\Edge[Direct](B)(D)
+\end{tikzpicture}
+
+An important property we can observe is \textit{every digraph is a DAG of its SCC's}:
+
+\begin{tikzpicture}
+\Vertex[label=A]{A} 
+\Vertex[label=BE, x=2]{B}
+\Vertex[label=D, y=-1]{D} 
+\Edge[Direct](A)(B)
+\Edge[Direct](B)(D)
+\end{tikzpicture}
+
+Another important property is a digraph's SCC graph \textit{must be acyclic}, otherwise it would contradict the definition of an SCC, and the SCC's that are cyclic would just merge together to form a bigger SCC.\\
+
+\textbf{Building an SCC graph from a DAG}\\
+The initial step for this algorithm is crucial- we must pick a \textit{sink} node to begin with. The reason is we want to take advantage of component \textit{reach-ability}, i.e. we want our exploration step to visit only nodes in the component and terminate.
+
+From \ref{prop:topo_sort_sinksource}, we can derive another property that we'll use in our SCC algorithm:
+
+\begin{property}
+	Let $G^R = (V, E^R)$ denoting that its edges are reversed. We have the following properties:
+	\begin{itemize}
+		\item A source node in $G$ is a sink node in $G^R$.
+		\item A sink node in $G$ is a source node in $G^R$.
+	\end{itemize}
+\end{property}
+
+\begin{algorithm}
+	\caption{$SCC$: labels the SCC's in a DAG.}
+	\label{alg:scc}
+	\begin{algorithmic}[1]
+		\REQUIRE $G=(V,E)$ is an digraph as an adjacency list.
+		\STATE Construct $G^R$. 
+		\STATE Run \hyperref[alg:dfs_dir]{$DFS(G^R)$}. 
+		\STATE Order $V$ decreasing by post-order \#. 
+		\STATE Run undirected \hyperref[alg:dfs_und]{$DFS(G)$} to label the components.
+	\end{algorithmic}
+Runs in $O(|V|+|E|)$.
+\end{algorithm}
 
 \subsection{Minimum Spanning Tree}
 \begin{definition}
