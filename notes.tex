@@ -179,6 +179,38 @@ See \href{https://classroom.udacity.com/courses/ud401/lessons/10159691481/concep
 For any nodes $u$ and $v$, intervals $[ Pre(u), Post(u) ]$ and $[Pre(v), Post(v)]$ are either disjoint, or one is contained in the other.
 \end{lemma}
 
+\subsection{Strongly Connected Components}
+Two vertices, $v$ and $w$, are \textit{strongly connected} if $\exists v \rightsquigarrow w \land w \rightsquigarrow v$.
+
+\begin{definition}{Strongly connected component}
+	\label{def:scc}
+	\\The \textit{maximal} set of strongly connected vertices. I.e., we keep greedily adding strongly connected vertices until we can add no more without breaking the definition.
+\end{definition}
+
+For the DAG below, we can extract SCC's:
+$$\{A\}, \{D\}, \{B,E\}$$
+\begin{tikzpicture}
+\Vertex[label=A]{A} 
+\Vertex[label=B, x=2]{B}
+\Vertex[label=D, y=-1]{D} 
+\Vertex[label=E, x=4]{E}
+\Edge[Direct](A)(B)
+\Edge[Direct, bend=45](B)(E)
+\Edge[Direct](E)(B)
+\Edge[Direct](B)(D)
+\end{tikzpicture}
+
+An important property we can observe is \textit{every digraph is a DAG of its SCC's}:
+
+\begin{tikzpicture}
+\Vertex[label=A]{A} 
+\Vertex[label=BE, x=2]{B}
+\Vertex[label=D, y=-1]{D} 
+\Edge[Direct](A)(B)
+\Edge[Direct](B)(D)
+\end{tikzpicture}
+
+
 \subsection{Topological ordering}
 \begin{tikzpicture}
 \label{def:3.3}
