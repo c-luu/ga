@@ -148,6 +148,7 @@ We no longer need to manage $ccnum$.
 
 \begin{algorithm}
 \caption{$Explore(v)$ for directed graphs.}
+\label{alg:explore_digraph}
 \begin{algorithmic}[1]
 \REQUIRE $v \in V, E \text{ edges in } G$.
 \STATE$Pre[v] \gets clock$ \COMMENT{set $v$'s pre-order \#}
@@ -303,6 +304,11 @@ From \ref{prop:topo_sort_sinksource}, we can derive another property that we'll 
 	\end{algorithmic}
 Runs in $O(|V|+|E|)$.
 \end{algorithm}
+
+In \ref{alg:scc} we hand-wave a bit with the step that computes $G^R$. Here's pseudo-code to how we might implement in linear time:
+
+\textbf{Pseudo-code}:\\
+Modify \hyperref[alg:explore_digraph]{$Explore$}, at the end of the for-loop, to remove the edge $(v,w)$ and insert $(w, v)$ which should take $O(|V| + |E|)$ for adjacency lists.
 
 \subsection{Minimum Spanning Tree}
 \begin{definition}
