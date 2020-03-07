@@ -185,10 +185,10 @@ We no longer need to manage $ccnum$.
 \FORALL{$(v, w) \in E$} 
 \IF{$\neg Visited(w)$}
 \STATE $Explore(w)$
-\STATE $Post[v] \gets clock$ \COMMENT{set $v$'s post-order \# now that we've traversed its forest}
-\STATE $clock \gets clock + 1$
 \ENDIF
 \ENDFOR
+\STATE $Post[v] \gets clock$ \COMMENT{set $v$'s post-order \# now that we've traversed its forest}
+\STATE $clock \gets clock + 1$
 \end{algorithmic}
 \end{algorithm}
 
