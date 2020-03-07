@@ -6,6 +6,9 @@
 \usepackage{hyperref}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{verbatim}
+\usepackage{dirtytalk}
+\usepackage{tikz-network}
 \usepackage[parfill]{parskip}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{property}{Property}[section]
@@ -153,10 +156,10 @@ We no longer need to manage $ccnum$.
 \FORALL{$(v, w) \in E$} 
 \IF{$\neg Visited(w)$}
 \STATE $Explore(w)$
-\STATE $Post[v] \gets clock$ \COMMENT{set $v$'s post-order \# now that we've traversed its forest}
-\STATE $clock \gets clock + 1$
 \ENDIF
 \ENDFOR
+\STATE $Post[v] \gets clock$ \COMMENT{set $v$'s post-order \# now that we've traversed its forest}
+\STATE $clock \gets clock + 1$
 \end{algorithmic}
 \end{algorithm}
 
@@ -175,6 +178,67 @@ See \href{https://classroom.udacity.com/courses/ud401/lessons/10159691481/concep
 \label{containment}
 For any nodes $u$ and $v$, intervals $[ Pre(u), Post(u) ]$ and $[Pre(v), Post(v)]$ are either disjoint, or one is contained in the other.
 \end{lemma}
+
+\subsection{Topological ordering}
+\begin{tikzpicture}
+\label{def:3.3}
+\Vertex[label=A]{A} 
+\Vertex[label=B, y=-1]{B}
+\Vertex[label=C, x=2, y=-.5]{C}
+\Vertex[label=D, x=4]{D} 
+\Vertex[label=E, x=4, y=-1]{E}
+\Vertex[label=F, x=6, y=-.5]{F}
+\Vertex[label=G, x=8]{G} 
+\Vertex[label=H, x=8, y=-1]{H}
+\Edge[Direct](A)(C)
+\Edge[Direct](B)(C)
+\Edge[Direct](C)(D)
+\Edge[Direct](C)(E)
+\Edge[Direct](D)(F)
+\Edge[Direct](E)(F)
+\Edge[Direct](F)(G)
+\Edge[Direct](F)(H)
+\end{tikzpicture}
+
+After running a \hyperref[alg:dfs_dir]{DFS}-based alphabetical, topological sorting algorithm, we get the following ``pre'' and ``post'' order numbers:
+
+\begin{center}
+	\begin{tabular}{||c c c||} 
+		\hline
+		N & Pre & Post\\ [0.5ex] 
+		\hline\hline
+		A & 1 & 14 \\ 
+		\hline
+		B & 15 & 16\\
+		\hline
+		C & 2 & 13\\
+		\hline
+		D & 3 & 10\\
+		\hline
+		E & 11 & 12\\
+		\hline
+		F & 4 & 9\\
+		\hline
+		G & 5 & 6\\
+		\hline
+		H & 7 & 8\\ [1ex] 
+		\hline
+	\end{tabular}
+\end{center}
+
+The sources we find are: $A$ and $B$ vertices, and the sinks are: $G$ and $H$ vertices. 
+
+We can find a topological ordering, in a DAG, by running a $DFS$ and sort by decreasing post-order number. One such ordering would be:
+$$<B, A, C, E, D, F, H,G>$$
+
+Such sorting would take $O(|V| + |E|)$ time.
+
+If we followed a rule that vertices should be explored alphabetically, there would be 2 possible topological orderings, depending on if we started with either source nodes $\{A, B\}$. 
+
+Otherwise, we'd have the following choices to make during exploration:
+$$<B|A, C, E|D, F, H|G>$$
+
+which gives us $2^3 = 8$ possible orderings.
 
 \subsection{Minimum Spanning Tree}
 \begin{definition}
@@ -366,6 +430,22 @@ We must take into account that there's $\leq C$ rounds we iterate through, thus 
 $$O(|E|C)$$
 
 An excellent \href{https://stackoverflow.com/questions/19649026/is-network-flow-pseudo-polynomial-time}{discussion} on what pseudo-polynomial means. \href{https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm#Integral_example}{Worst-case, integral example}.
+	
+\begin{algorithm}
+	\caption{$EdmonsKarp$}
+	\label{alg:edmons_karp}
+	\begin{algorithmic}[1]
+		\REQUIRE $c : E \to \mathbb{N}$ \COMMENT{This is a crucial limitation for $FordFulkerson$ to work}
+		\STATE Initialize flow network, $f$: $f_e = 0, \, \forall e \in E$
+		\WHILE {$\exists \mathcal{P} \in G^f$}
+		\STATE Find $\mathcal{P}$
+		\STATE $c(\mathcal{P}) \gets \text{the minimum capacity along } \mathcal{P}$
+		\STATE Augment $f$ by $c(\mathcal{P})$ unit along $\mathcal{P}$
+		\ENDWHILE
+		\RETURN {$f$}
+	\end{algorithmic}
+	\href{https://classroom.udacity.com/courses/ud401/lessons/8e8db62c-39bd-4dc2-bbe7-b9774e41756f/concepts/77dcde9a-43f0-4eea-889b-14b1ec034a28}{TODO}.
+\end{algorithm}
 
 \subsection{Max-flow = Min-cut}
 \begin{lemma}
@@ -482,5 +562,245 @@ To prove \ref{thm:maxflowmincut}, we first prove $\text{max-flow} \leq \text{min
 	$$\text{maximum } size(f) \geq size(f^*) = c(L,R) \geq \text{minimal }c(L,R)$$
 	which we've proved in \ref{clm:in_out_flow}.
 \end{proof}
+
+\section{Reductions}
+In this section we discuss methods to reduce problems to a form that can be solved by a black-box algorithm such as max-flow.
+
+\subsection{Generalization (Circulation and Demand)}
+There's a large class of problems that could be solved with max-flow, but require a bit of massaging. This class of problems are usually reduced to the following, before being finally reduced to max-flow:
+
+\begin{enumerate}
+	\item Circulation with Demands (C\&D)
+	\item C\&D with lower bounds
+\end{enumerate}
+
+\begin{definition}{Demand, $d_v$}
+\label{def:demand}
+	\\A node, $v \in V$ can be associated with a demand, $d_v$. 
+	\\$d_v >0$ indicates $v$ demands $d_v$ units. 
+	\\$d_v < 0$ indicates $v$ has a \textit{supply} of $-d_v$ units.
+\end{definition}
+
+\begin{definition}{Feasible circulations}
+	\label{def:feas_circulation}
+	\\Given demands $\{d_v\}$, a \textit{feasible} circulation is function $f: E \mapsto \mathbb{R}^+$ that satisfies:
+	
+	\begin{enumerate}
+		\item (Capacity condition) $\forall e \in E, 0 \leq f(e) \leq c(e)$
+		\item (Demand condition) $\forall v \in V, f^{in}(v) - f^{out}(v) = d_v$
+	\end{enumerate}
+
+	I.e., total supply must equal total demand:
+	$$\exists \text{ a feasible circulation with demands } \{d_v\} \implies \sum_{v \in V}{d_v} = 0$$
+\end{definition}
+
+\begin{corollary}{$D$}
+	\\It follows from \ref{def:feas_circulation} that:
+	$$D = \sum_{v \in V: d_v > 0}{d_v} = \sum_{v \in V: d_v < 0}{-d_v} = \sum_{v \in V}{d^{in}(v)} =\sum_{v \in V}{d^{out}(v)}$$
+\end{corollary}
+
+\say{We can reduce the problem of finding a feasible circulation with demands $\{d_v\}$ to the problem of finding the max st-flow in a different network.}
+
+To do so, we first need to convert our $G$ graph to the familiar flow network, \hyperref[def:flow_networks]{$G' = (V, E, s,t, \{c_e\})$}.
+Let $S$ be the set of ``flow-generating'' sources, and $T$ be the set of ``flow-absorbing'' sinks:
+
+\begin{enumerate}
+	\item $\forall v \in S$, attach a ``super-source'', $(s^*,v)$, with $c_e = -d_v$.
+	\item $\forall v \in T$, attach a ``super-sink'', $(v,t^*)$, with $c_e = d_v$.
+\end{enumerate}
+
+We carry over everything else from $G$ to $G'$ and thus completes our structural conversion to a flow network. 
+
+Now, \textbf{where did the actual reduction happen} as we transformed $G \to G'$? Adding $s^*$ to ``supply'' the extra flow to the sources, and $t^*$ to ``siphon'' the extra flow out of the sinks is the reduction. Now we seek the max $s^*t^*$ flow $\in G'$. 
+
+What is the upper bound of any $s^*t^*$ flow? It must be $D$ due to how we set what the capacities during the reduction phase, and if we take any cut $(A,B)$ with $A = \{s^*\}$ we see that $c(A,B) = D$ by \hyperref[thm:maxflowmincut]{max-flow min-cut theorem}.
+
+The reduction can be concluded and proven equivalent to the max-flow problem with the following lemmas:
+
+\begin{lemma}
+	$\exists$ a feasible circulation with demands $\{d_v\} \in G \iff$ the max $s^*t^*$ flow $\in G' = D$. 
+\end{lemma}
+
+\begin{lemma}
+	The graph $G$ has a feasible circulation with demands $\{d_v\} \iff \forall c(A,B), \sum_{v \in B}{d_v \leq c(A,B)}$. \textbf{Note} that such cut need not be an \hyperref[def:st_cut_cap]{st-cut} in this context.
+\end{lemma}
+
+Now we generalize even further by adding \textit{lower bounds}. 
+
+\begin{definition}{Lower bound capacities}
+	\label{def:low_bounds}	
+		\begin{enumerate}
+			\item (Capacity condition) $\forall e \in E, l(e) \leq f(e) \leq c(e)$
+			\item (Demand condition) $\forall v \in V, f^{in}(v) - f^{out}(v) = d_v$
+		\end{enumerate}
+\end{definition}
+
+As before, we need to again verify what a feasible circulation under these new rules.
+
+\textbf{TODO}: Finish the lower bound K\&T chapter and reconcile with \href{https://classroom.udacity.com/courses/ud401/lessons/98e96502-88a9-4c08-9737-5bfce78d6248/concepts/12561c77-2bcd-45e0-aae5-e7c4d57eb2ef}{lectures}.
+
+\subsection{Perfect Bipartite matching}
+\begin{definition}{Bipartite graphs}
+	\label{def:bipartite_graphs}
+	\\In general a bipartite graph $G=(V_1 \cup V_2, E)$ s.t. each edge has one endpoint in $V_1$ and the other in $V_2$.
+\end{definition}
+
+An example of this problem is \textit{matchmaking} for couples. Let $G(V,E)$ be an un-directed graph with vertices that are either male ($M \subset V$) or female ($F \subset V$). An edge, $e \in E$ denotes a match between two people, $v \in V$. Is it possible to choose couples s.t. everyone has \textit{exactly one partner}, i.e. a perfect match?
+
+We first need to translate $G$ into the flow-network: $$G'(V,E',s,t,c: E' \mapsto \mathbb{N})$$
+
+Assume $G$ is bipartite and $|M|=|F|$, i.e. even \# of males and females s.t. couples could be formed.
+
+We add a source $s$ node and connect it to all $v \in M$. We then connect all $v \in F$ to a sink node, $t$. This fulfills the $s,t$ node requirement for $G'$.
+
+Then, we set the max-capacity to all $e \in E'$ to 1, i.e. our capacity function is now $c : E' \mapsto 1$.
+
+Now we run $FordFulkerson$, \ref{alg:ford_fulk}, on $G'$ to generate $f^*$. If $|f^*| = $ the total number of possible couples, we have achieved a perfect match.
+
+\textbf{Intuition}: maxing out the capacity to 1 gives us a nice property which allows us to completely saturate some $\mathcal{P}$ in any given iteration of \ref{alg:ford_fulk}. 
+
+Recall from \ref{def:add_back_edge_unsat_2_resid} that only back-edges are added for saturated edges in $G'$, and once we augment along $\mathcal{P}$ in some step, the next build of ${G'}^{f^*}$ will have all back-edges of edges that comprised of $\mathcal{P}$ pre-augmentation. 
+
+Since $G$ is well-formed, from a couples and bipartite perspective, we know that if some $\mathcal{P}$ was augmented, at least one male and female along $\mathcal{P}$ were saturated. By \ref{prop:conservation}, we know the remaining edges along $\mathcal{P}$ are also saturated. 
+
+Thus no other $\mathcal{P'}$, such as a $\mathcal{P}$-overlapping one, can send any more flow across $\mathcal{P}$, otherwise a vertex could receive more flow from more than one vertex (analogous to a person matching with more than one person), which breaks our definition of a couple-matching.
+
+\subsection{Direct Bipartite matching}
+\begin{algorithm}
+	\caption{$BFS$}
+	\label{alg:bfs}
+	\begin{algorithmic}[1]
+		\REQUIRE $Q$ is a queue, rooted graph $G$, root vertex $v$,\\discovered array $disc : V \mapsto \{0, 1\}$.
+		\STATE $disc[v] \gets 1$
+		\STATE $Q$.enqueue($v$)
+		\WHILE {$Q$ isn't empty}
+			\STATE $n \gets$ $Q$.dequeue()
+			\IF {$n$ is some goal}
+				\RETURN $n$
+			\ENDIF
+			\FOR {all neighbors $u$ of $n$}
+				\IF {$\neg disc[u]$}
+					\STATE $disc[u] \gets 1$
+					\STATE $parent[u] \gets v$
+					\STATE $Q$.enqueue($u$)
+				\ENDIF
+			\ENDFOR
+		\ENDWHILE
+		\RETURN $parent[*]$
+	\end{algorithmic}
+Runs in $O(|V|+|E|)$.
+\end{algorithm}
+
+\begin{definition}{Matching edges}
+\label{def:match_edge}
+	\\A \textit{matching}, $M \in G$ is a set of edges with:
+	\begin{enumerate}
+		\item Pairwise, non-adjacent edges.
+		\item Acyclic.
+		\item No two edges share a common vertex.
+	\end{enumerate}
+\end{definition}
+
+\begin{definition}{Covered vertex}
+	\label{def:covered_vtx}
+	\\A vertex is \textit{covered} by $M$ if it is an endpoint of any $e \in M$.
+\end{definition}
+
+\begin{definition}{Alternating path}
+	\label{def:alt_path}
+	\\A path, $a := u \rightsquigarrow v$, s.t.:
+	\begin{enumerate}
+		\item $|a|$ is odd.
+		\item $u, v$ are non-covered vertices.
+		\item $a$'s edges alternate between $M$ and $E-M$.
+	\end{enumerate}
+\end{definition}
+
+\begin{definition} {Maximal matching of $M$}
+	\label{def:maximal_m}
+	\\$M$ is \textit{maximal} if $\nexists e \in E \land e \notin M$ that can be added to $M$ because it would cause $M$ to \textbf{no longer be a matching graph}. \href{https://brilliant.org/wiki/matching/}{Reference}.
+	
+	A maximal matching is only local (greedy), i.e. it does not mean you found the \textit{best matching overall}- that is the \textbf{maximum} matching. \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=618_f4}{Reference}.
+\end{definition}
+
+\begin{claim}
+	$M$ is maximal $\iff \nexists$ an alternating path w.r.t. it.
+\end{claim}
+
+\begin{proof}	
+	A \textit{minimum} alternating path encloses 1 matching edge. There is another matching we could do that increases the maximal matching, i.e. making the two end-edges matching with a total of 2 matches.
+	
+	A corollary is our original alternating path is no longer an alternating path since they no longer begin and end with covered vertices.
+	
+	Thus, it is a contradiction to have a maximal $M$ in an alternating path.
+	
+	\textbf{TODO:} The proof above only covers the base case so it's not a general enough proof. We also need to prove the other direction, \href{http://www-cs-students.stanford.edu/~csilvers/proof/node4.html}{see this reference}.
+\end{proof}
+
+\begin{claim}
+	Given a bipartite graph, $G = (V_1 \cup V_2, E)$, $\exists$ an algorithm to find some \hyperref[def:alt_path]{alternating path} $\in G$ in $O(|V|+|E|)$ using a modified $BFS$ algorithm.
+\end{claim}
+
+\textbf{HINT:} use properties of:
+\begin{enumerate}
+	\item DAGs
+	\item BFS traversal
+	\item Bipartite graphs
+	\item Alternating paths
+	\item Match edges
+\end{enumerate}
+to construct a solution.
+
+\begin{proof}
+	 Let $A \subseteq V_1$ and $B \subseteq V_2$  be the set of uncovered edges.
+	
+	A post-condition we can derive is- if an alternating path is found, we know it crossed $V_1, V_2$ at least three times:
+	\begin{enumerate}
+		\item Starting at an uncovered vertex, $u \in A$, it crosses $V_1, V_2$ along an unmatched edge to some covered vertex, $v \in V_2 - B$.
+		\item From $v$, it crosses some matched edge, $e \in M$ back to some covered vertex in $V_1-A$.
+		\item To maintain an alternating path, there must exist an uncovered vertex, $v' \in B$ to cross over to next.
+	\end{enumerate}
+	
+	It's preferred to encode such invariants, and pre/ post-conditions into $BFS$, whether data-structurally or algorithmically. This makes the proof of correctness easier since modifications to the core algorithm are minimized. We know from \hyperref[alg:bfs]{$BFS$} that during traversal it checks if the current vertex meets some terminating condition.
+	
+	To minimally change $BFS$, we can encode our post-condition by making the terminating condition be: $n \in B \to$ terminate. This is incomplete, because an uncovered vertex $\in A$ can be adjacent to yet another uncovered vertex $\in B$, i.e. an unmatched edge ($e \notin M$) can be traversed first. The suggested model seems to leave this out. 
+	
+	We can overcome this with a technical detail, by extending our terminating condition to also ensure that $parent[v] \neq r$, where $r$ is the root vertex we begin at. 
+	
+	During traversals, we now must decide which edge to take. For instance, say we are traversing $r$'s neighbor $n \in B$, and $n$ is incident on both a matched and unmatched edge. Since we're looking for alternate paths, $n$ should never take the unmatched edge, otherwise it would not be alternating.
+	
+	We can encode this property by transforming $G$ to $\overrightarrow{G}$, s.t. edges are directed from $V_1$ to $V_2$ if they're \textbf{$\notin$} $M$, otherwise the edge directions will be reversed. Now, paths that lead to alternate paths are analogous to valid, directed traversals. It is left to prove that constructing $\overrightarrow{G}$ is bounded by $O(|V|+|E|)$, otherwise the claim is proven given we run $BFS$ on some start vertex $r \in A$.
+\end{proof}
+
+\begin{claim}
+	Given a bipartite graph, $G = (V_1 \cup V_2, E)$, $\exists$ an algorithm to find a \hyperref[def:maximal_m]{maximal matching} $M \in G$ in $O(|V||E|)$.
+\end{claim}
+
+\begin{proof}
+	\textbf{Intuition}: We only need to find a maximal matching, so we can use a greedy algorithm that grows $M$ by adding valid matches until $\nexists e \in E-M$ s.t. adding $e$ to $M$ \hyperref[def:match_edge]{invalidates} it.
+	
+	We can loop through each $v \in V$, and add the first of $v$'s edges that have not already been matched to $M$. It's left to prove this meets $O(|V||E|)$, however the correctness is supported \href{https://www.cs.dartmouth.edu/~ac/Teach/CS105-Winter05/Notes/kavathekar-scribe.pdf}{here}.
+\end{proof}
+
+\begin{claim}
+	Given a bipartite graph, $G = (V_1 \cup V_2, E)$, $\exists$ an algorithm to find a \hyperref[def:maximum_m]{maximum matching} $M \in G$ in $O(|V||E|)$.
+\end{claim}
+
+\begin{proof}
+	\textbf{TODO}. Also, check follow-ups \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=705}{here} if any.
+\end{proof}
+
+\subsection{Hall's theorem}
+Given a bipartite graph, $G = (V_1 \cup V_2, E)$, where $V_1$ are boys, $V_2$ are girls, and $|V_1|=|V_2|$:
+$$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \text{ connects to at least } |S| \text{ girls.}$$
+\href{https://www2.cs.duke.edu/courses/spring19/compsci230/Notes/lecture14.pdf}{Reference.}
+
+\begin{proof} 
+\textbf{TODO}:
+($\Rightarrow$): In this direction, we need to encode what a \textit{perfect matching} is as a neighborhood function. Use \href{http://www-cs-students.stanford.edu/~csilvers/proof/node4.html}{directional proofs} as a guidance.
+\\($\Leftarrow$): Reduce to a flow-network and use \hyperref[thm:maxflowmincut]{max-flow min-cut} theorem to prove in the other direction.
+\end{proof}
+
+\subsection{Image segmentation}
 
 \end{document}
