@@ -902,4 +902,6 @@ If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$? Y
 	Now we can modify $BinarySearch$ s.t. it calls \ref{alg:tsp_bb} on $c$, $(0, \lfloor c/2 \rfloor)$, and $(\lfloor c/2 \rfloor +1, c)$. The reasoning being that if \ref{alg:tsp_bb} doesn't return false when searching on the former interval, we know the optimum shortest tour exists within that range, and vice-versa for the latter. \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{Reference}.
 \end{proof}
 
+\subsection{Search versus Decision}
+
 \end{document}
