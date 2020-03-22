@@ -875,5 +875,23 @@ $$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \te
 \end{proof}
 
 \subsection{Image segmentation}
+\textbf{TODO.}
+
+\section{Computational Complexity}
+\subsection{Reducing Optimization to Search (or vice-versa)}
+\begin{algorithm}
+	\caption{$TSP$, traveling salesman (search) problem}
+	\label{alg:tsp_bb}
+	\hspace*{\algorithmicindent} \textbf{Input:} A distance matrix and budget $b$.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} A tour passing through all cities and has length $\leq b$, if there exists one.
+\end{algorithm}
+\begin{algorithm}
+	\caption{$TSP-OPT$, traveling salesman (optimization) problem}
+	\label{alg:tspopt}
+	\hspace*{\algorithmicindent} \textbf{Input:} A distance matrix.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} The shortest tour passing through all cities.
+\end{algorithm}
+
+If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$?
 
 \end{document}
