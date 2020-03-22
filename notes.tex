@@ -892,6 +892,14 @@ $$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \te
 	\hspace*{\algorithmicindent} \textbf{Output:} The shortest tour passing through all cities.
 \end{algorithm}
 
-If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$?
+If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$? Yes:
+
+\begin{proof}
+	We assume \ref{alg:tsp_bb} outputs \textit{false} if no such tour is found, and the idea is to use it as a sub-routine in \ref{alg:tspopt}.\\
+	Note that the signature for \ref{alg:tspopt} does not have a budget as input, but \ref{alg:tsp_bb} does. This is a hint for the solution.\\
+	\ref{alg:tspopt} cares about the \textit{optimum} shortest tour only. Since \ref{alg:tsp_bb} outputs a tour of length $\leq b$ or false, we can repeatedly call it to find the optimum.
+	We calculate $c$, the optimum cost (distances), by iterating through all edges in $E$ and summing their distances together.\\
+	Now we can modify $BinarySearch$ s.t. it calls \ref{alg:tsp_bb} on $c$, $(0, \lfloor c/2 \rfloor)$, and $(\lfloor c/2 \rfloor +1, c)$. The reasoning being that if \ref{alg:tsp_bb} doesn't return false when searching on the former interval, we know the optimum shortest tour exists within that range, and vice-versa for the latter. \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{Reference}.
+\end{proof}
 
 \end{document}
