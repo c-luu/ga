@@ -903,5 +903,27 @@ If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$? Y
 \end{proof}
 
 \subsection{Search versus Decision}
+\begin{algorithm}[H]
+	\caption{$Rudrata\-Path\-D$, Rudrata st-path (decision)}
+	\label{alg:rudrata_d}
+	\hspace*{\algorithmicindent} \textbf{Input:} A rooted graph $G$.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} True if a Rudrata st-path is found, false otherwise.
+\end{algorithm}
+\begin{algorithm}
+	\caption{$Rudrata\-Path\-S$, Rudrata st-path (search)}
+	\label{alg:rudrata_s}
+	\hspace*{\algorithmicindent} \textbf{Input:} A rooted graph $G$.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} The Rudrata st-path, if there exists one.
+\end{algorithm}
+
+If we are given a polynomial algorithm that solves \ref{alg:rudrata_d}, can we use it to build a polynomial algorithm that solves \ref{alg:rudrata_s}? Yep:
+
+\begin{proof}
+	Run a modified \hyperref[alg:bfs]{$BFS$} starting at root $s$. At each level, we run \ref{alg:rudrata_d} on each neighbor. If it returns true, we queue up its neighbors. If false, we do not queue its neighbors.
+	
+	Upon termination, the output will be the result of $BFS$ (paths via parent links from $t$ back to $s$), or an empty tree signifying that there is no Rudrata st-path.\\
+	
+	The \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{reference solution} runs \ref{alg:rudrata_d} on $G - \{e\}$ for some $e \in E$ in a loop. If true, we know a Rudrata st-path can be found on another path, so $e$ is permanently removed from $G$. Otherwise, the Rudrata st-path is along $e$, so it cannot be removed. Loop until nothing is left but the Rudrata st-path.
+\end{proof}
 
 \end{document}
