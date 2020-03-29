@@ -880,13 +880,13 @@ $$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \te
 \section{Computational Complexity}
 \subsection{Reducing Optimization to Search (or vice-versa)}
 \begin{algorithm}
-	\caption{$TSP$, traveling salesman (search) problem}
+	\caption{\textit{TSP}, traveling salesman (search) problem}
 	\label{alg:tsp_bb}
 	\hspace*{\algorithmicindent} \textbf{Input:} A distance matrix and budget $b$.\\
 	\hspace*{\algorithmicindent} \textbf{Output:} A tour passing through all cities and has length $\leq b$, if there exists one.
 \end{algorithm}
 \begin{algorithm}
-	\caption{$TSP-OPT$, traveling salesman (optimization) problem}
+	\caption{\textit{TSP-OPT}, traveling salesman (optimization) problem}
 	\label{alg:tspopt}
 	\hspace*{\algorithmicindent} \textbf{Input:} A distance matrix.\\
 	\hspace*{\algorithmicindent} \textbf{Output:} The shortest tour passing through all cities.
@@ -904,13 +904,13 @@ If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$? Y
 
 \subsection{Search versus Decision}
 \begin{algorithm}[H]
-	\caption{$Rudrata\-Path\-D$, Rudrata st-path (decision)}
+	\caption{\textit{Rudrata-Path-D}, Rudrata st-path (decision)}
 	\label{alg:rudrata_d}
 	\hspace*{\algorithmicindent} \textbf{Input:} A rooted graph $G$.\\
 	\hspace*{\algorithmicindent} \textbf{Output:} True if a Rudrata st-path is found, false otherwise.
 \end{algorithm}
 \begin{algorithm}
-	\caption{$Rudrata\-Path\-S$, Rudrata st-path (search)}
+	\caption{\textit{Rudrata-Path-S}, Rudrata st-path (search)}
 	\label{alg:rudrata_s}
 	\hspace*{\algorithmicindent} \textbf{Input:} A rooted graph $G$.\\
 	\hspace*{\algorithmicindent} \textbf{Output:} The Rudrata st-path, if there exists one.
