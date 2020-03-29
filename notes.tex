@@ -926,4 +926,16 @@ If we are given a polynomial algorithm that solves \ref{alg:rudrata_d}, can we u
 	The \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{reference solution} runs \ref{alg:rudrata_d} on $G - \{e\}$ for some $e \in E$ in a loop. If true, we know a Rudrata st-path can be found on another path, so $e$ is permanently removed from $G$. Otherwise, the Rudrata st-path is along $e$, so it cannot be removed. Loop until nothing is left but the Rudrata st-path.
 \end{proof}
 
+\subsection{NP-completeness ($NPC$)}
+\subsubsection{\textit{StingySat} }
+This problem takes a set of $m$ clauses, each a dis-junction of literals, an integer $k$. Based on this, it needs to find a satisfying assignment in which \textit{at most} $k$ variables are true, if such an assignment exists.
+
+\begin{claim}
+	$StingySat \in NPC$.
+\end{claim}
+
+\begin{proof}
+	First we show that $StingySat \in NP$. Then we must show $StingySat$ reduces from either $CSAT$ or $3SAT$.
+\end{proof}
+	
 \end{document}
