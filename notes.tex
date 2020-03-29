@@ -927,6 +927,25 @@ If we are given a polynomial algorithm that solves \ref{alg:rudrata_d}, can we u
 \end{proof}
 
 \subsection{NP-completeness ($NPC$)}
+
+\subsubsection{Independent Sets ($INDSET$)}
+\begin{claim}
+	$INDSET \in NPC$.
+\end{claim}
+
+This is a \textbf{key proof and excellent demo} on reducing from $3SAT$. The basis is: given a 3CNF expression $E$ with $m$ clauses, and un-directed graph $G$,
+$$E \text{ is satisfiable} \iff G \text{ has an independent set of size } m.$$
+
+The following points highlight the learning importance of this proof:
+
+\begin{enumerate}
+	\item Constructing gadgets.
+	\item Tying gadgets together.
+	\item Recasting $INDSET$ as a decision problem if it is given as \textit{MAX-INDSET} optimization problem. 
+\end{enumerate}
+
+The principal references for this proof is the \textit{Intractable problems}, chapter 10, in the ATLC book with Hopcraft et. al, and \href{https://www.dropbox.com/s/bsnowkygvxjos2s/gadgets-IndSet.pdf?dl=0}{this model solution}.
+
 \subsubsection{\textit{StingySat} }
 This problem takes a set of $m$ clauses, each a dis-junction of literals, an integer $k$. Based on this, it needs to find a satisfying assignment in which \textit{at most} $k$ variables are true, if such an assignment exists.
 
@@ -935,7 +954,8 @@ This problem takes a set of $m$ clauses, each a dis-junction of literals, an int
 \end{claim}
 
 \begin{proof}
-	First we show that $StingySat \in NP$. Then we must show $StingySat$ reduces from either $CSAT$ or $3SAT$.
+	First we show that $StingySat \in NP$. Then we must show $StingySat$ reduces from either $CSAT$ or $3SAT$.\\
+	Showing $StingySat \in NP$ might be trivial. Given an instance $I$ and solution $S$, we plug in the $n$ literals to $m$ clauses and evaluate the $m$ conjunctions in $I$. If $I$ evaluates to true, we linearly count the $n$ variables to check if they are true. If this count exceeds $k$, $S$ is not a valid solution. Evidently this running time is bounded  by polynomial time.
 \end{proof}
 	
 \end{document}
