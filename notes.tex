@@ -947,15 +947,24 @@ The following points highlight the learning importance of this proof:
 The principal references for this proof is the \textit{Intractable problems}, chapter 10, in the ATLC book with Hopcraft et. al, and \href{https://www.dropbox.com/s/bsnowkygvxjos2s/gadgets-IndSet.pdf?dl=0}{this model solution}.
 
 \subsubsection{\textit{StingySat} }
-This problem takes a set of $m$ clauses, each a dis-junction of literals, an integer $k$. Based on this, it needs to find a satisfying assignment in which \textit{at most} $k$ variables are true, if such an assignment exists.
+This problem takes a set of $m$ clauses, each a dis-junction of literals, and integer $k$. It finds a satisfying assignment in which \textit{at most} $k$ variables are true, if such an assignment exists.
 
 \begin{claim}
 	$StingySat \in NPC$.
 \end{claim}
 
 \begin{proof}
-	First we show that $StingySat \in NP$. Then we must show $StingySat$ reduces from either $CSAT$ or $3SAT$.\\
-	Showing $StingySat \in NP$ might be trivial. Given an instance $I$ and solution $S$, we plug in the $n$ literals to $m$ clauses and evaluate the $m$ conjunctions in $I$. If $I$ evaluates to true, we linearly count the $n$ variables to check if they are true. If this count exceeds $k$, $S$ is not a valid solution. Evidently this running time is bounded  by polynomial time.
+	First we show that $StingySat \in NP$. Then we must show $StingySat$ reduces from either $CSAT$ or $3SAT$.\\\\
+	Showing $StingySat \in NP$ might be trivial. Given an instance $I$ and solution $S$, we plug in the $n$ literals to $m$ clauses and evaluate the $m$ conjunctions in $I$. If $I$ evaluates to true, we linearly count the $n$ variables to check if they are true. If this count exceeds $k$, $S$ is not a valid solution. Evidently this running time is bounded  by polynomial time.\\\\
+	To seal the proof, we show $CSAT \leq_p StingySat$. This is trivial since the instance structures, $I$ for $CSAT$, and $(I',k)$ for $StingySat$ are structurally similar. \\
+	The basis is: a CNF expression, $E$, is satisfiable $\iff$ no more than $k$ variables in $StingySat$ are true.\\\\
+	$\Rightarrow$ Evidently $StingySat$ is a generalization of $CSAT$, since we know if $E$ is satisfiable, at least $n$ variables must be true. Thus, we simply set $k=n$ when passing in $I$ to our sub-routine $StingySat$. \\
+	$\Leftarrow$ If $StingySat$ returns a satisfying assignment, that assignment also satisfies $CSAT$. If $StingySat$ does not return a satisfying assignment, neither does $CSAT$. \\\\
+	This is bounded in polynomial time, since the only operation we changed was to set $k=n$.
 \end{proof}
+
+\begin{remark}
+	Note how the original \textit{StingySat} problem is actually a \textit{search} problem, but we are recasting problems to their decision-variants for $NPC$ reductions. This is valid, since it is likely both variants are polynomial-time reducible to each other. \textbf{This remark might be wrong,} verify \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=879}{here}.
+\end{remark}
 	
 \end{document}
