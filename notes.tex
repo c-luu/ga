@@ -966,5 +966,23 @@ This problem takes a set of $m$ clauses, each a dis-junction of literals, and in
 \begin{remark}
 	Note how the original \textit{StingySat} problem is actually a \textit{search} problem, but we are recasting problems to their decision-variants for $NPC$ reductions. This is valid, since it is likely both variants are polynomial-time reducible to each other. \textbf{This remark might be wrong,} verify \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=879}{here}.
 \end{remark}
+
+\subsubsection{\textit{Almost-SAT}}
+Takes as input a CNF expression of clauses and literals, $E = (m,n)$, respectively. The output is an assignment s.t. $m-1$ clauses evaluate to true.\\
+First, we show \textit{Almost-SAT} $\in NP$. Given a solution, evaluate each clause in $m$, if the total clauses evaluated to true is $m-1$, \textit{Almost-SAT} is satisfiable, else return false. This can be evidently done in polynomial time.\\\\
+Next, we show \textit{Almost-SAT} is reducible from some problem in $NPC$. This might be done by showing:
+$$CSAT \leq_p \text{\textit{Almost-SAT}}.$$
+We can convert an instance $I$ of the former to $I'$ of the latter by passing along the same clauses from $I$ to $I'$, with the gadget being that $I'$ adds an additional clause that \textit{evaluates to false}. This gives a property that $I'$'s clauses, $m_I$, has $|m_I| = |m_{I'}|+1$.\\
+$\Rightarrow$ If $CSAT$ has a satisfying assignment, we know all clauses in $m_I$ evaluates to true. Since $m_I$ is copied into $I'$ as $m_{I'}$, we know \textit{Almost-SAT} is also satisfied since $m_{I'}$ has $m_{I}$ satisfied clauses, plus an additional clause that evaluates to false. Thus, the total amount of satisfied clauses in \textit{Almost-SAT} is $|m_{I'}|-1$.\\
+$\Leftarrow$ If \textit{Almost-SAT} has a satisfying assignment, so does \textit{CSAT} by construction.\\\\
+Building such gadget is evidently built in polynomial time.\\\\
+\textbf{Reference solution(s):} The common theme among the reference models is they defined a gadget of size $|m_{I'}|+2$, e.g. $(v) \land (\bar{v})$. This is a little awkward.
+
+References:
+\begin{enumerate}
+	\item https://farazdagi.com/2018/practice-problem-almost-sat/
+	\item https://www.dropbox.com/s/xrf9l33dk0aqct7/HW7Sol.pdf?dl=0
+	\item https://piazza.com/class/k52uzg6xjkl5xz?cid=831
+\end{enumerate}
 	
 \end{document}
