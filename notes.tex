@@ -987,6 +987,13 @@ References:
 
 \subsubsection{\textit{Clique+INDSET ($CI$)}}
 This problem takes as input a graph $G = (V,E)$ and integer $k$. As output, it returns a \textit{clique} of size $k$ and an independent set of size $k$. \\Show that $CI \in NPC$.\\\\
+First we show that $CI \in NP$. Given a solution to $CI$, $S = (C, I, k)$, where $C$ and $I$ are the clique and independent vertex sets of size $k$:
 
+\begin{itemize}
+	\item To verify a solution has a clique of size $k$, we iterate through all vertex pairs, $u, v \in C$ and check that $(u,v) \in E$ and check that $|C| = k$. 
+	\item We then verify $I$ has an independent set of size $k$ by iterating through all vertex pairs, $u, v \in I$ and check that $(u,v) \notin E$ and that $|I| = k$. 
+\end{itemize}
+
+Verifying $S$ is evidently done in polynomial time using conventional operations on $G$. 
 
 \end{document}
