@@ -994,6 +994,11 @@ First we show that $CI \in NP$. Given a solution to $CI$, $S = (C, I, k)$, where
 	\item We then verify $I$ has an independent set of size $k$ by iterating through all vertex pairs, $u, v \in I$ and check that $(u,v) \notin E$ and that $|I| = k$. 
 \end{itemize}
 
-Verifying $S$ is evidently done in polynomial time using conventional operations on $G$. 
+Verifying $S$ is evidently done in polynomial time using conventional operations on $G$. \\\\
+We can reduce $CI$ from $Clique$. $Clique$ takes as input a graph $G = (V,E, k)$ and determines whether $G$ has a clique of at least size $k$. We need to build a gadget to feed into our black box $CI$ verifier, call it input $F = (V_F, E_F, k)$, that will be constructed in polynomial time w.r.t. $G$ and whose solution instance satisfies $CI \iff G$'s solution instance satisfies $Clique$.\\
+To construct $F$, we simply create an independent set of $k$ additional vertices (no new edges are added to $E_F$) and add it to $V_F$. Further, we construct $F$ by inheriting the vertices and edges from $G$.\\
+$\Rightarrow$ If $Clique$ could determine a clique of size $k$ on $G$, we know by construction that $CI$ also found a clique of size $k$, and indeed has an independent set of size $k$ since $F$ was modified with $k$ vertices that have no edges to form said independent set.\\
+$\Leftarrow$ By construction, we know that if $CI$ cannot find a clique of size $k$ on it's modified graph, $F$, then we know $Clique$ also could not find a clique of size $k$ for its input graph $G$.\\\\
+Thus by the reduction $Clique \leq_p CI$, we have proved $CI \in NPC$.
 
 \end{document}
