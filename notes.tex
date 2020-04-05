@@ -875,5 +875,141 @@ $$\exists \text{ a perfect matching} \iff \text{any subset } S \subseteq V_1 \te
 \end{proof}
 
 \subsection{Image segmentation}
+\textbf{TODO.}
+
+\section{Computational Complexity}
+\subsection{Reducing Optimization to Search (or vice-versa)}
+\begin{algorithm}
+	\caption{\textit{TSP}, traveling salesman (search) problem}
+	\label{alg:tsp_bb}
+	\hspace*{\algorithmicindent} \textbf{Input:} A distance matrix and budget $b$.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} A tour passing through all cities and has length $\leq b$, if there exists one.
+\end{algorithm}
+\begin{algorithm}
+	\caption{\textit{TSP-OPT}, traveling salesman (optimization) problem}
+	\label{alg:tspopt}
+	\hspace*{\algorithmicindent} \textbf{Input:} A distance matrix.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} The shortest tour passing through all cities.
+\end{algorithm}
+
+If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$? Yes:
+
+\begin{proof}
+	We assume \ref{alg:tsp_bb} outputs \textit{false} if no such tour is found, and the idea is to use it as a sub-routine in \ref{alg:tspopt}.\\
+	Note that the signature for \ref{alg:tspopt} does not have a budget as input, but \ref{alg:tsp_bb} does. This is a hint for the solution.\\
+	\ref{alg:tspopt} cares about the \textit{optimum} shortest tour only. Since \ref{alg:tsp_bb} outputs a tour of length $\leq b$ or false, we can repeatedly call it to find the optimum.
+	We calculate $c$, the optimum cost (distances), by iterating through all edges in $E$ and summing their distances together.\\
+	Now we can modify $BinarySearch$ s.t. it calls \ref{alg:tsp_bb} on $c$, $(0, \lfloor c/2 \rfloor)$, and $(\lfloor c/2 \rfloor +1, c)$. The reasoning being that if \ref{alg:tsp_bb} doesn't return false when searching on the former interval, we know the optimum shortest tour exists within that range, and vice-versa for the latter. \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{Reference}. \href{https://eklitzke.org/the-traveling-salesman-problem-is-not-np-complete}{Why \ref{alg:tspopt} is $\in NP$-hard}.
+\end{proof}
+
+\subsection{Search versus Decision}
+\begin{algorithm}[H]
+	\caption{\textit{Rudrata-Path-D}, Rudrata st-path (decision)}
+	\label{alg:rudrata_d}
+	\hspace*{\algorithmicindent} \textbf{Input:} A rooted graph $G$.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} True if a Rudrata st-path is found, false otherwise.
+\end{algorithm}
+\begin{algorithm}
+	\caption{\textit{Rudrata-Path-S}, Rudrata st-path (search)}
+	\label{alg:rudrata_s}
+	\hspace*{\algorithmicindent} \textbf{Input:} A rooted graph $G$.\\
+	\hspace*{\algorithmicindent} \textbf{Output:} The Rudrata st-path, if there exists one.
+\end{algorithm}
+
+If we are given a polynomial algorithm that solves \ref{alg:rudrata_d}, can we use it to build a polynomial algorithm that solves \ref{alg:rudrata_s}? Yep:
+
+\begin{proof}
+	Run a modified \hyperref[alg:bfs]{$BFS$} starting at root $s$. At each level, we run \ref{alg:rudrata_d} on each neighbor. If it returns true, we queue up its neighbors. If false, we do not queue its neighbors.
+	
+	Upon termination, the output will be the result of $BFS$ (paths via parent links from $t$ back to $s$), or an empty tree signifying that there is no Rudrata st-path.\\
+	
+	The \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{reference solution} runs \ref{alg:rudrata_d} on $G - \{e\}$ for some $e \in E$ in a loop. If true, we know a Rudrata st-path can be found on another path, so $e$ is permanently removed from $G$. Otherwise, the Rudrata st-path is along $e$, so it cannot be removed. Loop until nothing is left but the Rudrata st-path.
+\end{proof}
+
+\subsection{NP-completeness ($NPC$)}
+
+\subsubsection{Independent Sets ($INDSET$)}
+\begin{claim}
+	$INDSET \in NPC$.
+\end{claim}
+
+This is a \textbf{key proof and excellent demo} on reducing from $3SAT$. The basis is: given a 3CNF expression $E$ with $m$ clauses, and un-directed graph $G$,
+$$E \text{ is satisfiable} \iff G \text{ has an independent set of size } m.$$
+
+The following points highlight the learning importance of this proof:
+
+\begin{enumerate}
+	\item Constructing gadgets.
+	\item Tying gadgets together.
+	\item Recasting $INDSET$ as a decision problem if it is given as \textit{MAX-INDSET} optimization problem. 
+\end{enumerate}
+
+The principal references for this proof is the \textit{Intractable problems}, chapter 10, in the ATLC book with Hopcraft et. al, and \href{https://www.dropbox.com/s/bsnowkygvxjos2s/gadgets-IndSet.pdf?dl=0}{this model solution}.
+
+\subsubsection{\textit{StingySat} }
+This problem takes a set of $m$ clauses, each a dis-junction of literals, and integer $k$. It finds a satisfying assignment in which \textit{at most} $k$ variables are true, if such an assignment exists.
+
+\begin{claim}
+	$StingySat \in NPC$.
+\end{claim}
+
+\begin{proof}
+	First we show that $StingySat \in NP$. Then we must show $StingySat$ reduces from either $CSAT$ or $3SAT$.\\\\
+	Showing $StingySat \in NP$ might be trivial. Given an instance $I$ and solution $S$, we plug in the $n$ literals to $m$ clauses and evaluate the $m$ conjunctions in $I$. If $I$ evaluates to true, we linearly count the $n$ variables to check if they are true. If this count exceeds $k$, $S$ is not a valid solution. Evidently this running time is bounded  by polynomial time.\\\\
+	To seal the proof, we show $CSAT \leq_p StingySat$. This is trivial since the instance structures, $I$ for $CSAT$, and $(I',k)$ for $StingySat$ are structurally similar. \\
+	The basis is: a CNF expression, $E$, is satisfiable $\iff$ no more than $k$ variables in $StingySat$ are true.\\\\
+	$\Rightarrow$ Evidently $StingySat$ is a generalization of $CSAT$, since we know if $E$ is satisfiable, at least $n$ variables must be true. Thus, we simply set $k=n$ when passing in $I$ to our sub-routine $StingySat$. \\
+	$\Leftarrow$ If $StingySat$ returns a satisfying assignment, that assignment also satisfies $CSAT$. If $StingySat$ does not return a satisfying assignment, neither does $CSAT$. \\\\
+	This is bounded in polynomial time, since the only operation we changed was to set $k=n$.
+\end{proof}
+
+\begin{remark}
+	Note how the original \textit{StingySat} problem is actually a \textit{search} problem, but we are recasting problems to their decision-variants for $NPC$ reductions. This is valid, since it is likely both variants are polynomial-time reducible to each other. \textbf{This remark might be wrong,} verify \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=879}{here}.
+\end{remark}
+
+\subsubsection{\textit{Almost-SAT}} \label{red:almostsat}
+Takes as input a CNF expression of clauses and literals, $E = (m,n)$, respectively. The output is an assignment s.t. $m-1$ clauses evaluate to true.\\
+First, we show \textit{Almost-SAT} $\in NP$. Given a solution, evaluate each clause in $m$, if the total clauses evaluated to true is $m-1$, \textit{Almost-SAT} is satisfiable, else return false. This can be evidently done in polynomial time.\\\\
+Next, we show \textit{Almost-SAT} is reducible from some problem in $NPC$. This might be done by showing:
+$$CSAT \leq_p \text{\textit{Almost-SAT}}.$$
+We can convert an instance $I$ of the former to $I'$ of the latter by passing along the same clauses from $I$ to $I'$, with the gadget being that $I'$ adds an additional clause that \textit{evaluates to false}. This gives a property that $I'$'s clauses, $m_I$, has $|m_I| = |m_{I'}|+1$.\\
+$\Rightarrow$ If $CSAT$ has a satisfying assignment, we know all clauses in $m_I$ evaluates to true. Since $m_I$ is copied into $I'$ as $m_{I'}$, we know \textit{Almost-SAT} is also satisfied since $m_{I'}$ has $m_{I}$ satisfied clauses, plus an additional clause that evaluates to false. Thus, the total amount of satisfied clauses in \textit{Almost-SAT} is $|m_{I'}|-1$.\\
+$\Leftarrow$ If \textit{Almost-SAT} has a satisfying assignment, so does \textit{CSAT} by construction.\\\\
+Building such gadget is evidently built in polynomial time.\\\\
+\textbf{Reference solution(s):} The common theme among the reference models is they defined a gadget of size $|m_{I'}|+2$, e.g. $(v) \land (\bar{v})$. This is a little awkward.
+
+References:
+\begin{enumerate}
+	\item https://farazdagi.com/2018/practice-problem-almost-sat/
+	\item https://www.dropbox.com/s/xrf9l33dk0aqct7/HW7Sol.pdf?dl=0
+	\item https://piazza.com/class/k52uzg6xjkl5xz?cid=831
+\end{enumerate}
+
+\subsubsection{\textit{Clique+INDSET ($CI$)}}
+This problem takes as input a graph $G = (V,E)$ and integer $k$. As output, it returns a \textit{clique} of size $k$ and an independent set of size $k$. \\Show that $CI \in NPC$.\\\\
+First we show that $CI \in NP$. Given a solution to $CI$, $S = (C, I, k)$, where $C$ and $I$ are the clique and independent vertex sets of size $k$:
+
+\begin{itemize}
+	\item To verify a solution has a clique of size $k$, we iterate through all vertex pairs, $u, v \in C$ and check that $(u,v) \in E$ and check that $|C| = k$. 
+	\item We then verify $I$ has an independent set of size $k$ by iterating through all vertex pairs, $u, v \in I$ and check that $(u,v) \notin E$ and that $|I| = k$. 
+\end{itemize}
+
+Verifying $S$ is evidently done in polynomial time using conventional operations on $G$. \\\\
+We can reduce $CI$ from $Clique$. $Clique$ takes as input a graph $G = (V,E, k)$ and determines whether $G$ has a clique of at least size $k$. We need to build a gadget to feed into our black box $CI$ verifier, call it input $F = (V_F, E_F, k)$, that will be constructed in polynomial time w.r.t. $G$ and whose solution instance satisfies $CI \iff G$'s solution instance satisfies $Clique$.\\
+To construct $F$, we simply create an independent set of $k$ additional vertices (no new edges are added to $E_F$) and add it to $V_F$. Further, we construct $F$ by inheriting the vertices and edges from $G$.\\
+$\Rightarrow$ If $Clique$ could determine a clique of size $k$ on $G$, we know by construction that $CI$ also found a clique of size $k$, and indeed has an independent set of size $k$ since $F$ was modified with $k$ vertices that have no edges to form said independent set.\\
+$\Leftarrow$ By construction, we know that if $CI$ cannot find a clique of size $k$ on it's modified graph, $F$, then we know $Clique$ also could not find a clique of size $k$ for its input graph $G$.\\\\
+Thus by the reduction $Clique \leq_p CI$, we have proved $CI \in NPC$.
+
+\subsubsection{\textit{3D-Matching ($3DM$)}}
+	\begin{claim}
+		$3DM \in NPC$.
+	\end{claim}
+	
+	\begin{proof}
+		We prove this by demonstrating the reduction $SAT \leq_p 3DM$.\\
+		$SAT$ takes the same input as \ref{red:almostsat}. $3DM$ takes as input a set $T$ and integer $k$, and returns whether $\exists M \subseteq T : |M| \geq k$.\\
+		We need to construct a gadget s.t. if $|m|$ clauses are satisfied, there are at least $k$, 3-d matches in $T$.
+	\end{proof}
 
 \end{document}
