@@ -1007,9 +1007,8 @@ Thus by the reduction $Clique \leq_p CI$, we have proved $CI \in NPC$.
 	\end{claim}
 	
 	\begin{proof}
-		We prove this by demonstrating the reduction $SAT \leq_p 3DM$.\\
+		We prove this by demonstrating the reduction $3DM \leq_p SAT$.\\
 		$SAT$ takes the same input as \ref{red:almostsat}. $3DM$ takes as input a set $T$ and integer $k$, and returns whether $\exists M \subseteq T : |M| \geq k$.\\
-		We need to construct a gadget s.t. if $|m|$ clauses are satisfied, there are at least $k$, 3-d matches in $T$.
 	\end{proof}
 
 \end{document}
