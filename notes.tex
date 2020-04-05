@@ -899,7 +899,7 @@ If \ref{alg:tsp_bb} $\in P$, can \ref{alg:tspopt} be shown to also be $\in P$? Y
 	Note that the signature for \ref{alg:tspopt} does not have a budget as input, but \ref{alg:tsp_bb} does. This is a hint for the solution.\\
 	\ref{alg:tspopt} cares about the \textit{optimum} shortest tour only. Since \ref{alg:tsp_bb} outputs a tour of length $\leq b$ or false, we can repeatedly call it to find the optimum.
 	We calculate $c$, the optimum cost (distances), by iterating through all edges in $E$ and summing their distances together.\\
-	Now we can modify $BinarySearch$ s.t. it calls \ref{alg:tsp_bb} on $c$, $(0, \lfloor c/2 \rfloor)$, and $(\lfloor c/2 \rfloor +1, c)$. The reasoning being that if \ref{alg:tsp_bb} doesn't return false when searching on the former interval, we know the optimum shortest tour exists within that range, and vice-versa for the latter. \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{Reference}.
+	Now we can modify $BinarySearch$ s.t. it calls \ref{alg:tsp_bb} on $c$, $(0, \lfloor c/2 \rfloor)$, and $(\lfloor c/2 \rfloor +1, c)$. The reasoning being that if \ref{alg:tsp_bb} doesn't return false when searching on the former interval, we know the optimum shortest tour exists within that range, and vice-versa for the latter. \href{https://cseweb.ucsd.edu/classes/sp08/cse101/hw/hw6soln.pdf}{Reference}. \href{https://eklitzke.org/the-traveling-salesman-problem-is-not-np-complete}{Why \ref{alg:tspopt} is $\in NP$-hard}.
 \end{proof}
 
 \subsection{Search versus Decision}
@@ -967,7 +967,7 @@ This problem takes a set of $m$ clauses, each a dis-junction of literals, and in
 	Note how the original \textit{StingySat} problem is actually a \textit{search} problem, but we are recasting problems to their decision-variants for $NPC$ reductions. This is valid, since it is likely both variants are polynomial-time reducible to each other. \textbf{This remark might be wrong,} verify \href{https://piazza.com/class/k52uzg6xjkl5xz?cid=879}{here}.
 \end{remark}
 
-\subsubsection{\textit{Almost-SAT}}
+\subsubsection{\textit{Almost-SAT}} \label{red:almostsat}
 Takes as input a CNF expression of clauses and literals, $E = (m,n)$, respectively. The output is an assignment s.t. $m-1$ clauses evaluate to true.\\
 First, we show \textit{Almost-SAT} $\in NP$. Given a solution, evaluate each clause in $m$, if the total clauses evaluated to true is $m-1$, \textit{Almost-SAT} is satisfiable, else return false. This can be evidently done in polynomial time.\\\\
 Next, we show \textit{Almost-SAT} is reducible from some problem in $NPC$. This might be done by showing:
@@ -1000,5 +1000,16 @@ To construct $F$, we simply create an independent set of $k$ additional vertices
 $\Rightarrow$ If $Clique$ could determine a clique of size $k$ on $G$, we know by construction that $CI$ also found a clique of size $k$, and indeed has an independent set of size $k$ since $F$ was modified with $k$ vertices that have no edges to form said independent set.\\
 $\Leftarrow$ By construction, we know that if $CI$ cannot find a clique of size $k$ on it's modified graph, $F$, then we know $Clique$ also could not find a clique of size $k$ for its input graph $G$.\\\\
 Thus by the reduction $Clique \leq_p CI$, we have proved $CI \in NPC$.
+
+\subsubsection{\textit{3D-Matching ($3DM$)}}
+	\begin{claim}
+		$3DM \in NPC$.
+	\end{claim}
+	
+	\begin{proof}
+		We prove this by demonstrating the reduction $SAT \leq_p 3DM$.\\
+		$SAT$ takes the same input as \ref{red:almostsat}. $3DM$ takes as input a set $T$ and integer $k$, and returns whether $\exists M \subseteq T : |M| \geq k$.\\
+		We need to construct a gadget s.t. if $|m|$ clauses are satisfied, there are at least $k$, 3-d matches in $T$.
+	\end{proof}
 
 \end{document}
