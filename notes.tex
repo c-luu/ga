@@ -1011,4 +1011,21 @@ Thus by the reduction $Clique \leq_p CI$, we have proved $CI \in NPC$.
 		$SAT$ takes the same input as \ref{red:almostsat}. $3DM$ takes as input a set $T$ and integer $k$, and returns whether $\exists M \subseteq T : |M| \geq k$.\\
 	\end{proof}
 
+\subsubsection{Reductions from \textit{Directed-Rudrata Path ($DRP$)}}
+$RDP$ is a restriction on the \textit{Rudrata path} problem, where the input graph is a directed graph, $\overrightarrow{G}$. \\
+\begin{claim}
+	$DRP \leq_p URP \textit{ (undirected) Rudrata path}$.
+\end{claim}
+
+\begin{proof}
+	Tricky one- must know how to encode directed edge semantics to un-directed edges. See the \href{http://www.cs.rpi.edu/~goldberg/14-CC/08-2-reduction.pdf}{reduction} for \textit{Directed-Hamilton circuits} $\leq_p$ \textit{Un-directed-Hamilton circuits}.\\
+	The basis is as follows: given directed graph, $\overrightarrow{G}$, construct an un-directed graph input, $H$, using $3n$ vertices s.t. $n=|V(\overrightarrow{G})|$ and create $2n + |E(\overrightarrow{G})|$ edges.\\
+	To reduce by replacement, use the ideas from the following gadget:
+	\begin{enumerate}
+		\item $\forall v \in V(\overrightarrow{G})$, add $\{v_{in}, v, v_{out}\} \in V(H)$.
+		\item $\forall v \in V(\overrightarrow{G})$, add $\{(v_{in}, v), (v, v_{out})\} \in E(H)$.
+		\item $\forall (u,v) \in E(\overrightarrow{G})$, add $\{(u_{out}, v_{in}))\} \in E(H)$.
+	\end{enumerate}
+\end{proof}
+
 \end{document}
